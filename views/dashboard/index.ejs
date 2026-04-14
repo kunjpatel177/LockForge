@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Password Manager Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+
+<body>
+
+    <!-- 🔷 NAVBAR -->
+    <nav class="navbar navbar-dark bg-primary px-4">
+        <span class="navbar-brand mb-0 h1">🔐 Password Manager</span>
+        <form action="/logout" method="POST" style="display:inline;">
+            <button class="btn btn-outline-light btn-sm ">Logout</button>
+        </form>
+    </nav>
+
+    <div class="container py-4">
+
+        <div class="w-100 d-flex justify-content-center">
+            <div class="col-md-6">
+                <%#- include("../partials/flash") %>
+                <%- include("../partials/toast") %>
+            </div>
+        </div>
+
+        <!-- 🔍 SEARCH -->
+        <form method="GET" action="/dashboard" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Search service..."
+                    value="<%= search || '' %>">
+                <button class="btn btn-primary">Search</button>
+            </div>
+        </form>
+
+        <!-- ➕ ADD CREDENTIAL -->
+        <div class="card shadow-sm p-4 mb-4">
+            <h4 class="mb-3">➕ Add Credential</h4>
+
+            <form method="POST" action="/add">
+
+                <input type="text" name="service" class="form-control mb-3" placeholder="Service (e.g. Gmail)" required>
+
+                <div id="fieldsContainer" class="mb-3"></div>
+
+                <button type="button" id="addFieldBtn" class="btn btn-outline-primary mb-3">
+                    + Add Field
+                </button>
+
+                <button type="submit" class="btn btn-primary w-100">
+                    Save Credential
+                </button>
+            </form>
+        </div>
+
+        <!-- 📦 SAVED CREDENTIALS -->
+        <h4 class="mb-3">📦 Saved Credentials</h4>
+
+        <% if (!credentials || credentials.length===0) { %>
+            <p class="text-muted">No credentials found.</p>
+            <% } %>
+
+                <div class="row">
+                    <% credentials.forEach(cred=> { %>
+
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card shadow-sm h-100 credential-card">
+
+                                <div class="card-body">
+
+                                    <h5 class="card-title text-center">
+                                        <%= cred.service %>
+                                    </h5>
+                                    <hr>
+                                    
+                                    <% cred.fields.forEach(field=> { %>
+
+                                        <p class="mb-2">
+                                            <strong>
+                                                <%= field.label %>:
+                                            </strong>
+
+                                            <% if (field.type==="password" || field.type==="otp" || field.type==="code"
+                                                ) { %>
+
+                                                
+                                                    <span id="hidden-<%= field._id %>">••••••••</span>
+
+                                                    <span id="real-<%= field._id %>" style="display:none;">
+                                                        <%= field.value %>
+                                                    </span>
+                                                 &nbsp;&nbsp;&nbsp;&nbsp;
+
+                                                <!-- <br> -->
+
+                                                <span><button type="button"
+                                                        class="btn btn-sm btn-outline-secondary toggle-btn"
+                                                        data-id="<%= field._id %>">
+                                                        Show
+                                                    </button>
+
+                                                <button type="button" class="btn btn-sm btn-outline-info copy-btn"
+                                                    data-value="<%= field.value %>">
+                                                    Copy
+                                                </button></span>
+
+                                                <% } else { %>
+
+                                                    <span>
+                                                        <%= field.value %>
+                                                    </span>
+
+                                                    <% } %>
+                                        </p>
+
+                                        <% }) %>
+
+                                </div>
+
+                                <div class="card-footer d-flex justify-content-evenly">
+
+                                    <a href="/edit/<%= cred._id %>" class="btn btn-sm btn-primary">
+                                        Edit
+                                    </a>
+
+                                    <form method="POST" action="/delete/<%= cred._id %>">
+                                        <button type="submit" class="btn btn-sm btn-danger delete-btn">
+                                            Delete
+                                        </button>
+                                    </form>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <% }) %>
+                </div>
+
+    </div>
+
+    <%- include("../partials/fieldTemplate") %>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script src="/js/toast.js"></script>
+
+        <script src="/js/script.js"></script>
+
+</body>
+
+</html>

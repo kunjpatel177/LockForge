@@ -1,0 +1,33 @@
+<template id="field-template">
+    <div class="field-group">
+
+        <input 
+            type="text" 
+            class="field-label"
+            placeholder="Label"
+            required
+        >
+
+        <input 
+            type="text"
+            class="field-value"
+            placeholder="Value"
+            required
+        >
+
+        <select class="field-type">
+            <option value="text">TEXT</option>
+            <option value="password">PASSWORD</option>
+            <option value="otp">OTP</option>
+        </select>
+
+        <button type="button" class="btn btn-outline-success btn-sm generate-btn d-done">
+            Generate
+        </button>
+
+        <button type="button" class="btn btn-outline-danger btn-sm remove-btn">
+            Remove
+        </button>
+
+    </div>
+</template>

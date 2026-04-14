@@ -1,0 +1,74 @@
+body {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Card Styling */
+.edit-card {
+    max-width: 900px;
+    margin: auto;
+    border-radius: 12px;
+    border: none;
+}
+
+.field-group {
+    background: #f8fafc;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* .field-group input,
+.field-group select {
+    flex: 2;
+} */
+
+/* ===== FIELD INPUTS ===== */
+.field-group input,
+.field-group select {
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    background: #ffffff;
+    outline: none;
+
+    /* smooth effect */
+    transition: all 0.2s ease;
+}
+
+/* ===== WIDTH CONTROL ===== */
+.field-label {
+    flex: 1.2;
+}
+
+.field-value {
+    flex: 1.5;
+}
+
+.field-type {
+    flex: 1;
+}
+
+/* ===== HOVER EFFECT ===== */
+.field-group input:hover,
+.field-group select:hover {
+    border-color: #4facfe;
+}
+
+/* ===== FOCUS EFFECT (IMPORTANT) ===== */
+.field-group input:focus,
+.field-group select:focus {
+    border-color: #4facfe;
+    box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.2);
+}
+
+/* ===== PLACEHOLDER STYLE ===== */
+.field-group input::placeholder {
+    color: #999;
+    font-size: 13px;
+}
+
+/* ===== SELECT STYLE CLEANUP ===== */
+.field-group select {
+    cursor: pointer;
+}
