@@ -1,0 +1,80 @@
+<nav id="navbar" class="navbar navbar-expand-lg fixed-top px-4">
+    <a class="navbar-brand fw-bold text-white" href="/">🔐 PassVault</a>
+
+    <button class="navbar-toggler text-white" data-bs-toggle="collapse" data-bs-target="#nav">
+        ☰
+    </button>
+
+    <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav ms-auto">
+
+            
+            <% if (isLoggedIn) { %>
+
+                <div class="dropdown">
+
+                    <button class="btn btn-dark dropdown-toggle d-flex align-items-center"
+                            data-bs-toggle="dropdown">
+
+                        <!-- Avatar (First Letter) -->
+                        <div class="avatar-circle me-2">
+                            <%= user.name.charAt(0).toUpperCase() %>
+                        </div>
+
+                        <span><%= user.name %></span>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end p-3" style="min-width: 250px;">
+
+                        <!-- User Info -->
+                        <li class="mb-2">
+                            <strong><%= user.name %></strong><br>
+                            <small class="text-muted"><%= user.email %></small>
+                        </li>
+
+                        <li><hr class="dropdown-divider"></li>
+
+                        <!-- Links -->
+                        <li>
+                            <a class="dropdown-item" href="/dashboard">📊 Dashboard</a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item text-danger" href="/logout">🚪 Logout</a>
+                        </li>
+
+                    </ul>
+                </div>
+                    
+                <% } else { %>
+
+                    <!-- ❌ Not Logged In -->
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/">Home</a>
+                    </li>
+        
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#features">Features</a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link text-white" href="/login">Login</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="btn btn-light" href="/register">Register</a>
+                    </li>
+
+                <% } %>
+
+            <!-- <li class="nav-item">
+                <a class="nav-link text-white" href="/login">Login</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="btn btn-light ms-2" href="/register">Register</a>
+            </li> -->
+
+        </ul>
+    </div>
+</nav>

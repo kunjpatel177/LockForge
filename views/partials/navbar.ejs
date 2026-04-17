@@ -1,0 +1,96 @@
+<nav id="navbar" class="navbar navbar-expand-lg fixed-top px-4">
+    <a class="navbar-brand fw-bold text-white" href="/">🔐 PassVault</a>
+
+    <button class="navbar-toggler text-white" data-bs-toggle="collapse" data-bs-target="#nav">
+        ☰
+    </button>
+
+    <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav ms-auto">
+
+            
+            <% if (isLoggedIn) { %>
+
+                <div class="dropdown">
+
+                    <button class="btn dropdown-toggle d-flex align-items-center"
+                            data-bs-toggle="dropdown">
+
+                        <!-- Avatar (First Letter) -->
+                        <div class="avatar-circle me-2">
+                            <%= user.name.charAt(0).toUpperCase() %>
+                        </div>
+
+                        <span><%= user.name %></span>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end user-dropdown shadow glass-dropdown">
+
+                        <!-- USER HEADER -->
+                        <li class="user-header text-center">
+                            <div class="avatar-lg">
+                                <%= user.name.charAt(0).toUpperCase() %>
+                            </div>
+                        
+                            <div class="mt-2">
+                                <strong><%= user.name %></strong><br>
+                                <small ><%= user.email %></small>
+                            </div>
+                        </li>
+                    
+                        <li><hr class="dropdown-divider"></li>
+                    
+                        <!-- LINKS -->
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="/dashboard">
+                                <span class="me-2">📊</span> Dashboard
+                            </a>
+                        </li>
+                    
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="/history">
+                                <span class="me-2">📜</span> Activity
+                            </a>
+                        </li>
+                    
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="/logout">
+                                <span class="me-2">🚪</span> Logout
+                            </a>
+                        </li>
+                    
+                    </ul>
+                </div>
+                    
+                <% } else { %>
+
+                    <!-- ❌ Not Logged In -->
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/">Home</a>
+                    </li>
+        
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#features">Features</a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link text-white" href="/login">Login</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="btn btn-light" href="/register">Register</a>
+                    </li>
+
+                <% } %>
+
+            <!-- <li class="nav-item">
+                <a class="nav-link text-white" href="/login">Login</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="btn btn-light ms-2" href="/register">Register</a>
+            </li> -->
+
+        </ul>
+    </div>
+</nav>

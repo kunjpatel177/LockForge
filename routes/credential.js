@@ -5,23 +5,23 @@ const isAuth = require("../middleware/auth");
 
 const {
     addCredential,
-    getCredentials,
-    deleteCredential,
-    renderEditPage,
-    updateCredential
+    getEditPage,
+    updateCredential,
+    deleteCredential
 } = require("../controllers/credentialController");
 
-// Dashboard + Search
-router.get("/dashboard", isAuth, getCredentials);
 
-// Add
+// ADD (AJAX)
 router.post("/add", isAuth, addCredential);
 
-// Edit
-router.get("/edit/:id", isAuth, renderEditPage);
+// EDIT PAGE
+router.get("/edit/:id", isAuth, getEditPage);
+
+// UPDATE
 router.post("/edit/:id", isAuth, updateCredential);
 
-// Delete
+// DELETE
 router.post("/delete/:id", isAuth, deleteCredential);
+
 
 module.exports = router;

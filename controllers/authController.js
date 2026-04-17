@@ -3,47 +3,250 @@ const User = require("../models/User")
 const { isValidName, isValidEmail, isStrongPassword, isValidUsername } = require("../utils/validators");
 const { deriveKey } = require("../utils/crypto");
 const crypto = require("crypto");
+const AuditLog = require("../models/AuditLog");
+const { getDevice } = require("../utils/device");
+const Session = require("../models/Session");
+const { getLocation } = require("../utils/location");
+const { sendAlert } = require("../utils/mailer");
+const { generateOTP } = require("../utils/otp");
+const { securityAlertTemplate } = require("../utils/emailTemplates");
+
+
+
+module.exports.login = async (req, res) => {
+    const { email, password } = req.body;
+
+    const errors = {};
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        errors.email = "Invalid email";
+        return res.json({ success: false, errors });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.masterPassword);
+
+    if (!isMatch) {
+        errors.password = "Invalid password";
+        return res.json({ success: false, errors });
+    }
+
+    const key = deriveKey(password, user.salt);
+
+    req.session.regenerate(async (err) => {
+        if (err) return res.json({ success: false });
+
+        req.session.userId = user._id;
+        req.session.user = {
+            name: user.fullName,
+            email: user.email
+        };
+        req.session.encryptionKey = key.toString("hex");
+
+        const currentDevice = getDevice(req);
+        const currentIP = req.ip;
+        const currentLocation = getLocation(currentIP);
+
+        const lastLogin = await AuditLog.findOne({
+            userId: user._id,
+            action: "login"
+        }).sort({ time: -1 });
+
+        let suspicious = false;
+
+        if (lastLogin) {
+            if (
+                lastLogin.device !== currentDevice ||
+                lastLogin.location !== currentLocation
+                //|| lastLogin.ip !== currentIP
+            ) {
+                suspicious = true;
+            }
+        }
+
+        // store in session
+        req.session.suspiciousLogin = suspicious;
+
+        if (suspicious) {
+
+            const location = getLocation(req.ip);
+            const device = getDevice(req);
+
+            const html = securityAlertTemplate({
+                device,
+                location,
+                ip: req.ip,
+                time: new Date().toLocaleString()
+            });
+
+            await sendAlert(user.email, "⚠️ New Login Alert", html);
+        }
+
+        if (suspicious) {
+
+            const otp = generateOTP();
+
+            // store OTP in session
+            req.session.otp = otp;
+            req.session.tempUserId = user._id;
+            req.session.otpExpiry = Date.now() + 5 * 60 * 1000; // 5 min
+
+            const html = `
+        <h2>🔐 Verify Login</h2>
+        <p>Your OTP is:</p>
+        <h1>${otp}</h1>
+        <p>This OTP expires in 5 minutes.</p>
+    `;
+
+            await sendAlert(user.email, "OTP Verification", html);
+
+            return res.json({
+                success: true,
+                requireOTP: true
+            });
+        }
+
+
+        // 🔥 AUDIT LOG
+        await AuditLog.create({
+            userId: user._id,
+            action: "login",
+            ip: req.ip,
+            userAgent: req.headers["user-agent"],
+            device: getDevice(req),
+            location: getLocation(req.ip)
+        });
+
+        await Session.create({
+            userId: user._id,
+            sessionId: req.sessionID,
+            ip: req.ip,
+            device: getDevice(req),
+            location: getLocation(req.ip)
+        });
+
+        // res.json({ success: true });
+
+        return res.json({ success: true });
+    });
+};
+
+
+module.exports.register = async (req, res) => {
+
+    let { fullName, email, username, password } = req.body;
+
+    const errors = {};
+
+    if (!isValidName(fullName)) errors.fullName = "Invalid name";
+    if (!isValidEmail(email)) errors.email = "Invalid email";
+    if (!isValidUsername(username)) errors.username = "Invalid username";
+    if (!isStrongPassword(password)) errors.password = "Weak password";
+
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) errors.email = "Email already exists";
+
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) errors.username = "Username taken";
+
+    if (Object.keys(errors).length > 0) {
+        return res.json({ success: false, errors });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const salt = crypto.randomBytes(16).toString("hex");
+
+    await User.create({
+        fullName,
+        email,
+        username,
+        masterPassword: hashedPassword,
+        salt
+    });
+
+    return res.json({ success: true });
+};
+
+
+module.exports.verifyOTP = (req, res) => {
+    console.log("BODY:", req.body);   // 🔥 ADD THIS
+    const { otp } = req.body;
+
+    console.log("SERVER OTP:", req.session.otp);
+    console.log("USER OTP:", otp);
+
+    if (!req.session.otp) {
+        return res.json({ success: false, message: "No OTP found" });
+    }
+
+    if (Date.now() > req.session.otpExpiry) {
+        return res.json({ success: false, message: "OTP expired" });
+    }
+
+    if (otp !== req.session.otp) {
+        return res.json({ success: false, message: "Invalid OTP" });
+    }
+
+    req.session.userId = req.session.tempUserId;
+
+    delete req.session.otp;
+    delete req.session.tempUserId;
+    delete req.session.otpExpiry;
+
+    res.json({ success: true });
+};
+
 
 // module.exports.register = async (req, res) => {
 //     try {
-//         let { fullName, email, username, password } = req.body
+//         let { fullName, email, username, password } = req.body;
 
-//         fullName = fullName?.trim()
+//         fullName = fullName?.trim();
 //         email = email?.toLowerCase().trim();
 //         username = username?.trim();
-//         console.log("-----------------------------") 
 
-//         // ✅ Custom validations
+//         const errors = {};
+
+//         // ✅ validations
 //         if (!isValidName(fullName)) {
-//             return res.send("Invalid full name (min 3 chars)");
+//             errors.fullName = "Full name must be at least 3 characters";
 //         }
 
 //         if (!isValidEmail(email)) {
-//             return res.send("Invalid email format");
+//             errors.email = "Invalid email format";
 //         }
 
 //         if (!isStrongPassword(password)) {
-//             return res.send("Password must be strong");
+//             errors.password = "Password must be strong";
 //         }
 
 //         if (!isValidUsername(username)) {
-//             return res.send("Invalid username");
+//             errors.username = "Invalid username";
 //         }
 
-//         // ✅ Check duplicates
+//         // ✅ duplicates
 //         const existingEmail = await User.findOne({ email });
 //         if (existingEmail) {
-//             return res.send("Email already registered");
+//             errors.email = "Email already registered";
 //         }
 
-//         if (username) {
-//             const existingUsername = await User.findOne({ username });
-//             if (existingUsername) {
-//                 return res.send("Username already taken");
-//             }
+
+//         const existingUsername = await User.findOne({ username });
+//         if (existingUsername) {
+//             errors.username = "Username already taken";
 //         }
 
-//         // 🔐 Hash password
+
+//         // ❌ if any error → re-render form
+//         if (Object.keys(errors).length > 0) {
+//             return res.render("auth/register", {
+//                 errors,
+//                 old: { fullName, email, username }
+//             });
+//         }
+
+//         // 🔐 continue if no error
 //         const hashedPassword = await bcrypt.hash(password, 12);
 //         const salt = crypto.randomBytes(16).toString("hex");
 
@@ -57,102 +260,38 @@ const crypto = require("crypto");
 
 //         await newUser.save();
 
-//         req.flash("success", "Registration successful! Please login.");
+//         req.flash("success", "Registration successful!");
 //         res.redirect("/");
 
 //     } catch (err) {
-//         console.log(err)
+//         res.send(err);
 //     }
 // };
 
-module.exports.register = async (req, res) => {
-    try {
-        let { fullName, email, username, password } = req.body;
-
-        fullName = fullName?.trim();
-        email = email?.toLowerCase().trim();
-        username = username?.trim();
-
-        const errors = {};
-
-        // ✅ validations
-        if (!isValidName(fullName)) {
-            errors.fullName = "Full name must be at least 3 characters";
-        }
-
-        if (!isValidEmail(email)) {
-            errors.email = "Invalid email format";
-        }
-
-        if (!isStrongPassword(password)) {
-            errors.password = "Password must be strong";
-        }
-
-        if (!isValidUsername(username)) {
-            errors.username = "Invalid username";
-        }
-
-        // ✅ duplicates
-        const existingEmail = await User.findOne({ email });
-        if (existingEmail) {
-            errors.email = "Email already registered";
-        }
-
-
-        const existingUsername = await User.findOne({ username });
-        if (existingUsername) {
-            errors.username = "Username already taken";
-        }
-
-
-        // ❌ if any error → re-render form
-        if (Object.keys(errors).length > 0) {
-            return res.render("auth/register", {
-                errors,
-                old: { fullName, email, username }
-            });
-        }
-
-        // 🔐 continue if no error
-        const hashedPassword = await bcrypt.hash(password, 12);
-        const salt = crypto.randomBytes(16).toString("hex");
-
-        const newUser = new User({
-            fullName,
-            email,
-            username,
-            masterPassword: hashedPassword,
-            salt
-        });
-
-        await newUser.save();
-
-        req.flash("success", "Registration successful!");
-        res.redirect("/");
-
-    } catch (err) {
-        res.send(err);
-    }
-};
 
 // module.exports.login = async (req, res) => {
 //     const { email, password } = req.body;
 
+//     const errors = {};
+//     const old = { email };
+
 //     const user = await User.findOne({ email });
 
-//     // ❌ MUST RETURN
+//     // ❌ email error
 //     if (!user) {
-//         req.flash("error", "Invalid email");
-//         return res.redirect("/");
+//         errors.email = "Invalid email";
+//         return res.render("auth/login", { errors, old });
 //     }
 
 //     const isMatch = await bcrypt.compare(password, user.masterPassword);
 
+//     // ❌ password error
 //     if (!isMatch) {
-//         req.flash("error", "Invalid password");
-//         return res.redirect("/");
+//         errors.password = "Invalid password";
+//         return res.render("auth/login", { errors, old });
 //     }
 
+//     // ✅ success
 //     const key = deriveKey(password, user.salt);
 
 //     req.session.regenerate((err) => {
@@ -166,113 +305,3 @@ module.exports.register = async (req, res) => {
 //     });
 // };
 
-module.exports.login = async (req, res) => {
-    const { email, password } = req.body;
-
-    const errors = {};
-    const old = { email };
-
-    const user = await User.findOne({ email });
-
-    // ❌ email error
-    if (!user) {
-        errors.email = "Invalid email";
-        return res.render("auth/login", { errors, old });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.masterPassword);
-
-    // ❌ password error
-    if (!isMatch) {
-        errors.password = "Invalid password";
-        return res.render("auth/login", { errors, old });
-    }
-
-    // ✅ success
-    const key = deriveKey(password, user.salt);
-
-    req.session.regenerate((err) => {
-        if (err) return res.send("Error");
-
-        req.session.userId = user._id;
-        req.session.encryptionKey = key.toString("hex");
-
-        req.flash("success", "Login successful!");
-        res.redirect("/dashboard");
-    });
-};
-
-// module.exports.login = async (req, res) => {
-//     const { email, password } = req.body;
-
-//     const user = await User.findOne({ email });
-//     if (!user){
-//         req.flash("error", "Invalid email")
-//         // return res.send("Invalid credentials");
-//     }
-
-//     const isMatch = await bcrypt.compare(password, user.masterPassword);
-//     if (!isMatch) {
-//         req.flash("error", "Invalid Password")
-//         // return res.send("Invalid credentials");
-//     }
-
-//     // 🔐 Derive encryption key
-//     const salt = "global_salt"; // improve later
-//     const key = deriveKey(password, user.salt);
-
-//     req.session.regenerate((err) => {
-//         if (err) return res.send("Error");
-
-//         req.session.userId = user._id;
-//         req.session.encryptionKey = key.toString("hex");
-
-//         req.flash("success", "Login successful!")
-//         res.redirect("/dashboard");
-//     });
-// };
-
-// module.exports.logout = (req, res) => {
-//     req.flash("success", "Logged out successfully!");
-
-//     req.session.save(() => {
-//         req.session.destroy(() => {
-//             res.clearCookie("connect.sid");
-//             res.redirect("/");
-//         });
-//     });
-// }
-
-// module.exports.login = async (req, res) => {
-//     try {
-//         let { email, password } = req.body;
-
-//         email = email?.toLowerCase().trim();
-
-//         if (!isValidEmail(email)) {
-//             return res.send("Invalid credentials");
-//         }
-
-//         const user = await User.findOne({ email });
-
-//         if (!user) {
-//             return res.send("Invalid credentials");
-//         }
-
-//         const isMatch = await bcrypt.compare(password, user.masterPassword);
-
-//         if (!isMatch) {
-//             return res.send("Invalid credentials");
-//         }
-
-//         req.session.regenerate((err) => {
-//             if (err) return res.send("Error");
-
-//             req.session.userId = user._id;
-//             res.redirect("/dashboard");
-//         });
-
-//     } catch (err) {
-//         res.send("Login error");
-//     }
-// };

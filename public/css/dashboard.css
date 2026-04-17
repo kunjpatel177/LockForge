@@ -1,146 +1,324 @@
+/* ===== GLOBAL ===== */
 body {
-    background: #f4f6f9;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #f9fafb;
 }
 
-/* Navbar */
-.navbar {
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-/* Cards */
-.card {
-    border-radius: 10px;
-    border: none;
-}
-
-/* Credential Cards */
-.credential-card {
-    transition: 0.2s ease;
-}
-
-.credential-card:hover {
-    /* border: 1px solid rgb(182, 138, 138); */
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-}
-
-.card-footer .btn{
-    width: fit-content;
-    height: fit-content;
-    padding: 0.3rem 3rem 0.3rem 3rem;
-    text-align: center;
-}
-
-
-/* not imp -------------- */
-/* #pass-field{
+/* ===== LAYOUT ===== */
+.dashboard {
     display: flex;
-    margin: 2px;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-} */
- /* -------------------------- */
+    min-height: 100vh;
+}
 
-/* Field Group */
-/* .field-group {
-    background: #f8f9fa;
-    padding: 10px;
+.search-bar input {
+    max-width: 400px;
     border-radius: 8px;
-    margin-bottom: 10px;
-} */
+}
 
-/* Buttons */
-button {
+/* ===== SIDEBAR ===== */
+.sidebar {
+    width: 240px;
+    background: #111827;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar .logo {
+    margin-bottom: 30px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin: 6px 0;
+}
+
+.sidebar a {
+    display: block;
+    padding: 8px 10px;
+    margin-left: 4px;
+    color: #9ca3af;
+    text-decoration: none;
+    border-radius: 8px;
     transition: 0.2s ease;
 }
 
-button:hover {
-    transform: translateY(-1px);
+.sidebar a:hover {
+    color: white;
+    background: rgba(255,255,255,0.08);
 }
 
-/* .field-group {
+.sidebar > h3 > a {
+    color: #fef08a;
+    margin: auto;
+}
+
+.sidebar > h3 > a:hover {
+    background: none;
+}
+
+/* ===== MAIN ===== */
+.main-content {
+    flex: 1;
+    padding: 30px;
+}
+
+/* ===== HEADER ===== */
+.dashboard-header {
     display: flex;
-    gap: 8px;
+    justify-content: space-between;
     align-items: center;
-    background: #f8f9fa;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-} */
-
-.field-group {
-    background: #f8fafc;
-    padding: 10px;
-    border-radius: 10px;
+    margin-bottom: 20px;
 }
 
-/* .field-group input,
-.field-group select {
-    flex: 2;
-} */
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
 
-/* ===== FIELD INPUTS ===== */
+/* ===== GRID FIX ===== */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.row > [class*="col-"] {
+    display: flex;
+}
+
+/* ===== CARD ===== */
+.credential-card {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    transition: 0.2s ease;
+}
+
+/* SUBTLE HOVER */
+.credential-card:hover {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+}
+
+/* ADD CARD */
+.add-card {
+    background: #f9fafb;
+    border: 1px dashed #d1d5db;
+}
+
+/* ===== CARD HEADER ===== */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h5 {
+    margin: 0;
+    font-weight: 600;
+}
+
+/* ACTION BUTTONS */
+.card-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.card-actions form {
+    margin: 0;
+}
+
+/* ===== BODY ===== */
+.card-body {
+    margin-top: 10px;
+}
+
+/* FIELD ROW */
+.field-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* LABEL */
+.field-label {
+    font-weight: 500;
+    min-width: 90px;
+    color: #374151;
+}
+
+/* VALUE */
+.field-value {
+    flex: 1;
+    color: #111827;
+    word-break: break-word;
+}
+
+/* ACTIONS */
+.field-actions {
+    display: flex;
+    gap: 6px;
+}
+
+/* ===== ICON BUTTON ===== */
+.icon-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #6b7280;
+    transition: 0.2s;
+}
+
+.icon-btn:hover {
+    color: #111827;
+    transform: scale(1.1);
+}
+
+/* ===== FORM ===== */
+.form-control {
+    border-radius: 8px;
+    /* width: 300px; */
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+    border-radius: 8px;
+    font-size: 13px;
+    padding: 5px 10px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+
+/* ===== EDIT PAGE ===== */
+.edit-card {
+    max-width: 1300px;
+}
+
+/* FIELDS WRAPPER */
+.fields-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* FIELD GROUP */
+.field-group {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 120px auto auto;
+    gap: 10px;
+    align-items: center;
+}
+
+/* INPUTS */
 .field-group input,
 .field-group select {
-    border: 1px solid #dcdfe6;
     border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 14px;
-    background: #ffffff;
-    outline: none;
-
-    /* smooth effect */
-    transition: all 0.2s ease;
+    height: 38px;
 }
 
-/* ===== WIDTH CONTROL ===== */
-.field-label {
-    flex: 1.2;
-}
-
-.field-value {
-    flex: 1.5;
-}
-
-.field-type {
-    flex: 1;
-}
-
-/* ===== HOVER EFFECT ===== */
-.field-group input:hover,
-.field-group select:hover {
-    border-color: #4facfe;
-}
-
-/* ===== FOCUS EFFECT (IMPORTANT) ===== */
-.field-group input:focus,
-.field-group select:focus {
-    border-color: #4facfe;
-    box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.2);
-}
-
-/* ===== PLACEHOLDER STYLE ===== */
-.field-group input::placeholder {
-    color: #999;
+/* BUTTON ALIGN */
+.field-group button {
+    height: 36px;
+    padding: 0 10px;
     font-size: 13px;
 }
 
-/* ===== SELECT STYLE CLEANUP ===== */
-.field-group select {
-    cursor: pointer;
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .field-group {
+        grid-template-columns: 1fr;
+    }
 }
 
-/* ===== RESPONSIVE WRAP ===== */
+/* ===== FIX FIELD LAYOUT (SAFE) ===== */
 .field-group {
     display: flex;
-    gap: 10px;
     flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
 }
 
-/* ===== Animate In ===== */
-/* .field-group.show {
+/* LABEL */
+.field-group .field-label {
+    flex: 1 1 30%;
+    min-width: 150px;
+}
+
+/* VALUE */
+.field-group .field-value {
+    flex: 1 1 40%;
+    min-width: 200px;
+}
+
+/* SELECT */
+.field-group .field-type {
+    flex: 1 1 120px;
+}
+
+/* BUTTONS */
+.field-group .generate-btn,
+.field-group .remove-btn {
+    flex: 0 0 auto;
+}
+
+
+/* ===== TOAST ===== */
+.toast-box {
+    position: fixed;
+    top: 20px;
+    right: 550px;
+
+    min-width: 250px;
+    max-width: 320px;
+
+    padding: 12px 16px;
+    border-radius: 10px;
+
+    color: white;
+    font-size: 14px;
+
+    opacity: 0;
+    transform: translateY(-20px);
+
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+/* SHOW */
+.toast-box.show {
     opacity: 1;
     transform: translateY(0);
-    transition: all 0.3s ease;
-} */
+}
+
+/* TYPES */
+.toast-success {
+    background: #16a34a;
+}
+
+.toast-error {
+    background: #dc2626;
+}
+
+.toast-info {
+    background: #2563eb;
+}

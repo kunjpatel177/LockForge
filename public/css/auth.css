@@ -1,4 +1,82 @@
-body {
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* FULL SCREEN BACKGROUND */
+.auth-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #111827, #1f2937);
+}
+
+/* ROW FIX */
+.auth-row {
+    min-height: 100vh;
+}
+
+/* LEFT SIDE */
+.auth-left {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px;
+}
+
+.auth-left h1 {
+    font-size: 2.8rem;
+}
+
+/* RIGHT SIDE */
+.auth-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* CARD */
+.auth-card {
+    background: rgba(255, 255, 255, 0.95);
+    /* background: linear-gradient(135deg, #f9fafb, #e0e7ff); */
+    border-radius: 15px;
+    padding: 35px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+/* INPUT */
+.form-control {
+    border-radius: 8px;
+}
+
+/* BUTTON */
+.btn {
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .auth-left {
+        display: none;
+    }
+}
+
+
+
+/* body {
     background: linear-gradient(135deg, #64666d, #000000);
     font-family: 'Poppins', sans-serif;
 }
@@ -25,4 +103,4 @@ body {
 .login-btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
+} */

@@ -1,180 +1,142 @@
-// ================= GLOBAL STATE =================
+// ================= GLOBAL =================
 let fieldCount = 0;
+const csrfToken = document.getElementById("csrfToken")?.value;
 
-// ================= ADD FIELD (SAFE DOM VERSION) =================
+function showToast(message, type = "info") {
+
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+
+    toast.innerText = message;
+
+    // reset classes
+    toast.className = "toast-box show";
+
+    if (type === "success") toast.classList.add("toast-success");
+    if (type === "error") toast.classList.add("toast-error");
+    if (type === "info") toast.classList.add("toast-info");
+
+    // auto hide
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000);
+}
+
+// ================= ADD FIELD =================
 function addField(label = "", value = "", type = "text") {
+
     const container = document.getElementById("fieldsContainer");
-    const template = document.getElementById("field-template");
-
-    if (!container || !template) {
-        console.error("Template or container not found");
-        return;
-    }
-
-    const clone = template.content.cloneNode(true);
+    if (!container) return;
 
     const index = fieldCount;
 
-    const wrapper = clone.querySelector(".field-group");
-    wrapper.id = `field-${index}`;
+    const div = document.createElement("div");
+    div.className = "field-group mb-2";
+    div.id = `field-${index}`;
 
-    const labelInput = clone.querySelector(".field-label");
-    const valueInput = clone.querySelector(".field-value");
-    const select = clone.querySelector(".field-type");
-    const genBtn = clone.querySelector(".generate-btn");
-    const removeBtn = clone.querySelector(".remove-btn");
 
-    // Assign names (IMPORTANT for backend)
+    // LABEL INPUT
+    const labelInput = document.createElement("input");
+    labelInput.type = "text";
     labelInput.name = `fields[${index}][label]`;
-    valueInput.name = `fields[${index}][value]`;
-    select.name = `fields[${index}][type]`;
-
-    // Set values
+    labelInput.placeholder = "Label";
+    labelInput.className = "form-control field-label";
     labelInput.value = label;
-    valueInput.value = typeof value === "string" ? value : "";
-    select.value = type;
 
-    // Set type for password field
-    // if (type === "password") {
-    //     valueInput.type = "password";
-    // }
-    if (type === "password") {
-        valueInput.type = "password";
-        genBtn.classList.remove("d-none");
-    } else {
-        genBtn.classList.add("d-none");
+
+    // VALUE INPUT
+    const valueInput = document.createElement("input");
+    valueInput.type = type === "password" ? "password" : "text";
+    valueInput.name = `fields[${index}][value]`;
+    valueInput.placeholder = "Value";
+    valueInput.className = "form-control field-value";
+    valueInput.value = value;
+
+
+    // SELECT TYPE
+    const select = document.createElement("select");
+    select.name = `fields[${index}][type]`;
+    select.className = "form-select field-type";
+
+    ["text", "password", "otp"].forEach(opt => {
+        const option = document.createElement("option");
+        option.value = opt;
+        option.textContent = opt.toUpperCase();
+        if (opt === type) option.selected = true;
+        select.appendChild(option);
+    });
+
+
+    // GENERATE BUTTON
+    const genBtn = document.createElement("button");
+    genBtn.type = "button";
+    genBtn.className = "btn btn-outline-success btn-sm generate-btn";
+    genBtn.textContent = "Generate";
+
+    if (type !== "password") {
+        genBtn.style.display = "none";
     }
 
-    // Attach dataset IDs
-    genBtn.dataset.id = index;
-    removeBtn.dataset.id = index;
 
-    container.appendChild(clone);
+    // REMOVE BUTTON
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "btn btn-outline-danger btn-sm remove-btn";
+    removeBtn.textContent = "Remove";
 
-    // 🔥 animation trigger
-    const newField = container.lastElementChild;
 
-    // force reflow (important)
-    newField.offsetHeight;
+    // TYPE CHANGE → SHOW/HIDE GENERATE
+    select.addEventListener("change", () => {
+        if (select.value === "password") {
+            valueInput.type = "password";
+            genBtn.style.display = "inline-block";
+        } else {
+            valueInput.type = "text";
+            genBtn.style.display = "none";
+        }
+    });
 
-    // add class to animate
-    newField.classList.add("show");
+
+    // REMOVE FIELD
+    removeBtn.addEventListener("click", () => {
+        div.remove();
+    });
+
+
+    // GENERATE PASSWORD
+    genBtn.addEventListener("click", () => {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+        let password = "";
+
+        for (let i = 0; i < 12; i++) {
+            password += chars[Math.floor(Math.random() * chars.length)];
+        }
+
+        valueInput.value = password;
+    });
+
+
+    // APPEND
+    div.appendChild(labelInput);
+    div.appendChild(valueInput);
+    div.appendChild(select);
+    div.appendChild(genBtn);
+    div.appendChild(removeBtn);
+
+    container.appendChild(div);
 
     fieldCount++;
 }
 
+
+// ================= ADD FIELD WITH DATA (EDIT PAGE) =================
 function addFieldWithData(label = "", value = "", type = "text") {
-    const container = document.getElementById("fieldsContainer");
-    const template = document.getElementById("field-template");
-
-    if (!container || !template) return;
-
-    const clone = template.content.cloneNode(true);
-
-    const index = fieldCount;
-
-    const wrapper = clone.querySelector(".field-group");
-    wrapper.id = `field-${index}`;
-
-    const labelInput = clone.querySelector(".field-label");
-    const valueInput = clone.querySelector(".field-value");
-    const select = clone.querySelector(".field-type");
-    const genBtn = clone.querySelector(".generate-btn");
-    const removeBtn = clone.querySelector(".remove-btn");
-
-    // assign names
-    labelInput.name = `fields[${index}][label]`;
-    valueInput.name = `fields[${index}][value]`;
-    select.name = `fields[${index}][type]`;
-
-    // set values
-    labelInput.value = label;
-    valueInput.value = typeof value === "string" ? value : "";
-    select.value = type;
-
-    if (type === "password") {
-        // valueInput.type = "password";
-        genBtn.classList.remove("d-none");
-    } else {
-        genBtn.classList.add("d-none");
-    }
-
-    // attach ids
-    genBtn.dataset.id = index;
-    removeBtn.dataset.id = index;
-
-    container.appendChild(clone);
-
-    fieldCount++;
+    addField(label, value, type);
 }
 
-// ================= REMOVE FIELD =================
-function removeField(id) {
-    const el = document.getElementById(`field-${id}`);
-    if (el) el.remove();
-}
 
-// ================= PASSWORD GENERATOR =================
-function generatePassword() {
-    const chars =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@$!%*?&";
-
-    let password = "";
-    for (let i = 0; i < 12; i++) {
-        password += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-
-    return password;
-}
-
-// ================= AUTO FILL PASSWORD =================
-function autoFillPassword(index) {
-    const input = document.querySelector(
-        `input[name="fields[${index}][value]"]`
-    );
-
-    if (input) {
-        input.value = generatePassword();
-    }
-}
-
-// ================= TOGGLE PASSWORD =================
-function toggle(id) {
-    const hidden = document.getElementById(`hidden-${id}`);
-    const real = document.getElementById(`real-${id}`);
-
-    if (!hidden || !real) return;
-
-    if (real.style.display === "none") {
-        real.style.display = "inline";
-        hidden.style.display = "none";
-    } else {
-        real.style.display = "none";
-        hidden.style.display = "inline";
-    }
-}
-
-// ================= COPY TEXT =================
-function copyText(text) {
-    navigator.clipboard.writeText(text);
-    alert("Copied!");
-}
-
-// ================= EVENT LISTENERS =================
-// document.addEventListener("DOMContentLoaded", function () {
-
-//     // Add Field Button
-//     const addBtn = document.getElementById("addFieldBtn");
-//     if (addBtn) {
-//         addBtn.addEventListener("click", () => addField());
-//     }
-
-//     // Default fields on load
-//     // addField("email", "", "text");
-//     // addField("password", "", "password");
-// });
-
-document.addEventListener("DOMContentLoaded", function () {
+// ================= ADD FIELD BUTTON =================
+document.addEventListener("DOMContentLoaded", () => {
 
     const addBtn = document.getElementById("addFieldBtn");
 
@@ -182,178 +144,151 @@ document.addEventListener("DOMContentLoaded", function () {
         addBtn.addEventListener("click", () => addField());
     }
 
-    // Default fields on load
-    // addField("email", "", "text");
-    // addField("password", "", "password");
+});
 
-    // 🔥 HANDLE EDIT PAGE DATA
-    const editDataScript = document.getElementById("edit-data");
 
-    if (editDataScript) {
+// ================= TOGGLE PASSWORD =================
+document.addEventListener("click", function (e) {
+
+    if (e.target.closest(".toggle-btn")) {
+
+        const btn = e.target.closest(".toggle-btn");
+        const id = btn.dataset.id;
+
+        const hidden = document.getElementById(`hidden-${id}`);
+        const real = document.getElementById(`real-${id}`);
+
+        if (!hidden || !real) return;
+
+        if (real.style.display === "none") {
+            real.style.display = "inline";
+            hidden.style.display = "none";
+            btn.innerHTML = '<i class="fa fa-eye-slash"></i>';
+        } else {
+            real.style.display = "none";
+            hidden.style.display = "inline";
+            btn.innerHTML = '<i class="fa fa-eye"></i>';
+        }
+    }
+});
+
+
+// ================= COPY =================
+document.addEventListener("click", function (e) {
+
+    if (e.target.closest(".copy-btn")) {
+
+        const btn = e.target.closest(".copy-btn");
+        const value = btn.dataset.value;
+
+        if (!value) return;
+
+        navigator.clipboard.writeText(value);
+
+        btn.innerHTML = '<i class="fa fa-check"></i>';
+
+        setTimeout(() => {
+            btn.innerHTML = '<i class="fa fa-copy"></i>';
+        }, 1000);
+    }
+});
+
+// ===== SEARCH FUNCTIONALITY =====
+const input = document.getElementById("searchInput");
+
+if (input) {
+
+    input.addEventListener("input", function () {
+
+        const query = this.value.toLowerCase().trim();
+
+        const cards = document.querySelectorAll(".credential-item");
+
+        cards.forEach(card => {
+
+            const text = card.dataset.search || "";
+            const col = card.closest(".col-md-6");
+
+            if (!col) return;
+
+            if (query === "") {
+                col.style.display = ""; // reset
+                return;
+            }
+
+            if (text.includes(query)) {
+                col.style.display = "";
+            } else {
+                col.style.display = "none";
+            }
+
+        });
+
+    });
+}
+
+
+console.log("SCRIPT LOADED");
+
+const addForm = document.getElementById("addForm");
+
+if (addForm) {
+    addForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        console.log("SUBMIT TRIGGERED");
+
         try {
-            const fields = JSON.parse(editDataScript.textContent);
+            const formData = new FormData(addForm);
+            const dataObj = Object.fromEntries(formData.entries());
 
-            fieldCount = 0;
+            // 🔥 manually include fields (important)
+            const fields = [];
 
-            if (fields.length > 0) {
-                fields.forEach(field => {
-                    addFieldWithData(field.label, field.value, field.type);
-                });
+            document.querySelectorAll(".field-group").forEach((group) => {
+                const label = group.querySelector(".field-label")?.value;
+                const value = group.querySelector(".field-value")?.value;
+                const type = group.querySelector(".field-type")?.value;
+
+                if (label && value) {
+                    fields.push({ label, value, type });
+                }
+            });
+
+            // 🔥 VALIDATION
+            if (fields.length === 0) {
+                showToast("⚠️ At least one field required", "error");
+                return;
+            }
+
+            dataObj.fields = fields;
+
+            const csrfToken = document.querySelector("[name='_csrf']").value;
+
+            const res = await fetch("/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "CSRF-Token": csrfToken   // 🔥 REQUIRED
+                },
+                body: JSON.stringify(dataObj),
+                credentials: "same-origin"
+            });
+
+            const data = await res.json();
+
+            console.log("STATUS:", res.status, data);
+
+            if (data.success) {
+                window.location.reload();
+            } else {
+                alert("Error: " + (data.message || "Failed"));
             }
 
         } catch (err) {
-            console.error("Error parsing edit data", err);
+            console.error(err);
+            alert("Something went wrong");
         }
-    }
-});
+    });
+}
 
-// ================= GLOBAL CLICK HANDLER =================
-document.addEventListener("click", function (e) {
-
-    // Remove field
-    if (e.target.classList.contains("remove-btn")) {
-        const id = e.target.getAttribute("data-id");
-        removeField(id);
-    }
-
-    // Generate password
-    if (e.target.classList.contains("generate-btn")) {
-        const id = e.target.getAttribute("data-id");
-        autoFillPassword(id);
-    }
-
-    // ================= TOGGLE PASSWORD =================
-    if (e.target.classList.contains("toggle-btn")) {
-        const id = e.target.getAttribute("data-id");
-        toggle(id);
-    }
-
-    // ================= COPY TEXT =================
-    if (e.target.classList.contains("copy-btn")) {
-        const text = e.target.getAttribute("data-value");
-        copyText(text);
-    }
-
-    // DELETE CONFIRM
-    if (e.target.classList.contains("delete-btn")) {
-        const confirmDelete = confirm("Are you sure?");
-        if (!confirmDelete) {
-            e.preventDefault();
-        }
-    }
-});
-
-document.addEventListener("change", function (e) {
-    if (e.target.classList.contains("field-type")) {
-
-        const fieldGroup = e.target.closest(".field-group");
-        const genBtn = fieldGroup.querySelector(".generate-btn");
-        // const valueInput = fieldGroup.querySelector(".field-value");
-
-        const selectedType = e.target.value;
-
-        // change input type
-        if (selectedType === "password") {
-            // valueInput.type = "text";
-            genBtn.classList.remove("d-none");
-        } else {
-            // valueInput.type = "text";
-            genBtn.classList.add("d-none");
-        }
-    }
-});
-
-
-
-
-// let fieldCount = 0;
-
-// function addField(label = "", value = "", type = "text") {
-//     const container = document.getElementById("fieldsContainer");
-
-//     const div = document.createElement("div");
-//     div.className = "field-group";
-//     div.id = `field-${fieldCount}`;
-
-//     div.innerHTML = `
-//         <input
-//             type="text"
-//             name="fields[${fieldCount}][label]"
-//             placeholder="Label (e.g. email)"
-//             value="${label}"
-//             required
-//         >
-
-//         <input
-//             type="${type === "password" ? "password" : "text"}"
-//             name="fields[${fieldCount}][value]"
-//             placeholder="Value"
-//             value="${value}"
-//             required
-//         >
-
-//         <select name="fields[${fieldCount}][type]">
-//             <option value="text" ${type === "text" ? "selected" : ""}>Text</option>
-//             <option value="password" ${type === "password" ? "selected" : ""}>Password</option>
-//             <option value="otp" ${type === "otp" ? "selected" : ""}>OTP</option>
-//         </select>
-
-//         <button type="button" onclick="autoFillPassword(${fieldCount})">
-//             Generate
-//         </button>
-
-//         <button type="button" onclick="removeField(${fieldCount})">
-//             Remove
-//         </button>
-
-//         <br><br>
-//     `;
-
-//     container.appendChild(div);
-//     fieldCount++;
-// }
-
-// function removeField(id) {
-//     const el = document.getElementById(`field-${id}`);
-//     if (el) el.remove();
-// }
-
-// function toggle(id) {
-//     const hidden = document.getElementById(`val-${id}`);
-//     const real = document.getElementById(`real-${id}`);
-
-//     if (real.style.display === "none") {
-//         real.style.display = "inline";
-//         hidden.style.display = "none";
-//     } else {
-//         real.style.display = "none";
-//         hidden.style.display = "inline";
-//     }
-// }
-
-// function copyText(text) {
-//     navigator.clipboard.writeText(text);
-//     alert("Copied!");
-// }
-
-// function generatePassword() {
-//     const chars =
-//         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@$!%*?&";
-
-//     let password = "";
-//     for (let i = 0; i < 12; i++) {
-//         password += chars.charAt(Math.floor(Math.random() * chars.length));
-//     }
-
-//     return password;
-// }
-
-// function autoFillPassword(index) {
-//     const input = document.querySelector(
-//         `input[name="fields[${index}][value]"]`
-//     );
-
-//     if (input) {
-//         input.value = generatePassword();
-//     }
-// }

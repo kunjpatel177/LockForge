@@ -1,0 +1,40 @@
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>🟢 Active Sessions</h2>
+        <a href="/dashboard" class="btn btn-dark">← Back</a>
+    </div>
+
+    <div class="card shadow p-3">
+
+        <% sessions.forEach(session => { %>
+
+            <div class="d-flex justify-content-between align-items-center border-bottom py-3">
+
+                <div>
+                    <strong>
+                        <%= session.sessionId === currentSessionId ? "🟢 This Device" : "📱 Device" %>
+                    </strong><br>
+
+                    <span class="text-muted"><%= session.device %></span><br>
+                    <small>IP: <%= session.ip %></small><br>
+                    <small>Last active: <%= session.lastActive.toLocaleString() %></small><br>
+                    <small>Location: <%= session.location %></small>
+                </div>
+
+                <% if (session.sessionId !== currentSessionId) { %>
+                    <form method="POST" action="/sessions/logout">
+                        <input type="hidden" name="sessionId" value="<%= session.sessionId %>">
+                        <button class="btn btn-danger btn-sm">
+                            Logout
+                        </button>
+                    </form>
+                <% } %>
+
+            </div>
+
+        <% }) %>
+
+    </div>
+
+</div>

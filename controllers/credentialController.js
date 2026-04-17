@@ -1,22 +1,26 @@
 const Credential = require("../models/Credential");
-const { encrypt } = require("../utils/crypto");
-const { decrypt } = require("../utils/crypto");
-const sanitize = require("../utils/sanitize");
+const { encrypt, decrypt } = require("../utils/crypto");
+const AuditLog = require("../models/AuditLog");
+const { getDevice } = require("../utils/device");
+const { getLocation } = require("../utils/location");
+
+// ================= ADD CREDENTIAL (AJAX) =================
 
 module.exports.addCredential = async (req, res) => {
     try {
-        // const { service, fields } = req.body;
-        const service = sanitize(req.body.service);
-        // const { service } = req.body;
-        const rawFields = req.body.fields || {};
-        const fields = Object.values(rawFields).filter(f => {
-            return f.label && f.value;
-        });;
+        const { service, fields } = req.body;
+
+        if (!service || !fields || !Array.isArray(fields)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid data"
+            });
+        }
 
         const key = Buffer.from(req.session.encryptionKey, "hex");
 
         const encryptedFields = fields.map(field => {
-            if (field.type === "password" || field.type === "otp" || field.type === "code") {
+            if (["password", "otp", "code"].includes(field.type)) {
                 return {
                     ...field,
                     value: encrypt(field.value, key)
@@ -25,182 +29,193 @@ module.exports.addCredential = async (req, res) => {
             return field;
         });
 
-        const credential = new Credential({
+        const newCredential = new Credential({
             userId: req.session.userId,
             service,
             fields: encryptedFields
         });
 
-        await credential.save();
-
-        res.redirect("/dashboard");
-
-    } catch (err) {
-        res.send("Error saving credential");
-    }
-};
-
-
-module.exports.getCredentials = async (req, res) => {
-    try {
-        const key = Buffer.from(req.session.encryptionKey, "hex");
-
-        const credentials = await Credential.find({
-            userId: req.session.userId
-        });
-
-        const decryptedData = credentials.map(cred => {
-            const fields = cred.fields.map(field => {
-                if (field.type === "password" || field.type === "otp" || field.type === "code") {
-                    return {
-                        ...field._doc,
-                        value: decrypt(field.value, key)
-                    };
-                }
-                return field;
-            });
-
-            return {
-                ...cred._doc,
-                fields
-            };
-        });
-
-        res.render("dashboard/index", { credentials: decryptedData });
-
-    } catch (err) {
-        res.send("Error fetching credentials");
-    }
-};
-
-module.exports.deleteCredential = async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        await Credential.deleteOne({
-            _id: id,
-            userId: req.session.userId
-        });
-
-        res.redirect("/dashboard");
-
-    } catch (err) {
-        res.send("Error deleting credential");
-    }
-};
-
-
-module.exports.renderEditPage = async (req, res) => {
-    try {
-        const key = Buffer.from(req.session.encryptionKey, "hex");
-
-        const cred = await Credential.findOne({
-            _id: req.params.id,
-            userId: req.session.userId
-        });
-
-        if (!cred) return res.send("Not found");
-
-        const fields = cred.fields.map(f => {
-            let value = f.value;
-
-            if (["password", "otp", "code"].includes(f.type)) {
-                value = decrypt(f.value, key);
-            }
-
-            return {
-                label: f.label,
-                value: value,   // 👈 MUST be plain string
-                type: f.type
-            };
-        });
-
-        res.render("dashboard/edit", {
-            cred: {
-                _id: cred._id,
-                service: cred.service,
-                fields
-            }
-        });
-
-    } catch (err) {
-        console.error(err);
-        res.send("Error");
-    }
-};
-
-
-module.exports.updateCredential = async (req, res) => {
-    const key = Buffer.from(req.session.encryptionKey, "hex");
-
-    const fields = Object.values(req.body.fields || {}).map(f => {
-        if (f.type === "password" || f.type === "otp" || f.type === "code") {
-            return {
-                ...f,
-                value: encrypt(f.value, key)
-            };
-        }
-        return f;
-    });
-
-    await Credential.updateOne(
-        { _id: req.params.id, userId: req.session.userId },
-        {
-            service: req.body.service,
-            fields
-        }
-    );
-
-    res.redirect("/dashboard");
-};
-
-
-module.exports.getCredentials = async (req, res) => {
-    try {
-        // 🔐 Check encryption key
-        if (!req.session.encryptionKey) {
-            return res.redirect("/");
-        }
-
-        const key = Buffer.from(req.session.encryptionKey, "hex");
-
-        // 🔍 Sanitize search input
-        const search = sanitize(req.query.search || "");
-
-        // 📦 Fetch credentials
-        const credentials = await Credential.find({
+        await AuditLog.create({
             userId: req.session.userId,
-            service: { $regex: search, $options: "i" }
+            action: "add_credential",
+            ip: req.ip,
+            device: getDevice(req),
+            location: getLocation(req.ip)
         });
 
-        // 🔓 Decrypt fields
-        const decryptedData = credentials.map(cred => {
-            const fields = cred.fields.map(field => {
+        await newCredential.save();
 
-                if (["password", "otp", "code"].includes(field.type)) {
-                    return {
-                        ...field._doc,
-                        value: decrypt(field.value, key)
-                    };
-                }
-
-                return field;
-            });
-
-            return {
-                ...cred._doc,
-                fields
-            };
-        });
-
-        // 🎨 Render dashboard
-        res.render("dashboard/index", {
-            credentials: decryptedData,
-            search
-        });
+        res.json({ success: true });
 
     } catch (err) {
         console.error(err);
-        res.send("Error fetching credentials");
+        res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
+    }
+};
+
+// module.exports.addCredential = async (req, res) => {
+
+//     try {
+//         const service = req.body.service;
+//         const rawFields = req.body.fields || {};
+
+//         const fields = Object.values(rawFields).filter(f => f.label && f.value);
+
+//         const key = Buffer.from(req.session.encryptionKey, "hex");
+
+//         const encryptedFields = fields.map(field => {
+
+//             if (["password", "otp", "code"].includes(field.type)) {
+//                 return {
+//                     ...field,
+//                     value: encrypt(field.value, key)
+//                 };
+//             }
+
+//             return field;
+//         });
+
+//         const credential = new Credential({
+//             userId: req.session.userId,
+//             service,
+//             fields: encryptedFields
+//         });
+
+//         await credential.save();
+
+//         return res.json({ success: true });
+
+//     } catch (err) {
+//         console.error("Add Error:", err);
+//         return res.json({ success: false });
+//     }
+// };
+
+
+
+// ================= GET EDIT PAGE =================
+module.exports.getEditPage = async (req, res) => {
+
+    try {
+        const cred = await Credential.findById(req.params.id);
+
+        if (!cred) return res.redirect("/dashboard");
+
+        const key = Buffer.from(req.session.encryptionKey, "hex");
+
+        const decryptedFields = cred.fields.map(field => {
+
+            if (["password", "otp", "code"].includes(field.type)) {
+                return {
+                    ...field._doc,
+                    value: decrypt(field.value, key)
+                };
+            }
+
+            return field;
+        });
+
+        cred.fields = decryptedFields;
+
+        const ejs = require("ejs");
+        const fs = require("fs");
+        const path = require("path");
+
+        const content = fs.readFileSync(
+            path.join(__dirname, "../views/dashboard/edit.ejs"),
+            "utf-8"
+        );
+
+        const body = ejs.render(content, {
+            cred,
+            csrfToken: req.csrfToken()
+        });
+
+        // await AuditLog.create({
+        //     userId: req.session.userId,
+        //     action: "add_credential",
+        //     ip: req.ip,
+        //     device: getDevice(req)
+        // });
+
+        res.render("layouts/app", {
+            title: "Edit Credential",
+            body
+        });
+
+    } catch (err) {
+        console.error("Edit GET Error:", err);
+        res.redirect("/dashboard");
+    }
+};
+
+
+
+// ================= UPDATE CREDENTIAL =================
+module.exports.updateCredential = async (req, res) => {
+
+    try {
+        const service = req.body.service;
+        const rawFields = req.body.fields || {};
+
+        const fields = Object.values(rawFields).filter(f => f.label && f.value);
+
+        const key = Buffer.from(req.session.encryptionKey, "hex");
+
+        const encryptedFields = fields.map(field => {
+
+            if (["password", "otp", "code"].includes(field.type)) {
+                return {
+                    ...field,
+                    value: encrypt(field.value, key)
+                };
+            }
+
+            return field;
+        });
+
+        await Credential.findByIdAndUpdate(req.params.id, {
+            service,
+            fields: encryptedFields
+        });
+
+        await AuditLog.create({
+            userId: req.session.userId,
+            action: "update_credential",
+            ip: req.ip,
+            device: getDevice(req),
+            location: getLocation(req.ip)
+        });
+
+        res.redirect("/dashboard");
+
+    } catch (err) {
+        console.error("Update Error:", err);
+        res.redirect("/dashboard");
+    }
+};
+
+
+
+// ================= DELETE =================
+module.exports.deleteCredential = async (req, res) => {
+
+    try {
+        await Credential.findByIdAndDelete(req.params.id);
+        await AuditLog.create({
+            userId: req.session.userId,
+            action: "delete_credential",
+            ip: req.ip,
+            device: getDevice(req),
+            location: getLocation(req.ip)
+        });
+        res.redirect("/dashboard");
+
+    } catch (err) {
+        console.error("Delete Error:", err);
+        res.redirect("/dashboard");
     }
 };

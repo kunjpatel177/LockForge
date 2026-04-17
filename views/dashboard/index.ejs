@@ -1,161 +1,151 @@
-<!DOCTYPE html>
-<html lang="en">
+<% if (suspiciousLogin) { %>
+    <div class="alert alert-danger d-flex justify-content-between align-items-center shadow-sm">
+        <div>
+            ⚠️ <strong>Suspicious Login Detected!</strong><br>
+            We noticed a login from a new device or location.
+        </div>
+        <a href="/history" class="btn btn-outline-danger btn-sm">
+            Review Activity
+        </a>
+    </div>
+<% } %>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Password Manager Dashboard</title>
+<!-- HEADER -->
+<div class="dashboard-header">
+    <h2>My Credentials</h2>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <div class="header-actions">
+        <a href="/sessions" class="btn btn-outline-primary btn-sm">
+            🟢 Active Sessions
+        </a>
 
+        <a href="/history" class="btn btn-outline-secondary btn-sm">
+            📜 Activity History
+        </a>
+    </div>
+</div>
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/dashboard.css">
-</head>
+<!-- <div class="search-bar mb-3">
+    <input 
+        type="text" 
+        id="searchInput" 
+        class="form-control" 
+        placeholder="🔍 Search credentials (service, email, username...)"
+    >
+</div> -->
 
-<body>
+<!-- ================= ADD CREDENTIAL ================= -->
 
-    <!-- 🔷 NAVBAR -->
-    <nav class="navbar navbar-dark bg-primary px-4">
-        <span class="navbar-brand mb-0 h1">🔐 Password Manager</span>
-        <form action="/logout" method="POST" style="display:inline;">
-            <button class="btn btn-outline-light btn-sm ">Logout</button>
-        </form>
-    </nav>
+<div class="credential-card add-card">
 
-    <div class="container py-4">
+    <form id="addForm">
 
-        <div class="w-100 d-flex justify-content-center">
-            <div class="col-md-6">
-                <%#- include("../partials/flash") %>
-                <%- include("../partials/toast") %>
-            </div>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+        <div class="mb-3">
+            <input type="text" name="service" class="form-control" placeholder="Service (e.g. Gmail)" required>
         </div>
 
-        <!-- 🔍 SEARCH -->
-        <form method="GET" action="/dashboard" class="mb-4">
-            <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="Search service..."
-                    value="<%= search || '' %>">
-                <button class="btn btn-primary">Search</button>
-            </div>
-        </form>
+        <div id="fieldsContainer"></div>
+        <p id="error" class="text-center"></p>
 
-        <!-- ➕ ADD CREDENTIAL -->
-        <div class="card shadow-sm p-4 mb-4">
-            <h4 class="mb-3">➕ Add Credential</h4>
+        <button type="button" id="addFieldBtn" class="btn btn-outline-primary btn-sm px-4 py-2 mt-2">
+            <i class="fa fa-plus"></i> Add Field
+        </button>
 
-            <form method="POST" action="/add">
+        <br><br>
 
-                <input type="text" name="service" class="form-control mb-3" placeholder="Service (e.g. Gmail)" required>
+        <button class="btn btn-primary px-4 py-2">
+            Save Credential
+        </button>
 
-                <div id="fieldsContainer" class="mb-3"></div>
+    </form>
 
-                <button type="button" id="addFieldBtn" class="btn btn-outline-primary mb-3">
-                    + Add Field
-                </button>
+</div>
 
-                <button type="submit" class="btn btn-primary w-100">
-                    Save Credential
-                </button>
-            </form>
-        </div>
+<!-- ================= DISPLAY ================= -->
 
-        <!-- 📦 SAVED CREDENTIALS -->
-        <h4 class="mb-3">📦 Saved Credentials</h4>
+<% if (!credentials || credentials.length === 0) { %>
+    <p class="text-muted mt-3">No credentials found.</p>
+<% } %>
 
-        <% if (!credentials || credentials.length===0) { %>
-            <p class="text-muted">No credentials found.</p>
-            <% } %>
+<div class="row mt-4">
 
-                <div class="row">
-                    <% credentials.forEach(cred=> { %>
+    <% credentials.forEach(cred => { %>
 
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card shadow-sm h-100 credential-card">
+        <div class="col-md-6 mb-4 d-flex">
 
-                                <div class="card-body">
+            <!-- <div class="credential-card w-100"> -->
+            <div class="credential-card w-100 credential-item"
+     data-search="<%= (cred.service + ' ' + cred.fields.map(f => f.value).join(' ')).toLowerCase() %>">
 
-                                    <h5 class="card-title text-center">
-                                        <%= cred.service %>
-                                    </h5>
-                                    <hr>
-                                    
-                                    <% cred.fields.forEach(field=> { %>
+                <!-- HEADER -->
+                <div class="card-header">
+                    <h5><%= cred.service %></h5>
 
-                                        <p class="mb-2">
-                                            <strong>
-                                                <%= field.label %>:
-                                            </strong>
+                    <div class="card-actions">
+                        <a href="/edit/<%= cred._id %>" class="btn btn-sm btn-primary">Edit</a>
 
-                                            <% if (field.type==="password" || field.type==="otp" || field.type==="code"
-                                                ) { %>
-
-                                                
-                                                    <span id="hidden-<%= field._id %>">••••••••</span>
-
-                                                    <span id="real-<%= field._id %>" style="display:none;">
-                                                        <%= field.value %>
-                                                    </span>
-                                                 &nbsp;&nbsp;&nbsp;&nbsp;
-
-                                                <!-- <br> -->
-
-                                                <span><button type="button"
-                                                        class="btn btn-sm btn-outline-secondary toggle-btn"
-                                                        data-id="<%= field._id %>">
-                                                        Show
-                                                    </button>
-
-                                                <button type="button" class="btn btn-sm btn-outline-info copy-btn"
-                                                    data-value="<%= field.value %>">
-                                                    Copy
-                                                </button></span>
-
-                                                <% } else { %>
-
-                                                    <span>
-                                                        <%= field.value %>
-                                                    </span>
-
-                                                    <% } %>
-                                        </p>
-
-                                        <% }) %>
-
-                                </div>
-
-                                <div class="card-footer d-flex justify-content-evenly">
-
-                                    <a href="/edit/<%= cred._id %>" class="btn btn-sm btn-primary">
-                                        Edit
-                                    </a>
-
-                                    <form method="POST" action="/delete/<%= cred._id %>">
-                                        <button type="submit" class="btn btn-sm btn-danger delete-btn">
-                                            Delete
-                                        </button>
-                                    </form>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <% }) %>
+                        <form method="POST" action="/delete/<%= cred._id %>">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </div>
                 </div>
 
-    </div>
+                <hr>
 
-    <%- include("../partials/fieldTemplate") %>
+                <!-- FIELDS -->
+                <div class="card-body">
 
+                    <% cred.fields.forEach(field => { %>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+                        <div class="field-row">
 
-        <script src="/js/toast.js"></script>
+                            <span class="field-label"><%= field.label %>:</span>
 
-        <script src="/js/script.js"></script>
+                            <span class="field-value">
 
-</body>
+                                <% if (["password","otp","code"].includes(field.type)) { %>
 
-</html>
+                                    <span id="hidden-<%= field._id %>">••••••••</span>
+
+                                    <span id="real-<%= field._id %>" style="display:none;">
+                                        <%= field.value %>
+                                    </span>
+
+                                <% } else { %>
+                                    <%= field.value %>
+                                <% } %>
+
+                            </span>
+
+                            <div class="field-actions">
+
+                                <% if (["password","otp","code"].includes(field.type)) { %>
+                                    <button type="button" class="icon-btn toggle-btn" data-id="<%= field._id %>">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                <% } %>
+
+                                <button type="button" class="icon-btn copy-btn" data-value="<%= field.value %>">
+                                    <i class="fa fa-copy"></i>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    <% }) %>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    <% }) %>
+
+</div>
+
+<!-- <script src="/js/script.js"></script> -->

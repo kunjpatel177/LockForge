@@ -1,0 +1,131 @@
+<div class="container-fluid py-4">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">🔐 Activity History</h2>
+            <p class="text-muted mb-0">Track your account activity and logins</p>
+        </div>
+
+        <a href="/dashboard" class="btn btn-primary px-4 shadow-sm">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    <!-- CARD -->
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-body p-4">
+
+            <% if (logs.length===0) { %>
+
+                <!-- EMPTY STATE -->
+                <div class="text-center py-5">
+                    <h5 class="text-muted">No activity found</h5>
+                    <p class="text-muted small">Your login history will appear here.</p>
+                </div>
+
+                <% } else { %>
+
+                    <div class="table-responsive">
+                        <table class="table align-middle table-hover">
+
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Action</th>
+                                    <th>Device</th>
+                                    <th>IP Address</th>
+                                    <th>Time</th>
+                                    <th>Location</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <% logs.forEach(log=> { %>
+                                    <tr class="history-row <%= log.suspicious ? 'table-danger' : '' %>">
+
+                                        <!-- ACTION -->
+                                        <td>
+                                            <% if (log.action==="login" ) { %>
+                                                <span class="badge bg-success">Login</span>
+                                                <% } else if (log.action==="logout" ) { %>
+                                                    <span class="badge bg-secondary">Logout</span>
+                                                    <% } else { %>
+                                                        <span class="badge bg-primary">
+                                                            <%= log.action %>
+                                                        </span>
+                                                        <% } %>
+                                        </td>
+
+                                        <!-- DEVICE -->
+                                        <td>
+                                            <% if (log.device.includes("mobile")) { %>
+                                                📱
+                                                <% } else { %>
+                                                    💻
+                                                    <% } %>
+                                                        <span class="text-muted">
+                                                            <%= log.device %>
+                                                        </span>
+                                        </td>
+
+                                        <!-- IP -->
+                                        <td>
+                                            <code><%= log.ip %></code>
+                                        </td>
+
+                                        <!-- TIME -->
+                                        <td class="text-muted small">
+                                            <%= new Date(log.time).toLocaleString() %>
+                                        </td>
+
+                                        <!-- Location -->
+                                        <td>
+                                            <span class="badge bg-info text-dark">
+                                                🌍 <%= log.location || "Unknown" %>
+                                            </span>
+                                        </td>
+
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                    <% } %>
+
+        </div>
+    </div>
+
+</div>
+
+<style>
+    body {
+        background: #f6f8fb;
+    }
+
+    .card {
+        transition: 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+    }
+
+    .history-row:hover {
+        background: #f1f5ff;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+        padding: 6px 10px;
+        border-radius: 12px;
+    }
+
+    code {
+        background: #eef1f7;
+        padding: 4px 8px;
+        border-radius: 6px;
+    }
+</style>
