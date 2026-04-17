@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": "24.14.0"
+  },
   "name": "password-manager",
   "version": "1.0.0",
   "description": "",
@@ -7,7 +10,7 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -24,6 +27,8 @@
     "express-session": "^1.19.0",
     "geoip-lite": "^2.0.1",
     "helmet": "^8.1.0",
+    "joi": "^18.1.2",
+    "mongodb": "^7.1.1",
     "mongoose": "^9.4.1",
     "nodemailer": "^8.0.5",
     "ua-parser-js": "^2.0.9"

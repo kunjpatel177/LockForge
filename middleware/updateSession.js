@@ -1,4 +1,3 @@
-// middleware/updateSession.js
 const Session = require("../models/Session");
 
 module.exports = async (req, res, next) => {

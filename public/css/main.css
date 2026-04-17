@@ -49,6 +49,51 @@ body {
     background: linear-gradient(135deg, #9496f5, #1500ff);
 }
 
+/* ===== HOW IT WORKS ===== */
+.step-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.step-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    margin: auto;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c7ef7, #0000ff);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* ===== SECURITY SECTION ===== */
+.security-section {
+    background: linear-gradient(135deg, #1f2937, #111827);
+}
+
+/* ===== TESTIMONIALS ===== */
+.testimonial-card {
+    background: linear-gradient(135deg, #f8fafc, #eef2ff);
+    border-radius: 12px;
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
 /* BUTTON HOVER */
 .btn {
     transition: 0.3s;

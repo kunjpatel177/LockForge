@@ -1,3 +1,4 @@
+/* dashboard.css */
 /* ===== GLOBAL ===== */
 body {
     margin: 0;
@@ -9,11 +10,25 @@ body {
 .dashboard {
     display: flex;
     min-height: 100vh;
+} 
+
+.search-bar{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.search-bar label{
+    font-size: larger;
 }
 
 .search-bar input {
     max-width: 400px;
     border-radius: 8px;
+}
+
+#noResults{
+    color: crimson !important;
 }
 
 /* ===== SIDEBAR ===== */
@@ -90,6 +105,10 @@ body {
     display: flex;
 }
 
+.col-md-6 {
+    transition: all 0.3s ease !important;
+}
+
 /* ===== CARD ===== */
 .credential-card {
     width: 100%;
@@ -113,7 +132,7 @@ body {
 
 /* ADD CARD */
 .add-card {
-    background: #f9fafb;
+    background: rgba(224, 224, 250, 0.219);
     border: 1px dashed #d1d5db;
 }
 
@@ -321,4 +340,31 @@ body {
 
 .toast-info {
     background: #2563eb;
+}
+
+
+/* ===== SESSION CARD ===== */
+.session-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    transition: 0.25s ease;
+}
+
+/* HOVER EFFECT (GitHub style) */
+.session-card:hover {
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+}
+
+/* BADGE IMPROVEMENT */
+.session-card .badge {
+    font-size: 0.7rem;
+    border-radius: 12px;
+}
+
+/* CODE STYLE */
+.session-card code {
+    background: #f3f4f6;
+    padding: 2px 6px;
+    border-radius: 6px;
 }

@@ -8,144 +8,155 @@
             Review Activity
         </a>
     </div>
-<% } %>
+    <% } %>
 
-<!-- HEADER -->
-<div class="dashboard-header">
-    <h2>My Credentials</h2>
+        <!-- HEADER -->
+        <div class="dashboard-header">
+            <h2>My Credentials</h2>
 
-    <div class="header-actions">
-        <a href="/sessions" class="btn btn-outline-primary btn-sm">
-            🟢 Active Sessions
-        </a>
+            <div class="header-actions">
+                <a href="/sessions" class="btn btn-outline-primary btn-sm">
+                    🟢 Active Sessions
+                </a>
 
-        <a href="/history" class="btn btn-outline-secondary btn-sm">
-            📜 Activity History
-        </a>
-    </div>
-</div>
-
-<!-- <div class="search-bar mb-3">
-    <input 
-        type="text" 
-        id="searchInput" 
-        class="form-control" 
-        placeholder="🔍 Search credentials (service, email, username...)"
-    >
-</div> -->
-
-<!-- ================= ADD CREDENTIAL ================= -->
-
-<div class="credential-card add-card">
-
-    <form id="addForm">
-
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-
-        <div class="mb-3">
-            <input type="text" name="service" class="form-control" placeholder="Service (e.g. Gmail)" required>
+                <a href="/history" class="btn btn-outline-secondary btn-sm">
+                    📜 Activity History
+                </a>
+            </div>
         </div>
 
-        <div id="fieldsContainer"></div>
-        <p id="error" class="text-center"></p>
+        <!-- 🔍 SEARCH BAR -->
+        <div class="search-bar mb-3">
+            <label for="searchInput" class="form-lable">Search your existing service:&nbsp;</label>
+            <input type="text" id="searchInput" class="form-control"
+                placeholder="Search service (e.g. Gmail, Instagram...)">
+        </div>
 
-        <button type="button" id="addFieldBtn" class="btn btn-outline-primary btn-sm px-4 py-2 mt-2">
-            <i class="fa fa-plus"></i> Add Field
-        </button>
+        <!-- NO RESULT MESSAGE -->
+        <p id="noResults" class=" mt-2" style="display:none;">
+            No matching services found.
+        </p>
 
-        <br><br>
+        <!-- ================= ADD CREDENTIAL ================= -->
 
-        <button class="btn btn-primary px-4 py-2">
-            Save Credential
-        </button>
+        <div class="credential-card add-card">
+            <h4 class="mb-3 text-center ">Add Your Service Here</h4>
+            <!-- <hr> -->
 
-    </form>
+            <form id="addForm">
 
-</div>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-<!-- ================= DISPLAY ================= -->
-
-<% if (!credentials || credentials.length === 0) { %>
-    <p class="text-muted mt-3">No credentials found.</p>
-<% } %>
-
-<div class="row mt-4">
-
-    <% credentials.forEach(cred => { %>
-
-        <div class="col-md-6 mb-4 d-flex">
-
-            <!-- <div class="credential-card w-100"> -->
-            <div class="credential-card w-100 credential-item"
-     data-search="<%= (cred.service + ' ' + cred.fields.map(f => f.value).join(' ')).toLowerCase() %>">
-
-                <!-- HEADER -->
-                <div class="card-header">
-                    <h5><%= cred.service %></h5>
-
-                    <div class="card-actions">
-                        <a href="/edit/<%= cred._id %>" class="btn btn-sm btn-primary">Edit</a>
-
-                        <form method="POST" action="/delete/<%= cred._id %>">
-                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                            <button class="btn btn-sm btn-danger">Delete</button>
-                        </form>
-                    </div>
+                <div class="mb-3">
+                    <input type="text" name="service" class="form-control" placeholder="Service (e.g. Gmail)" required>
                 </div>
 
-                <hr>
+                <div id="fieldsContainer"></div>
+                <p id="error" class="text-center"></p>
 
-                <!-- FIELDS -->
-                <div class="card-body">
+                <button type="button" id="addFieldBtn" class="btn btn-outline-primary btn-sm px-4 py-2 mt-2">
+                    <i class="fa fa-plus"></i> Add Field
+                </button>
 
-                    <% cred.fields.forEach(field => { %>
+                <br><br>
 
-                        <div class="field-row">
+                <button class="btn btn-primary px-4 py-2">
+                    Save Credential
+                </button>
 
-                            <span class="field-label"><%= field.label %>:</span>
+            </form>
 
-                            <span class="field-value">
+        </div>
 
-                                <% if (["password","otp","code"].includes(field.type)) { %>
+        <!-- ================= DISPLAY ================= -->
 
-                                    <span id="hidden-<%= field._id %>">••••••••</span>
+        <% if (!credentials || credentials.length===0) { %>
+            <p class="text-muted mt-3">No credentials found.</p>
+            <% } %>
 
-                                    <span id="real-<%= field._id %>" style="display:none;">
-                                        <%= field.value %>
-                                    </span>
+                <div class="row mt-4">
 
-                                <% } else { %>
-                                    <%= field.value %>
-                                <% } %>
+                    <% credentials.forEach(cred=> { %>
 
-                            </span>
+                        <div class="col-md-6 mb-4 d-flex">
 
-                            <div class="field-actions">
+                            <!-- <div class="credential-card w-100"> -->
+                            <div class="credential-card w-100 credential-item"
+                                data-search="<%= cred.service.toLowerCase() %>">
 
-                                <% if (["password","otp","code"].includes(field.type)) { %>
-                                    <button type="button" class="icon-btn toggle-btn" data-id="<%= field._id %>">
-                                        <i class="fa fa-eye"></i>
-                                    </button>
-                                <% } %>
+                                <!-- HEADER -->
+                                <div class="card-header">
+                                    <h5>
+                                        <%= cred.service %>
+                                    </h5>
 
-                                <button type="button" class="icon-btn copy-btn" data-value="<%= field.value %>">
-                                    <i class="fa fa-copy"></i>
-                                </button>
+                                    <div class="card-actions">
+                                        <a href="/edit/<%= cred._id %>" class="btn btn-sm btn-primary">Edit</a>
+
+                                        <form method="POST" action="/delete/<%= cred._id %>">
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                            <button class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <!-- FIELDS -->
+                                <div class="card-body">
+
+                                    <% cred.fields.forEach(field=> { %>
+
+                                        <div class="field-row">
+
+                                            <span class="field-label">
+                                                <%= field.label %>:
+                                            </span>
+
+                                            <span class="field-value">
+
+                                                <% if (["password","otp","code"].includes(field.type)) { %>
+
+                                                    <span id="hidden-<%= field._id %>">••••••••</span>
+
+                                                    <span id="real-<%= field._id %>" style="display:none;">
+                                                        <%= field.value %>
+                                                    </span>
+
+                                                    <% } else { %>
+                                                        <%= field.value %>
+                                                            <% } %>
+
+                                            </span>
+
+                                            <div class="field-actions">
+
+                                                <% if (["password","otp","code"].includes(field.type)) { %>
+                                                    <button type="button" class="icon-btn toggle-btn"
+                                                        data-id="<%= field._id %>">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                    <% } %>
+
+                                                        <button type="button" class="icon-btn copy-btn"
+                                                            data-value="<%= field.value %>">
+                                                            <i class="fa fa-copy"></i>
+                                                        </button>
+
+                                            </div>
+
+                                        </div>
+
+                                        <% }) %>
+
+                                </div>
 
                             </div>
 
                         </div>
 
-                    <% }) %>
+                        <% }) %>
 
                 </div>
 
-            </div>
-
-        </div>
-
-    <% }) %>
-
-</div>
-
-<!-- <script src="/js/script.js"></script> -->
+                <!-- <script src="/js/script.js"></script> -->

@@ -55,7 +55,7 @@
     <%- JSON.stringify(cred.fields || []) %>
 </script>
 
-<!-- <script src="/js/script.js"></script> -->
+<script src="/js/script.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -79,5 +79,34 @@ document.addEventListener("DOMContentLoaded", () => {
         addField("email", "", "text");
         addField("password", "", "password");
     }
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const form = document.getElementById("editForm");
+
+    if (!form) return;
+
+    form.addEventListener("submit", (e) => {
+
+        const fields = document.querySelectorAll(".field-group");
+
+        if (fields.length === 0) {
+            e.preventDefault();
+
+            // 🔥 Use existing toast function
+            if (typeof showToast === "function") {
+                showToast("⚠️ At least one field required", "error");
+            } else {
+                alert("At least one field required"); // fallback
+            }
+
+            return;
+        }
+
+    });
+
 });
 </script>

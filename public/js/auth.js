@@ -1,5 +1,3 @@
-let abcform = "abc"
-
 document.addEventListener("DOMContentLoaded", () => {
 
     console.log("AUTH JS LOADED");
@@ -16,17 +14,14 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
 
             const formData = new FormData(loginForm);
-            abcform = formData
             
             const dataObj = Object.fromEntries(formData.entries());
-            // dataform = dataObj
-            // console.log(dataform)
-            // console.log(dataObj)
 
             const res = await fetch("/login", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "CSRF-Token": csrfToken
                 },
                 body: JSON.stringify(dataObj),
                 credentials: "same-origin"
@@ -82,93 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
-
-module.exports.abcform1 = () => {
-    console.log(abcform)
-}
-
-
-// ================= GLOBAL CSRF TOKEN =================
-// const csrfToken = document.getElementById("csrfToken")?.value;
-
-
-// ================= LOGIN =================
-// const loginForm = document.getElementById("loginForm");
-
-// if (loginForm) {
-//     loginForm.addEventListener("submit", async (e) => {
-//         e.preventDefault();
-
-//         try {
-//             const formData = new FormData(loginForm);
-//             const dataObj = Object.fromEntries(formData.entries());
-
-//             const res = await fetch("/login", {
-//                 method: "POST",
-//                 headers: {
-//                     "Content-Type": "application/json"
-//                 },
-//                 body: JSON.stringify(dataObj),
-//                 credentials: "same-origin"
-//             });
-
-//             const data = await res.json();
-
-//             // 🔥 IMPORTANT: handle OTP FIRST
-//             if (data.requireOTP) {
-//                 window.location.href = "/verify-otp";
-//             }
-//             else if (data.success) {
-//                 window.location.href = "/dashboard";
-//             }
-//             else {
-//                 alert(data.message || "Invalid credentials");
-//             }
-
-//         } catch (err) {
-//             console.error("Login error:", err);
-//             alert("Something went wrong");
-//         }
-//     });
-// }
-//-----------------------------------------
-// const loginForm = document.getElementById("loginForm");
-
-// if (loginForm) {
-//     loginForm.addEventListener("submit", async (e) => {
-//         e.preventDefault();
-
-//         clearErrors();
-
-//         try {
-//             // ✅ FIXED: use loginForm
-//             const formData = new FormData(loginForm);
-
-//             const dataObj = Object.fromEntries(formData.entries());
-
-//             const res = await fetch("/login", {
-//                 method: "POST",
-//                 headers: {
-//                     "Content-Type": "application/json",
-//                     "CSRF-Token": csrfToken
-//                 },
-//                 body: JSON.stringify(dataObj)
-//             });
-
-//             const data = await res.json();
-
-//             if (!data.success) {
-//                 showErrors(data.errors);
-//             } else {
-//                 window.location.href = "/dashboard";
-//             }
-
-//         } catch (err) {
-//             console.error("Login error:", err);
-//             alert("Something went wrong. Try again.");
-//         }
-//     });
-// }
 
 
 // ================= REGISTER =================
@@ -239,46 +147,3 @@ function showErrors(errors) {
         input.parentNode.appendChild(div);
     }
 }
-
-
-// ===== OTP VERIFY =====
-// console.log("OTP SCRIPT LOADED");
-// const otpForm = document.getElementById("otpForm");
-
-// if (otpForm) {
-//     console.log("OTP FORM FOUND");
-//     otpForm.addEventListener("submit", async (e) => {
-//         e.preventDefault();
-
-//         console.log("OTP SUBMIT TRIGGERED");
-
-//         const formData = new FormData(otpForm);
-//         const dataObj = Object.fromEntries(formData.entries());
-
-//         try {
-//             const res = await fetch("/verify-otp", {
-//                 method: "POST",
-//                 headers: {
-//                     "Content-Type": "application/json",
-//                     "CSRF-Token": csrfToken   // 🔥 REQUIRED
-//                 },
-//                 body: JSON.stringify(dataObj),
-//                 credentials: "same-origin"
-//             });
-
-//             const data = await res.json();
-//             console.log("OTP RESPONSE:", data);
-
-//             if (data.success) {
-//                 window.location.href = "/dashboard";
-//             } else {
-//                 document.getElementById("error").innerText =
-//                     data.message || "Invalid OTP";
-//             }
-
-//         } catch (err) {
-//             console.error("OTP error:", err);
-//             alert("Something went wrong");
-//         }
-//     });
-// }

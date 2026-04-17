@@ -1,3 +1,5 @@
+//script.js file
+
 // ================= GLOBAL =================
 let fieldCount = 0;
 const csrfToken = document.getElementById("csrfToken")?.value;
@@ -99,6 +101,12 @@ function addField(label = "", value = "", type = "text") {
 
     // REMOVE FIELD
     removeBtn.addEventListener("click", () => {
+        const allFields = document.querySelectorAll(".field-group");
+
+        if (allFields.length <= 1) {
+            showToast("⚠️ At least one field required", "error");
+            return;
+        }
         div.remove();
     });
 
@@ -242,6 +250,8 @@ if (addForm) {
             const formData = new FormData(addForm);
             const dataObj = Object.fromEntries(formData.entries());
 
+            let valid = true;
+
             // 🔥 manually include fields (important)
             const fields = [];
 
@@ -252,12 +262,19 @@ if (addForm) {
 
                 if (label && value) {
                     fields.push({ label, value, type });
+                } else {
+                    valid = false;
                 }
             });
 
             // 🔥 VALIDATION
             if (fields.length === 0) {
                 showToast("⚠️ At least one field required", "error");
+                return;
+            }
+
+            if (!valid) {
+                showToast("⚠️ Fields cannot be empty", "error");
                 return;
             }
 
@@ -292,3 +309,85 @@ if (addForm) {
     });
 }
 
+// ================= EDIT FORM VALIDATION =================
+const editForm = document.getElementById("editForm");
+
+if (editForm) {
+    editForm.addEventListener("submit", (e) => {
+
+        let valid = true;
+
+        const fields = document.querySelectorAll(".field-group");
+
+        // 🔥 Check if at least 1 field exists
+        if (fields.length === 0) {
+            e.preventDefault();
+            showToast("⚠️ At least one field required", "error");
+            return;
+        }
+
+        // 🔥 Validate each field
+        fields.forEach(group => {
+            const label = group.querySelector(".field-label")?.value.trim();
+            const value = group.querySelector(".field-value")?.value.trim();
+
+            if (!label || !value) {
+                valid = false;
+            }
+        });
+
+        if (!valid) {
+            e.preventDefault();
+            showToast("⚠️ Fields cannot be empty", "error");
+        }
+
+    });
+}
+
+// ===== SEARCH FUNCTIONALITY =====
+document.addEventListener("DOMContentLoaded", () => {
+
+    const input = document.getElementById("searchInput");
+    const noResults = document.getElementById("noResults");
+
+    if (!input) return;
+
+    input.addEventListener("input", function () {
+
+        const query = this.value.toLowerCase().trim();
+        const cards = document.querySelectorAll(".credential-item");
+
+        let found = false;
+
+        cards.forEach(card => {
+
+            const text = card.dataset.search || "";
+            const col = card.closest(".col-md-6");
+
+            if (!col) return;
+
+            if (query === "") {
+                col.classList.remove("d-none");
+                found = true;
+                return;
+            }
+
+            if (text.includes(query)) {
+                col.classList.remove("d-none");
+                found = true;
+            } else {
+                col.classList.add("d-none");
+            }
+
+        });
+
+        // NO RESULT MESSAGE
+        if (!found) {
+            noResults.style.display = "block";
+        } else {
+            noResults.style.display = "none";
+        }
+
+    });
+
+});

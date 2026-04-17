@@ -1,28 +1,21 @@
 const express = require("express");
 const router = express.Router();
+const fs = require("fs");
+const ejs = require("ejs");
 
 const { register, login, verifyOTP } = require("../controllers/authController");
 const AuditLog = require("../models/AuditLog");
 const { getDevice } = require("../utils/device");
 const { getLocation } = require("../utils/location");
-const fs = require("fs");
-const ejs = require("ejs");
+const validate = require("../middleware/validate");
+const { registerSchema, loginSchema } = require("../utils/joiSchemas");
+
 
 // REGISTER
-router.post("/register", register);
+router.post("/register", validate(registerSchema), register);
 
 // LOGIN
 router.post("/login", login);
-
-// LOGOUT
-// router.get("/logout", (req, res) => {
-
-//     req.session.destroy(() => {
-//         res.clearCookie("connect.sid");
-//         res.redirect("/login");
-//     });
-
-// });
 
 router.get("/logout", async (req, res) => {
 
@@ -42,12 +35,6 @@ router.get("/logout", async (req, res) => {
     });
 });
 
-// router.get("/verify-otp", (req, res) => {
-//     res.render("pages/verify-otp", {
-//         csrfToken: req.csrfToken()   // 🔥 VERY IMPORTANT
-//     });
-// });
-
 router.get("/verify-otp", (req, res) => {
 
     const body = fs.readFileSync("views/pages/verify-otp.ejs", "utf-8");
@@ -62,10 +49,5 @@ router.get("/verify-otp", (req, res) => {
 });
 
 router.post("/verify-otp", verifyOTP);
-
-
-
-
-
 
 module.exports = router;

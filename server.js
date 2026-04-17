@@ -3,30 +3,22 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-
 const session = require("express-session");
 const MongoStore = require("connect-mongo").default;
-
-// console.log("MongoStore:", MongoStore.create);
-
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const flash = require("connect-flash");
 const csrf = require("csurf");
-
 const ejs = require("ejs");
 const fs = require("fs");
 
 const authRoutes = require("./routes/auth");
 const credentialRoutes = require("./routes/credential");
 const isAuth = require("./middleware/auth");
-
 const AuditLog = require("./models/AuditLog");
 const { getDevice } = require("./utils/device");
-
 const Credential = require("./models/Credential");
 const { decrypt } = require("./utils/crypto");
-
 const Session = require("./models/Session")
 const updateSession = require("./middleware/updateSession");
 
@@ -37,12 +29,10 @@ mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("✅ DB connected"))
     .catch(err => console.log(err));
 
-
 // ================= MIDDLEWARE =================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
-
 
 // ================= SECURITY =================
 app.use(
@@ -50,7 +40,6 @@ app.use(
         contentSecurityPolicy: false
     })
 );
-
 
 // ================= RATE LIMIT =================
 const limiter = rateLimit({
@@ -65,7 +54,6 @@ const loginLimiter = rateLimit({
     message: "Too many login attempts. Try later."
 });
 app.use("/login", loginLimiter);
-
 
 // ================= SESSION =================
 app.use(session({
@@ -91,7 +79,6 @@ app.use((req, res, next) => {
     next();
 });
 
-
 // ================= FLASH =================
 app.use(flash());
 
@@ -101,35 +88,21 @@ app.use((req, res, next) => {
     next();
 });
 
-
 // ================= NO CACHE =================
 app.use((req, res, next) => {
     res.set("Cache-Control", "no-store");
     next();
 });
 
-
 // ================= CSRF (GLOBAL - FINAL FIX) =================
 const csrfProtection = csrf();
 
-
-// app.use(csrfProtection);
-
-// app.use((req, res, next) => {
-//     if (!req.session.csrfToken) {
-//         req.session.csrfToken = req.csrfToken();   // ✅ generate ONCE
-//     }
-
-//     res.locals.csrfToken = req.session.csrfToken;  // ✅ reuse
-//     next();
-// });
 app.use(csrfProtection);
 
 app.use((req, res, next) => {
     res.locals.csrfToken = req.csrfToken();
     next();
 });
-
 
 // ================= VIEW ENGINE =================
 app.set("view engine", "ejs");
@@ -142,9 +115,7 @@ function renderView(viewPath, data = {}) {
     return ejs.render(content, data);
 }
 
-
 // ================= ROUTES =================
-
 // ---------- HOME ----------
 app.get("/", (req, res) => {
 
@@ -174,7 +145,6 @@ app.get("/login", (req, res) => {
     });
 });
 
-
 // ---------- REGISTER ----------
 app.get("/register", (req, res) => {
 
@@ -188,7 +158,6 @@ app.get("/register", (req, res) => {
         csrfToken: res.locals.csrfToken
     });
 });
-
 
 // ---------- DASHBOARD ----------
 app.get("/dashboard", isAuth, async (req, res) => {
@@ -274,11 +243,9 @@ app.post("/sessions/logout", isAuth, async (req, res) => {
     res.redirect("/sessions");
 });
 
-
 // ================= ROUTES FILES =================
 app.use("/", authRoutes);
 app.use("/", credentialRoutes);
-
 
 // ================= ERROR HANDLER =================
 app.use((err, req, res, next) => {
@@ -295,8 +262,9 @@ app.use((err, req, res, next) => {
     });
 });
 
-
 // ================= SERVER =================
-app.listen(process.env.PORT, () => {
-    console.log(`🚀 Server running on port ${process.env.PORT}`);
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
 });

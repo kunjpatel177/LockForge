@@ -10,9 +10,7 @@ const { getLocation } = require("../utils/location");
 const { sendAlert } = require("../utils/mailer");
 const { generateOTP } = require("../utils/otp");
 const { securityAlertTemplate } = require("../utils/emailTemplates");
-
-
-
+ 
 module.exports.login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -20,17 +18,17 @@ module.exports.login = async (req, res) => {
 
     const user = await User.findOne({ email });
 
-    if (!user) {
-        errors.email = "Invalid email";
-        return res.json({ success: false, errors });
-    }
+    // if (!user) {
+    //     errors.email = "Invalid email";
+    //     return res.json({ success: false, errors });
+    // }
 
     const isMatch = await bcrypt.compare(password, user.masterPassword);
 
-    if (!isMatch) {
-        errors.password = "Invalid password";
-        return res.json({ success: false, errors });
-    }
+    // if (!isMatch) {
+    //     errors.password = "Invalid password";
+    //     return res.json({ success: false, errors });
+    // }
 
     const key = deriveKey(password, user.salt);
 
@@ -136,13 +134,14 @@ module.exports.login = async (req, res) => {
 module.exports.register = async (req, res) => {
 
     let { fullName, email, username, password } = req.body;
+    console.log("BODY:", req.body);
 
     const errors = {};
 
-    if (!isValidName(fullName)) errors.fullName = "Invalid name";
-    if (!isValidEmail(email)) errors.email = "Invalid email";
-    if (!isValidUsername(username)) errors.username = "Invalid username";
-    if (!isStrongPassword(password)) errors.password = "Weak password";
+    // if (!isValidName(fullName)) errors.fullName = "Invalid name";
+    // if (!isValidEmail(email)) errors.email = "Invalid email";
+    // if (!isValidUsername(username)) errors.username = "Invalid username";
+    // if (!isStrongPassword(password)) errors.password = "Weak password";
 
     const existingEmail = await User.findOne({ email });
     if (existingEmail) errors.email = "Email already exists";
@@ -196,112 +195,3 @@ module.exports.verifyOTP = (req, res) => {
 
     res.json({ success: true });
 };
-
-
-// module.exports.register = async (req, res) => {
-//     try {
-//         let { fullName, email, username, password } = req.body;
-
-//         fullName = fullName?.trim();
-//         email = email?.toLowerCase().trim();
-//         username = username?.trim();
-
-//         const errors = {};
-
-//         // ✅ validations
-//         if (!isValidName(fullName)) {
-//             errors.fullName = "Full name must be at least 3 characters";
-//         }
-
-//         if (!isValidEmail(email)) {
-//             errors.email = "Invalid email format";
-//         }
-
-//         if (!isStrongPassword(password)) {
-//             errors.password = "Password must be strong";
-//         }
-
-//         if (!isValidUsername(username)) {
-//             errors.username = "Invalid username";
-//         }
-
-//         // ✅ duplicates
-//         const existingEmail = await User.findOne({ email });
-//         if (existingEmail) {
-//             errors.email = "Email already registered";
-//         }
-
-
-//         const existingUsername = await User.findOne({ username });
-//         if (existingUsername) {
-//             errors.username = "Username already taken";
-//         }
-
-
-//         // ❌ if any error → re-render form
-//         if (Object.keys(errors).length > 0) {
-//             return res.render("auth/register", {
-//                 errors,
-//                 old: { fullName, email, username }
-//             });
-//         }
-
-//         // 🔐 continue if no error
-//         const hashedPassword = await bcrypt.hash(password, 12);
-//         const salt = crypto.randomBytes(16).toString("hex");
-
-//         const newUser = new User({
-//             fullName,
-//             email,
-//             username,
-//             masterPassword: hashedPassword,
-//             salt
-//         });
-
-//         await newUser.save();
-
-//         req.flash("success", "Registration successful!");
-//         res.redirect("/");
-
-//     } catch (err) {
-//         res.send(err);
-//     }
-// };
-
-
-// module.exports.login = async (req, res) => {
-//     const { email, password } = req.body;
-
-//     const errors = {};
-//     const old = { email };
-
-//     const user = await User.findOne({ email });
-
-//     // ❌ email error
-//     if (!user) {
-//         errors.email = "Invalid email";
-//         return res.render("auth/login", { errors, old });
-//     }
-
-//     const isMatch = await bcrypt.compare(password, user.masterPassword);
-
-//     // ❌ password error
-//     if (!isMatch) {
-//         errors.password = "Invalid password";
-//         return res.render("auth/login", { errors, old });
-//     }
-
-//     // ✅ success
-//     const key = deriveKey(password, user.salt);
-
-//     req.session.regenerate((err) => {
-//         if (err) return res.send("Error");
-
-//         req.session.userId = user._id;
-//         req.session.encryptionKey = key.toString("hex");
-
-//         req.flash("success", "Login successful!");
-//         res.redirect("/dashboard");
-//     });
-// };
-
