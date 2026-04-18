@@ -3,11 +3,12 @@ const router = express.Router();
 const fs = require("fs");
 const ejs = require("ejs");
 
-const { register, login, verifyOTP } = require("../controllers/authController");
+const { register, login, verifyOTP, deleteAccount } = require("../controllers/authController");
 const AuditLog = require("../models/AuditLog");
 const { getDevice } = require("../utils/device");
 const { getLocation } = require("../utils/location");
 const validate = require("../middleware/validate");
+const isAuth = require("../middleware/auth")
 const { registerSchema, loginSchema } = require("../utils/joiSchemas");
 
 
@@ -49,5 +50,7 @@ router.get("/verify-otp", (req, res) => {
 });
 
 router.post("/verify-otp", verifyOTP);
+
+router.post("/delete-account", isAuth, deleteAccount);
 
 module.exports = router;

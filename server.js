@@ -33,6 +33,7 @@ mongoose.connect(process.env.MONGO_URI)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.set("trust proxy", 1);
 
 // ================= SECURITY =================
 app.use(
@@ -68,6 +69,7 @@ app.use(session({
     cookie: {
         httpOnly: true,
         secure: false,        // true in production (HTTPS)
+        // secure: process.env.NODE_ENV === "production",
         sameSite: "lax",      // ✅ IMPORTANT FIX
         maxAge: 1000 * 60 * 30
     }

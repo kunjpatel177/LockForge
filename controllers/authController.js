@@ -195,3 +195,59 @@ module.exports.verifyOTP = (req, res) => {
 
     res.json({ success: true });
 };
+
+
+module.exports.deleteAccount = async (req, res) => {
+    try {
+        const { password } = req.body;
+
+        if (!password) {
+            return res.json({
+                success: false,
+                message: "Password required"
+            });
+        }
+
+        const user = await User.findById(req.session.userId);
+
+        if (!user) {
+            return res.json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.masterPassword);
+
+        if (!isMatch) {
+            return res.json({
+                success: false,
+                message: "Incorrect password"
+            });
+        }
+
+        // 🔥 DELETE EVERYTHING RELATED
+        const Credential = require("../models/Credential");
+        const Session = require("../models/Session");
+        const AuditLog = require("../models/AuditLog");
+
+        await Credential.deleteMany({ userId: user._id });
+        await Session.deleteMany({ userId: user._id });
+        await AuditLog.deleteMany({ userId: user._id });
+        await User.findByIdAndDelete(user._id);
+
+        // 🔐 Destroy session
+        req.session.destroy(() => {
+            res.json({
+                success: true
+            });
+        });
+
+    } catch (err) {
+        console.error("Delete Account Error:", err);
+        res.json({
+            success: false,
+            message: "Something went wrong"
+        });
+    }
+};

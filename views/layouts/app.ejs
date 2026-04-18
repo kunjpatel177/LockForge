@@ -3,52 +3,48 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>
-        <%= title %>
-    </title>
+    <title><%= title %></title>
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 
 <body>
+
+    <!-- ✅ GLOBAL CSRF -->
+    <input type="hidden" id="csrfToken" value="<%= csrfToken %>">
+
     <div class="dashboard">
+
+        <!-- ✅ CUSTOM TOAST -->
         <div id="toast" class="toast-box"></div>
 
         <!-- SIDEBAR -->
         <aside class="sidebar">
-            <h3 class="logo"><a href="/"> 🔐 PassVault</a></h3>
+            <h3 class="logo"><a href="/"><img src="/Images/android-chrome-512x512.png" height="29" alt="LockForge Logo"> LockForge</a></h3>
 
             <ul>
                 <li><a href="/dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
-                <!-- <li><a href="#"><i class="fa fa-key"></i> Vault</a></li> -->
                 <li><a href="/history"><i class="fa-solid fa-clock-rotate-left"></i> Activity History</a></li>
-                <li><a href="/sessions"><i class="fa-regular fa-circle-dot"></i> Active Sessions
-                    </a></li>
-                <!-- <li><a href="/sessions">
-                    🟢 Active Sessions
-                </a></li> -->
+                <li><a href="/sessions"><i class="fa-regular fa-circle-dot"></i> Active Sessions</a></li>
                 <li><a href="/logout"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </aside>
 
-        <!-- MAIN CONTENT -->
+        <!-- MAIN -->
         <main class="main-content">
-
-            <%- include("../partials/toast") %>
-
-                <%- body %>
-
+            <%- body %>
         </main>
 
     </div>
 
-    <script src="/js/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- ✅ SCRIPTS (ORDER IMPORTANT) -->
     <script src="/js/script.js"></script>
     <script src="/js/toast.js"></script>
+    <script src="/js/auth.js"></script>
 
 </body>
-
 </html>

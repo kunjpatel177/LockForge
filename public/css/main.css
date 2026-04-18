@@ -6,6 +6,46 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+/* ===== GLOW GRADIENT TEXT EFFECT ===== */
+.glow-text {
+    font-size: 3rem;
+
+    /* Gradient text */
+    background: linear-gradient(
+        90deg,
+        #ffffff,
+        #a5b4fc,
+        #60a5fa,
+        #c084fc,
+        #ffffff
+    );
+
+    background-size: 300% auto;
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    /* Glow */
+    text-shadow:
+        0 0 8px rgba(255,255,255,0.4),
+        0 0 16px rgba(96,165,250,0.5),
+        0 0 24px rgba(192,132,252,0.4);
+
+    /* Animation */
+    animation: shimmer 4s linear infinite;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes shimmer {
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 300% center;
+    }
+}
+
+
 /* HERO */
 .hero {
     height: 90vh;
@@ -119,6 +159,10 @@ body {
 #navbar {
     transition: all 0.3s ease;
     background: transparent;
+}
+
+.navbar-brand{
+    font-size: 24px !important;
 }
 
 /* NAVBAR ON SCROLL */

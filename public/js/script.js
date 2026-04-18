@@ -344,6 +344,7 @@ if (editForm) {
     });
 }
 
+
 // ===== SEARCH FUNCTIONALITY =====
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -390,4 +391,54 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
+});
+
+
+// ================= DELETE ACCOUNT (FIXED) =================
+document.addEventListener("click", async (e) => {
+
+    const btn = e.target.closest("#confirmDelete");
+    // console.log(btn)
+
+    if (!btn) return;
+
+    const passwordInput = document.getElementById("deletePassword");
+    const errorBox = document.getElementById("deleteError");
+
+    const password = passwordInput?.value.trim();
+
+    if (!password) {
+        errorBox.innerText = "Password required";
+        return;
+    }
+
+    try {
+        const csrfToken = document.querySelector("[name='_csrf']").value;
+
+        const res = await fetch("/delete-account", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "CSRF-Token": csrfToken
+            },
+            body: JSON.stringify({ password }),
+            credentials: "same-origin"
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            showToast("Account deleted successfully", "success");
+
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 1500);
+        } else {
+            errorBox.innerText = data.message || "Error";
+        }
+
+    } catch (err) {
+        console.error("Delete error:", err);
+        errorBox.innerText = "Something went wrong";
+    }
 });
