@@ -68,8 +68,8 @@ app.use(session({
 
     cookie: {
         httpOnly: true,
-        secure: false,        // true in production (HTTPS)
-        // secure: process.env.NODE_ENV === "production",
+        // secure: false,        // true in production (HTTPS)
+        secure: process.env.NODE_ENV === "production",
         sameSite: "lax",      // ✅ IMPORTANT FIX
         maxAge: 1000 * 60 * 30
     }

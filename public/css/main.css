@@ -9,27 +9,32 @@ body {
 /* ===== GLOW GRADIENT TEXT EFFECT ===== */
 .glow-text {
     font-size: 3rem;
+    font-weight: 600;
 
     /* Gradient text */
-    background: linear-gradient(
-        90deg,
-        #ffffff,
-        #a5b4fc,
-        #60a5fa,
-        #c084fc,
-        #ffffff
-    );
+    background: linear-gradient(90deg, #fef3c7, #fde68a, #fca5a5, #f9a8d4, #c4b5fd, #93c5fd, #a7f3d0, #fef3c7);
 
     background-size: 300% auto;
+    animation: rainbowFlow 5s linear infinite;
+
+    @keyframes rainbowFlow {
+        0% {
+            background-position: 0% center;
+        }
+
+        100% {
+            background-position: 300% center;
+        }
+    }
+
+    ;
 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 
     /* Glow */
-    text-shadow:
-        0 0 8px rgba(255,255,255,0.4),
-        0 0 16px rgba(96,165,250,0.5),
-        0 0 24px rgba(192,132,252,0.4);
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.3),
+    0 0 12px rgba(99, 102, 241, 0.4);
 
     /* Animation */
     animation: shimmer 4s linear infinite;
@@ -40,6 +45,7 @@ body {
     0% {
         background-position: 0% center;
     }
+
     100% {
         background-position: 300% center;
     }
@@ -54,7 +60,7 @@ body {
 
 /* HERO TEXT */
 .hero-title {
-    font-size: 3rem;
+    font-size: 2.5rem;
     line-height: 1.2;
     animation: fadeUp 1s ease;
 }
@@ -71,12 +77,12 @@ body {
     background: linear-gradient(135deg, #eef2ff, #f8fafc);
     border-radius: 12px;
     transition: 0.3s;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .feature-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 /* ICON */
@@ -93,13 +99,13 @@ body {
 .step-card {
     background: #ffffff;
     border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     transition: 0.3s;
 }
 
 .step-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .step-number {
@@ -126,12 +132,12 @@ body {
     background: linear-gradient(135deg, #f8fafc, #eef2ff);
     border-radius: 12px;
     transition: 0.3s;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .testimonial-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 /* BUTTON HOVER */
@@ -149,6 +155,7 @@ body {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -161,7 +168,7 @@ body {
     background: transparent;
 }
 
-.navbar-brand{
+.navbar-brand {
     font-size: 24px !important;
 }
 
@@ -171,7 +178,7 @@ body {
     backdrop-filter: blur(8px);
 }
 
-.nav-item .nav-link{
+.nav-item .nav-link {
     margin-right: 0.5rem;
 }
 
@@ -207,15 +214,15 @@ body {
     font-weight: bold;
 }
 
-.dropdown-toggle{
+.dropdown-toggle {
     background-color: #f3f4f6;
 }
 
-.dropdown-toggle:hover{
+.dropdown-toggle:hover {
     background-color: #d8d7d7;
 }
 
-.dropdown-toggle span{
+.dropdown-toggle span {
     color: #000000;
 }
 
