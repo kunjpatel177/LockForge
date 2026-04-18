@@ -65,6 +65,7 @@ body {
 .sidebar a:hover {
     color: white;
     background: rgba(255,255,255,0.08);
+    transform: translateX(3px);
 }
 
 .sidebar > h3 > a {
@@ -74,6 +75,8 @@ body {
 
 .sidebar > h3 > a:hover {
     background: none;
+    transform:none;
+
 }
 
 /* ===== MAIN ===== */
