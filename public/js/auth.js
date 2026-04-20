@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
 
             const formData = new FormData(loginForm);
+            console.log("--------",formData)
             
             const dataObj = Object.fromEntries(formData.entries());
 
@@ -28,13 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             const data = await res.json();
+            // console.log(res)
 
             if (data.requireOTP) {
                 window.location.href = "/verify-otp";
             } else if (data.success) {
                 window.location.href = "/dashboard";
             } else {
-                alert("Invalid credentials");
+                showErrors(data.errors)
             }
         });
     }
@@ -105,6 +107,7 @@ if (registerForm) {
             const data = await res.json();
 
             if (!data.success) {
+                // console.log("Errors --> ",data.errors)
                 showErrors(data.errors);
             } else {
                 window.location.href = "/login";
@@ -128,7 +131,6 @@ function clearErrors() {
     });
 }
 
-
 // ================= SHOW ERRORS =================
 function showErrors(errors) {
 
@@ -147,3 +149,28 @@ function showErrors(errors) {
         input.parentNode.appendChild(div);
     }
 }
+
+// ================= TOGGLE PASSWORD =================
+document.addEventListener("click", function (e) {
+
+    if (e.target.closest(".toggle-password")) {
+
+        const btn = e.target.closest(".toggle-password");
+        const inputId = btn.dataset.target;
+
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector("i");
+
+        if (!input) return;
+
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
+});

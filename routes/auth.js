@@ -16,7 +16,7 @@ const { registerSchema, loginSchema } = require("../utils/joiSchemas");
 router.post("/register", validate(registerSchema), register);
 
 // LOGIN
-router.post("/login", login);
+router.post("/login", validate(loginSchema), login);
 
 router.get("/logout", async (req, res) => {
 

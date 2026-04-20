@@ -122,7 +122,9 @@ function renderView(viewPath, data = {}) {
 app.get("/", (req, res) => {
 
     const body = renderView("pages/home.ejs", {
-        csrfToken: res.locals.csrfToken
+        csrfToken: res.locals.csrfToken,
+        isLoggedIn: res.locals.isLoggedIn,   // ✅ ADD THIS
+        user: res.locals.user
     });
 
     res.render("layouts/public", {

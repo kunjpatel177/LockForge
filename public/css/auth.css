@@ -74,3 +74,16 @@ html, body {
         display: none;
     }
 }
+
+.instructions{
+    width: fit-content;
+    margin-top: 20px;
+    padding: 15px 30px 15px 30px;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 1rem;
+}
+
+.instructions h4{
+    text-align: center;
+    color: rgb(246, 135, 135);
+}

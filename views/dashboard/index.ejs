@@ -167,36 +167,40 @@
 
                 <!-- ================= DELETE ACCOUNT MODAL ================= -->
 
-<!-- DELETE ACCOUNT MODAL -->
-<div class="modal fade" id="deleteModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
+                <!-- DELETE ACCOUNT MODAL -->
+                <div class="modal fade" id="deleteModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
 
-            <div class="modal-header">
-                <h5 class="modal-title text-danger">⚠️ Delete Account</h5>
-                <button class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+                            <div class="modal-header">
+                                <h5 class="modal-title text-danger">⚠️ Delete Account</h5>
+                                <button class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
 
-            <div class="modal-body">
-                <p>This action is permanent. Enter your password to confirm.</p>
+                            <div class="modal-body">
+                                <p>This action is permanent. Enter your password to confirm.</p>
 
-                <input 
-                    type="password" 
-                    id="deletePassword"
-                    class="form-control"
-                    placeholder="Enter your password"
-                >
+                                <div class="d-flex align-items-center">
+                                    <input type="password" id="deletePassword" class="form-control"
+                                        placeholder="Enter your password">
 
-                <div id="deleteError" class="text-danger mt-2"></div>
-            </div>
+                                    <!-- 👁️ TOGGLE BUTTON -->
+                                    <button type="button" class="btn btn-outline-secondary ms-2 toggle-password"
+                                        data-target="deletePassword">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </div>
 
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button id="confirmDelete" class="btn btn-danger">
-                    Delete
-                </button>
-            </div>
+                                <div id="deleteError" class="text-danger mt-2"></div>
+                            </div>
 
-        </div>
-    </div>
-</div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button id="confirmDelete" class="btn btn-danger">
+                                    Delete
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>

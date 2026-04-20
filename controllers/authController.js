@@ -18,15 +18,20 @@ module.exports.login = async (req, res) => {
 
     const user = await User.findOne({ email });
 
-    // if (!user) {
-    //     errors.email = "Invalid email";
-    //     return res.json({ success: false, errors });
-    // }
+    if (!user) {
+        errors.email = "Invalid email";
+        return res.json({ success: false, errors });
+    }
 
     const isMatch = await bcrypt.compare(password, user.masterPassword);
-
-    // if (!isMatch) {
-    //     errors.password = "Invalid password";
+    
+    if (!isMatch) {
+        errors.password = "Invalid password";
+        return res.json({ success: false, errors });
+    }
+    
+    // if (Object.keys(errors).length > 0) {
+    //     console.log("Hello:   ",Object.keys(errors))
     //     return res.json({ success: false, errors });
     // }
 
@@ -134,22 +139,20 @@ module.exports.login = async (req, res) => {
 module.exports.register = async (req, res) => {
 
     let { fullName, email, username, password } = req.body;
-    console.log("BODY:", req.body);
+    // console.log("BODY:", req.body);
+    console.log("Email:", email);
 
     const errors = {};
 
-    // if (!isValidName(fullName)) errors.fullName = "Invalid name";
-    // if (!isValidEmail(email)) errors.email = "Invalid email";
-    // if (!isValidUsername(username)) errors.username = "Invalid username";
-    // if (!isStrongPassword(password)) errors.password = "Weak password";
-
     const existingEmail = await User.findOne({ email });
     if (existingEmail) errors.email = "Email already exists";
+    // if (!email) errors.email = "Enter Email"
 
     const existingUsername = await User.findOne({ username });
     if (existingUsername) errors.username = "Username taken";
 
     if (Object.keys(errors).length > 0) {
+        console.log("Hello:   ",errors)
         return res.json({ success: false, errors });
     }
 

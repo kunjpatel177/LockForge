@@ -27,24 +27,27 @@
                     <div class="mb-3">
                         <label class="form-label">Email</label>
                         <input 
-                            type="email" 
+                            type="text" 
                             name="email"
                             class="form-control"
                             placeholder="Enter your email"
-                            required
                         >
                     </div>
 
                     <!-- PASSWORD -->
-                    <div class="mb-3">
+                    <div class="mb-3 position-relative">
                         <label class="form-label">Password</label>
-                        <input 
-                            type="password" 
-                            name="password"
-                            class="form-control"
-                            placeholder="Enter your password"
-                            required
-                        >
+
+                        <div class="d-flex align-items-center">
+                            <input type="password" name="password" id="password" class="form-control"
+                                placeholder="Create a strong password" required>
+
+                            <!-- 👁️ TOGGLE BUTTON OUTSIDE INPUT -->
+                            <button type="button" class="btn btn-outline-secondary ms-2 toggle-password"
+                                data-target="password">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- SUBMIT -->
