@@ -31,7 +31,7 @@
 
     <div class="row g-4">
 
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="about-card text-center p-4">
                 <i class="fa-solid fa-lock fa-2x mb-3"></i>
                 <h5>End-to-End Encryption</h5>
@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="about-card text-center p-4">
                 <i class="fa-solid fa-shield-halved fa-2x mb-3"></i>
                 <h5>Secure Authentication</h5>
@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="about-card text-center p-4">
                 <i class="fa-solid fa-mobile-screen-button fa-2x mb-3"></i>
                 <h5>Device Tracking</h5>
@@ -124,7 +124,7 @@
 
     <div class="row text-center g-4">
 
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <i class="fa-solid fa-key fa-2x mb-3"></i>
             <h6>Create Master Password</h6>
             <p class="text-muted small">
@@ -132,7 +132,7 @@
             </p>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <i class="fa-solid fa-database fa-2x mb-3"></i>
             <h6>Store Encrypted Data</h6>
             <p class="text-muted small">
@@ -140,7 +140,7 @@
             </p>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <i class="fa-solid fa-unlock-keyhole fa-2x mb-3"></i>
             <h6>Access Securely</h6>
             <p class="text-muted small">
@@ -173,11 +173,22 @@
 <!-- ================= CTA ================= -->
 <section class="text-center py-5">
 
-    <h3 class="mb-3 fw-semibold">Start Securing Your Credentials Today</h3>
-
-    <a href="/register" class="btn btn-dark btn-lg px-4">
+    
+    <!-- <a href="/register" class="btn btn-dark btn-lg px-4">
+        Create Account
+    </a> -->
+    
+    <% if (isLoggedIn) { %>
+        <h3 class="mb-3 fw-semibold">Continue Securing Your Credentials Today</h3>
+        <a href="/dashboard" class="btn btn-dark btn-lg px-4">
+            Dashboard
+        </a>
+        <% } else { %>
+            <h3 class="mb-3 fw-semibold">Start Securing Your Credentials Today</h3>
+            <a href="/register" class="btn btn-dark btn-lg px-4">
         Create Account
     </a>
+        <% } %>
 
 </section>
 <!-- CTA -->

@@ -7,75 +7,75 @@
             <p class="text-muted mb-0">Manage devices currently logged into your account</p>
         </div>
 
-        <a href="/dashboard" class="btn btn-dark px-3 py-2">
-            <i class="fa-solid fa-arrow-left-long"></i> Back to Dashboard
+        <a href="/dashboard" class="btn btn-dark px-3 py-2 ">
+            <span> <i class="fa-solid fa-arrow-left-long"></i> Back to Dashboard</span>
         </a>
     </div>
 
     <!-- WRAPPER CARD -->
     <div class="card border-0 shadow-sm rounded-4 p-3 sessions-info">
-        <% if (sessions && sessions.length > 0) { %>
+        <% if (sessions && sessions.length> 0) { %>
 
-        <% sessions.forEach(session=> { %>
+            <% sessions.forEach(session=> { %>
 
-            <div class="session-card d-flex justify-content-between align-items-center p-3 mb-3 rounded-3">
+                <div class="session-card d-flex justify-content-between align-items-center p-3 mb-3 rounded-3">
 
-                <!-- LEFT INFO -->
-                <div class="d-flex flex-column">
+                    <!-- LEFT INFO -->
+                    <div class="d-flex flex-column">
 
-                    <!-- TOP ROW -->
-                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <!-- TOP ROW -->
+                        <div class="d-flex align-items-center gap-2 mb-1">
 
-                        <% if (session.sessionId===currentSessionId) { %>
-                            <span class="badge bg-success">Current</span>
+                            <% if (session.sessionId===currentSessionId) { %>
+                                <span class="badge bg-success">Current</span>
+                                <% } else { %>
+                                    <span class="badge bg-secondary">Active</span>
+                                    <% } %>
+
+                                        <strong>
+                                            <%= session.device %>
+                                        </strong>
+                        </div>
+
+                        <!-- META INFO -->
+                        <div class="text-muted small">
+                            IP: <code><%= session.ip %></code> •
+                            <%= session.location %>
+                        </div>
+
+                        <div class="text-muted small">
+                            Last active: <%= session.lastActive.toLocaleString() %>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT ACTION -->
+                    <div>
+
+                        <% if (session.sessionId !==currentSessionId) { %>
+                            <form method="POST" action="/sessions/logout">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>"> <!-- ✅ ADD THIS -->
+                                <input type="hidden" name="sessionId" value="<%= session.sessionId %>">
+                                <button class="btn btn-outline-danger btn-sm">
+                                    Logout
+                                </button>
+                            </form>
                             <% } else { %>
-                                <span class="badge bg-secondary">Active</span>
+                                <span class="badge bg-success px-3 py-2">
+                                    This Device
+                                </span>
                                 <% } %>
 
-                                    <strong>
-                                        <%= session.device %>
-                                    </strong>
-                    </div>
-
-                    <!-- META INFO -->
-                    <div class="text-muted small">
-                        IP: <code><%= session.ip %></code> •
-                        <%= session.location %>
-                    </div>
-
-                    <div class="text-muted small">
-                        Last active: <%= session.lastActive.toLocaleString() %>
                     </div>
 
                 </div>
 
-                <!-- RIGHT ACTION -->
-                <div>
+                <% }) %>
 
-                    <% if (session.sessionId !==currentSessionId) { %>
-                        <form method="POST" action="/sessions/logout">
-                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">  <!-- ✅ ADD THIS -->
-                            <input type="hidden" name="sessionId" value="<%= session.sessionId %>">
-                            <button class="btn btn-outline-danger btn-sm">
-                                Logout
-                            </button>
-                        </form>
-                        <% } else { %>
-                            <span class="badge bg-success px-3 py-2">
-                                This Device
-                            </span>
-                            <% } %>
 
-                </div>
-
-            </div>
-
-            <% }) %>
-            
-
-            <% } else { %>
-                <h3 class="text-center">There is/are no active session/s</h3>
-             <% } %>
+                    <% } else { %>
+                        <h3 class="text-center">There is/are no active session/s</h3>
+                        <% } %>
     </div>
 
 

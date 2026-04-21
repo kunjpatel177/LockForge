@@ -252,7 +252,7 @@ body {
 /* REMOVE DEFAULT BOOTSTRAP FOCUS RESET */
 .dropdown-toggle:focus {
     background: #f3f4f6 !important;
-    color: white !important;
+    color: rgb(0, 0, 0) !important;
     box-shadow: none !important;
 }
 
@@ -389,4 +389,76 @@ body {
 .about-developer-section {
     background: linear-gradient(135deg, #d335f6, #1500ff);
     border-top: 1px solid #eee;
+}
+
+/* ----------------------------------------------- */
+
+/* ===== GLOBAL MOBILE FIX ===== */
+@media (max-width: 768px) {
+
+    body {
+        font-size: 14px;
+    }
+
+    h1 { font-size: 1.8rem !important; }
+    h2 { font-size: 1.5rem !important; }
+    h3 { font-size: 1.3rem !important; }
+
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    /* HERO */
+    .hero {
+        height: auto;
+        padding: 60px 0;
+    }
+
+    /* GRID STACK */
+    .row {
+        flex-direction: column;
+    }
+
+    /* CARDS */
+    .feature-card,
+    .testimonial-card,
+    .stat-card {
+        margin-bottom: 15px;
+    }
+}
+
+
+@media (max-width: 768px) {
+    #navbar {
+        background: #111827 !important;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .footer .row {
+        text-align: center;
+    }
+
+    .footer .col-md-4,
+    .footer .col-md-3,
+    .footer .col-md-2 {
+        margin-bottom: 20px;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .about-hero {
+        height: auto;
+        padding: 60px 20px;
+    }
 }

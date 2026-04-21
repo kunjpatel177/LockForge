@@ -87,3 +87,19 @@ html, body {
     text-align: center;
     color: rgb(246, 135, 135);
 }
+
+
+
+/* ------------------------- */
+
+@media (max-width: 768px) {
+
+    .auth-card {
+        width: 90%;
+        padding: 25px;
+    }
+
+    .form-control {
+        font-size: 14px;
+    }
+}

@@ -375,3 +375,52 @@ body {
 .sessions-info h3{
     color: #dc2626;
 }
+
+
+
+/* -------------------------- */
+
+@media (max-width: 768px) {
+
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        text-align: center;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .credential-card {
+        width: 100%;
+    }
+
+    .field-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .field-actions {
+        margin-top: 5px;
+    }
+}
+
+
+/* Edit page */
+@media (max-width: 768px) {
+
+    .field-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .field-group input,
+    .field-group select,
+    .field-group button {
+        width: 100%;
+    }
+}

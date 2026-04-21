@@ -48,7 +48,8 @@ const registerSchema = Joi.object({
         .messages({
             "string.pattern.base":
                 "Password must contain uppercase, lowercase, number, and special character",
-            "string.min": "Password must be at least 8 characters"
+            "string.min": "Password must be at least 8 characters",
+            "string.empty": "Password is required"
         })
 });
 
