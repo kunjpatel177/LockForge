@@ -57,14 +57,19 @@ const loginLimiter = rateLimit({
 app.use("/login", loginLimiter);
 
 // ================= SESSION =================
+const store = MongoStore.create({
+    mongoUrl: process.env.MONGO_URI
+});
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
 
-    store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URI
-    }),
+    store: store,
+    // store: MongoStore.create({
+    //     mongoUrl: process.env.MONGO_URI
+    // }),
 
     cookie: {
         httpOnly: true,
@@ -229,7 +234,8 @@ app.get("/sessions", isAuth, async (req, res) => {
 
     const body = renderView("dashboard/sessions.ejs", {
         sessions,
-        currentSessionId: req.sessionID
+        currentSessionId: req.sessionID,
+        csrfToken: res.locals.csrfToken   // ✅ ADD THIS
     });
 
     res.render("layouts/app", {
@@ -242,9 +248,39 @@ app.post("/sessions/logout", isAuth, async (req, res) => {
 
     const { sessionId } = req.body;
 
-    await Session.deleteOne({ sessionId });
+    // 🔥 1. Destroy actual session
+    store.destroy(sessionId, async (err) => {
 
-    res.redirect("/sessions");
+        if (err) {
+            console.error("Session destroy error:", err);
+            return res.redirect("/sessions");
+        }
+
+        // 🔥 2. Remove from your tracking collection
+        await Session.deleteOne({
+            sessionId,
+            userId: req.session.userId
+        });
+
+        // res.redirect("/sessions");
+        if (sessionId === req.sessionID) {
+            return res.redirect("/sessions");
+        }
+    });
+});
+
+app.get("/about", (req, res) => {
+
+    const body = renderView("pages/about.ejs",{
+        // csrfToken: res.locals.csrfToken,
+        isLoggedIn: res.locals.isLoggedIn,   // ✅ ADD THIS
+        // user: res.locals.user
+    });
+
+    res.render("layouts/clean", {
+        title: "About",
+        body
+    });
 });
 
 // ================= ROUTES FILES =================
@@ -257,6 +293,16 @@ app.use((err, req, res, next) => {
     console.error("❌ ERROR:", err.message);
 
     if (err.code === "EBADCSRFTOKEN") {
+
+        // 🔥 If request is AJAX → send JSON
+        if (req.headers["content-type"] === "application/json") {
+            return res.status(403).json({
+                success: false,
+                message: "Invalid CSRF token"
+            });
+        }
+
+        // normal form
         return res.status(403).send("Invalid CSRF token");
     }
 

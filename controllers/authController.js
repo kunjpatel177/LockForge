@@ -10,7 +10,7 @@ const { getLocation } = require("../utils/location");
 const { sendAlert } = require("../utils/mailer");
 const { generateOTP } = require("../utils/otp");
 const { securityAlertTemplate } = require("../utils/emailTemplates");
- 
+
 module.exports.login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -24,12 +24,12 @@ module.exports.login = async (req, res) => {
     }
 
     const isMatch = await bcrypt.compare(password, user.masterPassword);
-    
+
     if (!isMatch) {
         errors.password = "Invalid password";
         return res.json({ success: false, errors });
     }
-    
+
     // if (Object.keys(errors).length > 0) {
     //     console.log("Hello:   ",Object.keys(errors))
     //     return res.json({ success: false, errors });
@@ -96,13 +96,21 @@ module.exports.login = async (req, res) => {
             req.session.otpExpiry = Date.now() + 5 * 60 * 1000; // 5 min
 
             const html = `
-        <h2>🔐 Verify Login</h2>
-        <p>Your OTP is:</p>
-        <h1>${otp}</h1>
-        <p>This OTP expires in 5 minutes.</p>
-    `;
+                            <h2>🔐 Verify Login</h2>
+                            <p>Your OTP is:</p>
+                            <h1>${otp}</h1>
+                            <p>This OTP expires in 5 minutes.</p>
+                                                                    `;
 
             await sendAlert(user.email, "OTP Verification", html);
+            await AuditLog.create({
+                userId: user._id,
+                action: "login",
+                ip: req.ip,
+                userAgent: req.headers["user-agent"],
+                device: getDevice(req),
+                location: getLocation(req.ip)
+            });
 
             return res.json({
                 success: true,
@@ -131,7 +139,9 @@ module.exports.login = async (req, res) => {
 
         // res.json({ success: true });
 
-        return res.json({ success: true });
+        return res.json({
+            success: true, csrfToken: req.csrfToken()   /* 🔥 NEW TOKEN */
+        });
     });
 };
 
@@ -152,7 +162,7 @@ module.exports.register = async (req, res) => {
     if (existingUsername) errors.username = "Username taken";
 
     if (Object.keys(errors).length > 0) {
-        console.log("Hello:   ",errors)
+        console.log("Hello:   ", errors)
         return res.json({ success: false, errors });
     }
 
@@ -171,7 +181,7 @@ module.exports.register = async (req, res) => {
 };
 
 
-module.exports.verifyOTP = (req, res) => {
+module.exports.verifyOTP = async (req, res) => {
     console.log("BODY:", req.body);   // 🔥 ADD THIS
     const { otp } = req.body;
 
@@ -196,7 +206,11 @@ module.exports.verifyOTP = (req, res) => {
     delete req.session.tempUserId;
     delete req.session.otpExpiry;
 
-    res.json({ success: true });
+    res.json({
+        success: true,
+        requireOTP: true,
+        csrfToken: req.csrfToken()   // 🔥 NEW TOKEN
+    });
 };
 
 
@@ -254,3 +268,4 @@ module.exports.deleteAccount = async (req, res) => {
         });
     }
 };
+

@@ -53,4 +53,6 @@ router.post("/verify-otp", verifyOTP);
 
 router.post("/delete-account", isAuth, deleteAccount);
 
+
+
 module.exports = router;

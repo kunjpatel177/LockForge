@@ -98,6 +98,20 @@ body {
     background: linear-gradient(135deg, #9496f5, #1500ff);
 }
 
+/* ===== NEW SECTION ===== */
+
+.stat-card {
+    background: #ffffff;
+    border-radius: 12px;
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
 /* ===== HOW IT WORKS ===== */
 .step-card {
     background: #ffffff;
@@ -296,105 +310,83 @@ body {
 }
 
 
+/* ===== FOOTER ===== */
 
-/* LOGOUT HOVER */
-/* .user-dropdown .dropdown-item.text-danger:hover {
-    background: #fee2e2;
-} */
-
-
-/* ===== GLASS DROPDOWN ===== */
-/* .glass-dropdown {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-
-    border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-
-    box-shadow: 
-        0 10px 30px rgba(0, 0, 0, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-
-    padding: 10px 0;
-} */
-
-/* .glass-dropdown {
-    color: #fff;
+.footer {
+    background: #111827;
 }
 
-.glass-dropdown small {
-    color: rgba(255,255,255,0.7);
+.footer-link {
+    text-decoration: none;
+    color: #9ca3af;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 6px;
+    transition: 0.3s;
 }
 
-.glass-dropdown .dropdown-item {
+.footer-link:hover {
+    color: #ffffff;
+    transform: translateX(3px);
+}
+
+.footer-text {
+    color: #9ca3af;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+/* SOCIAL ICONS */
+.social-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #5d4eff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    transition: 0.3s;
+}
+
+.social-icon:hover {
+    background: #374151;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+
+/* ===== ABOUT PAGE ===== */
+
+.about-hero {
+    height: 60vh;
+    background: linear-gradient(135deg, #111827, #1f2937);
     color: white;
-    border-radius: 8px;
-    margin: 2px 8px;
-    transition: all 0.2s ease;
 }
 
-.glass-dropdown .dropdown-item:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateX(4px);
+.about-card {
+    background: #ffffff;
+    border-radius: 12px;
+    height: 100%;
+    /* 🔥 equal height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* vertical alignment */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: 0.3s;
 }
 
-.avatar-lg {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
-} */
-
-/* Glass effect --------------------- */
-/* .glass-dropdown {
-    background: rgba(255, 255, 255, 0.75);
-
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-
-    border: 1px solid rgba(0, 0, 0, 0.08);
-
-    box-shadow: 
-        0 8px 25px rgba(0, 0, 0, 0.12);
-
-    border-radius: 14px;
-    padding: 10px 0;
-
-    color: #111827;
-} */
-
-
-/* .glass-dropdown small {
-    color: #6b7280;
+.about-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-.glass-dropdown .dropdown-item {
-    color: #111827;
-    border-radius: 8px;
-    margin: 2px 8px;
-    transition: all 0.2s ease;
+.about-section {
+    border-top: 1px solid #eee;
 }
 
-.glass-dropdown .dropdown-item:hover {
-    background: rgba(99, 102, 241, 0.1);
-    transform: translateX(4px);
-} */
-
-/* @media (prefers-color-scheme: dark) {
-    .glass-dropdown {
-        background: rgba(17, 24, 39, 0.7);
-        border: 1px solid rgba(255,255,255,0.1);
-        color: white;
-    }
-
-    .glass-dropdown small {
-        color: rgba(255,255,255,0.7);
-    }
-
-    .glass-dropdown .dropdown-item {
-        color: white;
-    }
-
-    .glass-dropdown .dropdown-item:hover {
-        background: rgba(255,255,255,0.1);
-    }
-} */
+.about-developer-section {
+    background: linear-gradient(135deg, #d335f6, #1500ff);
+    border-top: 1px solid #eee;
+}

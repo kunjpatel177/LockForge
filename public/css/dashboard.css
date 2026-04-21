@@ -371,3 +371,7 @@ body {
     padding: 2px 6px;
     border-radius: 6px;
 }
+
+.sessions-info h3{
+    color: #dc2626;
+}

@@ -14,8 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
 
             const formData = new FormData(loginForm);
-            console.log("--------",formData)
-            
+            console.log("--------", formData)
+
             const dataObj = Object.fromEntries(formData.entries());
 
             const res = await fetch("/login", {
@@ -28,8 +28,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 credentials: "same-origin"
             });
 
-            const data = await res.json();
+            // const data = await res.json();
+            let data;
+
+            try {
+                data = await res.json();
+            } catch (err) {
+                alert("Session expired. Please refresh and try again.");
+                return;
+            }
+
+            if (res.status === 403) {
+                alert("Session expired. Please refresh page.");
+                return;
+            }
             // console.log(res)
+            if (data.csrfToken) {
+                document.getElementById("csrfToken").value = data.csrfToken;
+            }
 
             if (data.requireOTP) {
                 window.location.href = "/verify-otp";
@@ -68,6 +84,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await res.json();
 
             console.log("OTP RESPONSE:", data);
+            if (data.csrfToken) {
+                document.getElementById("csrfToken").value = data.csrfToken;
+            }
 
             if (data.success) {
                 window.location.href = "/dashboard";
@@ -146,23 +165,27 @@ function showErrors(errors) {
         div.className = "invalid-feedback d-block";
         div.innerText = errors[key];
 
-        input.parentNode.appendChild(div);
+        // input.parentNode.appendChild(div);
+        // 🔥 FIX: append AFTER parent container (not inside)
+        const parent = input.closest(".mb-3") || input.parentNode;
+        parent.appendChild(div);
     }
 }
 
+
 // ================= TOGGLE PASSWORD =================
 document.addEventListener("click", function (e) {
-
+    
     if (e.target.closest(".toggle-password")) {
-
+        
         const btn = e.target.closest(".toggle-password");
         const inputId = btn.dataset.target;
-
+        
         const input = document.getElementById(inputId);
         const icon = btn.querySelector("i");
-
+        
         if (!input) return;
-
+        
         if (input.type === "password") {
             input.type = "text";
             icon.classList.remove("fa-eye");
@@ -174,3 +197,7 @@ document.addEventListener("click", function (e) {
         }
     }
 });
+
+
+window.showErrors = showErrors;
+window.clearErrors = clearErrors;

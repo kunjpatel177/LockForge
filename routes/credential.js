@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const isAuth = require("../middleware/auth");
-const {addCredential, getEditPage, updateCredential, deleteCredential} = require("../controllers/credentialController");
+const {addCredential, getEditPage, updateCredential, deleteCredential, exportPDF} = require("../controllers/credentialController");
 const validate = require("../middleware/validate");
 const { credentialSchema } = require("../utils/joiSchemas");
 
@@ -17,5 +17,8 @@ router.post("/edit/:id", isAuth, updateCredential);
 
 // DELETE
 router.post("/delete/:id", isAuth, deleteCredential);
+
+//EXPORT PDF
+router.post("/export", isAuth, exportPDF);
 
 module.exports = router;

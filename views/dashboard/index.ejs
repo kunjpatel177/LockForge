@@ -1,7 +1,7 @@
 <% if (suspiciousLogin) { %>
     <div class="alert alert-danger d-flex justify-content-between align-items-center shadow-sm">
         <div>
-            ⚠️ <strong>Suspicious Login Detected!</strong><br>
+            <i class="fa-solid fa-triangle-exclamation"></i> <strong>Suspicious Login Detected!</strong><br>
             We noticed a login from a new device or location.
         </div>
         <a href="/history" class="btn btn-outline-danger btn-sm">
@@ -12,16 +12,19 @@
 
         <!-- HEADER -->
         <div class="dashboard-header">
-            <h2>My Credentials</h2>
+            <h2>My Credentials</h2><i class="fa-solid fa-circle-info"></i>
 
             <div class="header-actions">
-                <a href="/sessions" class="btn btn-outline-primary btn-sm">
+                <!-- <a href="/sessions" class="btn btn-outline-primary btn-sm">
                     🟢 Active Sessions
                 </a>
 
                 <a href="/history" class="btn btn-outline-secondary btn-sm">
                     📜 Activity History
-                </a>
+                </a> -->
+                <button class="btn btn-success btn-sm" onclick="openExportModal()">
+                    <i class="fa-solid fa-file"></i> Export PDF
+                </button>
                 <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
                     Delete Account
                 </button>
@@ -200,6 +203,51 @@
                                     Delete
                                 </button>
                             </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal fade" id="exportModal" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content p-4 rounded-4 shadow">
+
+                            <!-- HEADER -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-semibold m-0">🔐 Export Credentials</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <p class="text-muted small mb-3">
+                                Enter your master password to securely export your credentials.
+                            </p>
+
+                            <!-- PASSWORD FIELD -->
+                            <div class="mb-3">
+
+                                <!-- INPUT GROUP -->
+                                <div class="position-relative d-flex">
+
+                                    <input type="password" id="exportPassword" name="password" class="form-control pe-5"
+                                        placeholder="Enter your password">
+
+                                    <!-- TOGGLE BUTTON -->
+                                    <button type="button" class="btn btn-outline-secondary ms-2 toggle-password"
+                                        data-target="exportPassword">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+
+                                </div>
+
+                                <!-- ERROR WILL COME HERE -->
+
+                            </div>
+
+                            <!-- ACTION BUTTON -->
+                            <button class="btn btn-primary w-100 fw-medium" onclick="exportPDF()">
+                                📄 Export PDF
+                            </button>
 
                         </div>
                     </div>

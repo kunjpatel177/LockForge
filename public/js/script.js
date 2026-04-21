@@ -1,5 +1,6 @@
 //script.js file
 
+
 // ================= GLOBAL =================
 let fieldCount = 0;
 const csrfToken = document.getElementById("csrfToken")?.value;
@@ -442,3 +443,45 @@ document.addEventListener("click", async (e) => {
         errorBox.innerText = "Something went wrong";
     }
 });
+
+
+
+function openExportModal() {
+    const modal = new bootstrap.Modal(document.getElementById("exportModal"));
+    modal.show();
+}
+
+async function exportPDF() {
+
+    clearErrors();
+
+    const password = document.getElementById("exportPassword").value;
+
+    const csrfToken = document.querySelector("[name='_csrf']").value;
+
+    const res = await fetch("/export", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "CSRF-Token": csrfToken
+        },
+        body: JSON.stringify({ password })
+    });
+
+    if (res.headers.get("content-type") === "application/pdf") {
+        const blob = await res.blob();
+
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+
+        a.href = url;
+        a.download = "credentials.pdf";
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+    } else {
+        const data = await res.json();
+        // alert(data.message || "Failed");
+        showErrors({password: data.message})
+    }
+}
