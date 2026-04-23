@@ -245,7 +245,7 @@ module.exports.verifyOTP = async (req, res) => {
         // 🔥 CREATE AUDIT LOG (MISSING BEFORE)
         await AuditLog.create({
             userId,
-            action: "login",
+            action: "otp_verification",
             ip: req.ip,
             userAgent: req.headers["user-agent"],
             device: getDevice(req),

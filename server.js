@@ -26,12 +26,12 @@ const sessionCleanup = require("./middleware/sessionCleanup");
 const startSessionCleaner = require("./utils/sessionCleaner");
 
 const app = express();
-app.set("trust proxy", true);
+app.set("trust proxy", 1);
 
 // ================= DATABASE =================
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
-        console.log("✅ DB connected");
+        console.log("DB connected");
 
         startSessionCleaner();   // ✅ ADD THIS
     })
@@ -353,5 +353,5 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
