@@ -134,7 +134,9 @@ module.exports.login = async (req, res) => {
             sessionId: req.sessionID,
             ip: req.ip,
             device: getDevice(req),
-            location: getLocation(req.ip)
+            location: getLocation(req.ip),
+            expiresAt: new Date(Date.now() + 30 * 60 * 1000) // 30 min
+            // expiresAt: new Date(Date.now() + 30 * 1000) // 30 min
         });
 
         // res.json({ success: true });
@@ -181,12 +183,41 @@ module.exports.register = async (req, res) => {
 };
 
 
-module.exports.verifyOTP = async (req, res) => {
-    console.log("BODY:", req.body);   // 🔥 ADD THIS
-    const { otp } = req.body;
+// module.exports.verifyOTP = async (req, res) => {
+//     console.log("BODY:", req.body);   // 🔥 ADD THIS
+//     const { otp } = req.body;
 
-    console.log("SERVER OTP:", req.session.otp);
-    console.log("USER OTP:", otp);
+//     console.log("SERVER OTP:", req.session.otp);
+//     console.log("USER OTP:", otp);
+
+//     if (!req.session.otp) {
+//         return res.json({ success: false, message: "No OTP found" });
+//     }
+
+//     if (Date.now() > req.session.otpExpiry) {
+//         return res.json({ success: false, message: "OTP expired" });
+//     }
+
+//     if (otp !== req.session.otp) {
+//         return res.json({ success: false, message: "Invalid OTP" });
+//     }
+
+//     req.session.userId = req.session.tempUserId;
+
+//     delete req.session.otp;
+//     delete req.session.tempUserId;
+//     delete req.session.otpExpiry;
+
+//     res.json({
+//         success: true,
+//         requireOTP: true,
+//         csrfToken: req.csrfToken()   // 🔥 NEW TOKEN
+//     });
+// };
+
+module.exports.verifyOTP = async (req, res) => {
+
+    const { otp } = req.body;
 
     if (!req.session.otp) {
         return res.json({ success: false, message: "No OTP found" });
@@ -200,17 +231,44 @@ module.exports.verifyOTP = async (req, res) => {
         return res.json({ success: false, message: "Invalid OTP" });
     }
 
-    req.session.userId = req.session.tempUserId;
+    try {
+        const userId = req.session.tempUserId;
 
-    delete req.session.otp;
-    delete req.session.tempUserId;
-    delete req.session.otpExpiry;
+        // 🔥 SET USER SESSION
+        req.session.userId = userId;
 
-    res.json({
-        success: true,
-        requireOTP: true,
-        csrfToken: req.csrfToken()   // 🔥 NEW TOKEN
-    });
+        // 🔥 CLEAN TEMP DATA
+        delete req.session.otp;
+        delete req.session.tempUserId;
+        delete req.session.otpExpiry;
+
+        // 🔥 CREATE AUDIT LOG (MISSING BEFORE)
+        await AuditLog.create({
+            userId,
+            action: "login",
+            ip: req.ip,
+            userAgent: req.headers["user-agent"],
+            device: getDevice(req),
+            location: getLocation(req.ip)
+        });
+
+        // 🔥 CREATE SESSION ENTRY (MAIN FIX)
+        await Session.create({
+            userId,
+            sessionId: req.sessionID,
+            ip: req.ip,
+            device: getDevice(req),
+            location: getLocation(req.ip),
+            expiresAt: new Date(Date.now() + 30 * 60 * 1000) // 30 min
+            // expiresAt: new Date(Date.now() + 30 * 1000) // 30 min
+        });
+
+        res.json({ success: true });
+
+    } catch (err) {
+        console.error("OTP verify error:", err);
+        res.json({ success: false, message: "Something went wrong" });
+    }
 };
 
 

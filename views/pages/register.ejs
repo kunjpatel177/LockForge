@@ -11,14 +11,27 @@
                 <h4 class="fw-bold">Instructions to create Password</h4>
                 <hr>
                 <h5>Password must contains at least: </h5>
-                <ul>
-                    <li>1 uppercase</li>
-                    <li>1 lowercase</li>
-                    <li>1 number</li>
-                    <li>1 special character</li>
-                    <li>8 characters</li>
-                </ul> <hr>
-                <h5 class="text-warning text-center"><i class="fa-solid fa-triangle-exclamation"></i> Please remember your password carefully. If you forget it, you will permanently lose access to your credentials.</h5>
+                <ul class="password-rules">
+                    <li id="rule-uppercase">
+                        <i class="fa-solid fa-circle-xmark icon"></i> 1 uppercase
+                    </li>
+                    <li id="rule-lowercase">
+                        <i class="fa-solid fa-circle-xmark icon"></i> 1 lowercase
+                    </li>
+                    <li id="rule-number">
+                        <i class="fa-solid fa-circle-xmark icon"></i> 1 number
+                    </li>
+                    <li id="rule-special">
+                        <i class="fa-solid fa-circle-xmark icon"></i> 1 special character
+                    </li>
+                    <li id="rule-length">
+                        <i class="fa-solid fa-circle-xmark icon"></i> 8 characters
+                    </li>
+                </ul>
+                <hr>
+                <h5 class="text-warning text-center"><i class="fa-solid fa-triangle-exclamation"></i> Please remember
+                    your password carefully. If you forget it, you will permanently lose access to your credentials.
+                </h5>
             </div>
         </div>
 
@@ -60,13 +73,24 @@
 
                         <div class="d-flex align-items-center">
                             <input type="password" name="password" id="password" class="form-control"
-                                placeholder="Create a strong password" >
+                                placeholder="Create a strong password">
 
                             <!-- 👁️ TOGGLE BUTTON OUTSIDE INPUT -->
                             <button type="button" class="btn btn-outline-secondary ms-2 toggle-password"
                                 data-target="password">
                                 <i class="fa fa-eye"></i>
                             </button>
+                        </div>
+                        <div id="strengthWrapper" class="mt-2 d-none">
+
+                            <!-- Strength Bar -->
+                            <div class="progress" style="height: 6px;">
+                                <div id="strengthBar" class="progress-bar" ></div>
+                            </div>
+
+                            <!-- Label -->
+                            <small id="strengthText" class="fw-semibold"></small>
+
                         </div>
                     </div>
 

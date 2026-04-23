@@ -21,19 +21,26 @@ const Credential = require("./models/Credential");
 const { decrypt } = require("./utils/crypto");
 const Session = require("./models/Session")
 const updateSession = require("./middleware/updateSession");
+const inactivity = require("./middleware/inactivity");
+const sessionCleanup = require("./middleware/sessionCleanup");
+const startSessionCleaner = require("./utils/sessionCleaner");
 
 const app = express();
+app.set("trust proxy", true);
 
 // ================= DATABASE =================
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("✅ DB connected"))
+    .then(() => {
+        console.log("✅ DB connected");
+
+        startSessionCleaner();   // ✅ ADD THIS
+    })
     .catch(err => console.log(err));
 
 // ================= MIDDLEWARE =================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.set("trust proxy", 1);
 
 // ================= SECURITY =================
 app.use(
@@ -69,6 +76,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    rolling: true,
 
     store: store,
     // store: MongoStore.create({
@@ -83,6 +91,10 @@ app.use(session({
         maxAge: 1000 * 60 * 30
     }
 }));
+
+app.use(sessionCleanup);
+
+app.use(inactivity);
 
 app.use((req, res, next) => {
     res.locals.isLoggedIn = !!req.session.userId;
@@ -248,28 +260,49 @@ app.get("/sessions", isAuth, async (req, res) => {
     });
 });
 
+// app.post("/sessions/logout", isAuth, async (req, res) => {
+
+//     const { sessionId } = req.body;
+
+//     // 🔥 1. Destroy actual session
+//     store.destroy(sessionId, async (err) => {
+
+//         if (err) {
+//             console.error("Session destroy error:", err);
+//             return res.redirect("/sessions");
+//         }
+
+//         // 🔥 2. Remove from your tracking collection
+//         await Session.deleteOne({
+//             sessionId,
+//             userId: req.session.userId
+//         });
+
+//         // res.redirect("/sessions");
+//         if (sessionId === req.sessionID) {
+//             return res.redirect("/sessions");
+//         }
+//     });
+// });
+
 app.post("/sessions/logout", isAuth, async (req, res) => {
 
     const { sessionId } = req.body;
 
-    // 🔥 1. Destroy actual session
+    if (sessionId === req.sessionID) {
+        return res.redirect("/sessions");
+    }
+
     store.destroy(sessionId, async (err) => {
 
-        if (err) {
-            console.error("Session destroy error:", err);
-            return res.redirect("/sessions");
+        if (!err) {
+            await Session.deleteOne({
+                sessionId,
+                userId: req.session.userId
+            });
         }
 
-        // 🔥 2. Remove from your tracking collection
-        await Session.deleteOne({
-            sessionId,
-            userId: req.session.userId
-        });
-
-        // res.redirect("/sessions");
-        if (sessionId === req.sessionID) {
-            return res.redirect("/sessions");
-        }
+        res.redirect("/sessions");
     });
 });
 

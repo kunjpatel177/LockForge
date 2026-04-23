@@ -88,6 +88,45 @@ html, body {
     color: rgb(246, 135, 135);
 }
 
+.password-rules li {
+    list-style: none;
+    margin-bottom: 6px;
+    color: white; /* ❌ default = white */
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.password-rules li .icon {
+    color: white;
+}
+
+/* ✅ VALID STATE */
+.password-rules li.valid {
+    color: #7bf862; /* green */
+}
+
+.password-rules li.valid .icon {
+    color: #7bf862;
+}
+
+
+/* STRENGTH BAR COLORS */
+.progress-bar.weak {
+    background-color: #dc2626; /* red */
+    width: 20%;
+}
+
+.progress-bar.medium {
+    background-color: #f59e0b; /* yellow */
+    width: 60%;
+}
+
+.progress-bar.strong {
+    background-color: #16a34a; /* green */
+    width: 100%;
+}
 
 
 /* ------------------------- */

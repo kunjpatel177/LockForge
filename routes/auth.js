@@ -5,6 +5,7 @@ const ejs = require("ejs");
 
 const { register, login, verifyOTP, resendOTP, deleteAccount } = require("../controllers/authController");
 const AuditLog = require("../models/AuditLog");
+const Session = require("../models/Session");
 const { getDevice } = require("../utils/device");
 const { getLocation } = require("../utils/location");
 const validate = require("../middleware/validate");
@@ -19,6 +20,24 @@ router.post("/register", validate(registerSchema), register);
 // LOGIN
 router.post("/login", validate(loginSchema), login);
 
+// router.get("/logout", async (req, res) => {
+
+//     if (req.session.userId) {
+//         await AuditLog.create({
+//             userId: req.session.userId,
+//             action: "logout",
+//             ip: req.ip,
+//             userAgent: req.headers["user-agent"],
+//             device: getDevice(req),
+//             location: getLocation(req.ip)
+//         });
+//     }
+
+//     req.session.destroy(() => {
+//         res.redirect("/login");
+//     });
+// });
+
 router.get("/logout", async (req, res) => {
 
     if (req.session.userId) {
@@ -32,7 +51,17 @@ router.get("/logout", async (req, res) => {
         });
     }
 
-    req.session.destroy(() => {
+    const currentSessionId = req.sessionID;
+
+    req.session.destroy(async (err) => {
+
+        if (!err) {
+            // 🔥 REMOVE from active sessions
+            await Session.deleteOne({
+                sessionId: currentSessionId
+            });
+        }
+
         res.redirect("/login");
     });
 });

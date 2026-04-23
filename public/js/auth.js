@@ -332,5 +332,111 @@ if (otpBoxes.length > 0) {
 }
 
 
+// ================= PASSWORD LIVE VALIDATION =================
+const passwordInput = document.getElementById("password");
+
+if (passwordInput) {
+
+    passwordInput.addEventListener("input", () => {
+
+        const val = passwordInput.value;
+
+        const strengthWrapper = document.getElementById("strengthWrapper");
+
+        if (strengthWrapper) {
+            if (val.length === 0) {
+                strengthWrapper.classList.add("d-none");
+            } else {
+                strengthWrapper.classList.remove("d-none");
+            }
+        }
+
+        // rules
+        const hasUpper = /[A-Z]/.test(val);
+        const hasLower = /[a-z]/.test(val);
+        const hasNumber = /[0-9]/.test(val);
+        const hasSpecial = /[@$!%*?&]/.test(val);
+        const hasLength = val.length >= 8;
+
+        toggleRule("rule-uppercase", hasUpper);
+        toggleRule("rule-lowercase", hasLower);
+        toggleRule("rule-number", hasNumber);
+        toggleRule("rule-special", hasSpecial);
+        toggleRule("rule-length", hasLength);
+
+        // ================= PASSWORD STRENGTH =================
+        const strengthBar = document.getElementById("strengthBar");
+        const strengthText = document.getElementById("strengthText");
+
+        if (strengthBar && strengthText) {
+
+            // 🔥 EMPTY INPUT FIX
+            if (val.length === 0) {
+                strengthBar.className = "progress-bar";
+                strengthBar.style.width = "0%";
+                strengthText.innerText = "";
+                return;
+            }
+
+            let score = 0;
+
+            if (hasUpper) score++;
+            if (hasLower) score++;
+            if (hasNumber) score++;
+            if (hasSpecial) score++;
+            if (hasLength) score++;
+
+            // reset classes
+            strengthBar.className = "progress-bar";
+
+            if (score <= 2) {
+                strengthBar.classList.add("weak");
+                strengthText.innerText = "Weak";
+                strengthBar.style.width = "25%";
+            }
+            else if (score === 3 || score === 4) {
+                strengthBar.classList.add("medium");
+                strengthText.innerText = "Medium";
+                strengthBar.style.width = "60%";
+            }
+            else if (score === 5) {
+                strengthBar.classList.add("strong");
+                strengthText.innerText = "Strong";
+                strengthBar.style.width = "100%";
+            }
+            // else {
+            //     strengthBar.style.width = "0%";
+            //     strengthText.innerText = "";
+            // }
+        }
+    });
+}
+
+// helper
+function toggleRule(id, isValid) {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const icon = el.querySelector(".icon");
+
+    if (isValid) {
+        el.classList.add("valid");
+
+        if (icon) {
+            icon.classList.remove("fa-circle-xmark");
+            icon.classList.add("fa-circle-check");
+        }
+
+    } else {
+        el.classList.remove("valid");
+
+        if (icon) {
+            icon.classList.remove("fa-circle-check");
+            icon.classList.add("fa-circle-xmark");
+        }
+    }
+}
+
+
 window.showErrors = showErrors;
 window.clearErrors = clearErrors;

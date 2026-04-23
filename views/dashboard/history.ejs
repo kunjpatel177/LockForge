@@ -48,21 +48,26 @@
                                         <td>
                                             <% if (log.action==="login" ) { %>
                                                 <span class="badge bg-success">Login</span>
+
                                                 <% } else if (log.action==="logout" ) { %>
                                                     <span class="badge bg-secondary">Logout</span>
-                                                    <% } else { %>
-                                                        <span class="badge bg-primary">
-                                                            <%= log.action %>
-                                                        </span>
-                                                        <% } %>
+
+                                                    <% } else if (log.action==="logout_expired" ) { %>
+                                                        <span class="badge bg-warning text-dark">Session Expired</span>
+                                                        
+                                                        <% } else { %>
+                                                            <span class="badge bg-primary">
+                                                                <%= log.action %>
+                                                            </span>
+                                                            <% } %>
                                         </td>
 
                                         <!-- DEVICE -->
                                         <td>
                                             <% if (log.device.includes("mobile")) { %>
-                                                
+
                                                 <% } else { %>
-                                                    
+
                                                     <% } %>
                                                         <span class="text-muted">
                                                             <%= log.device %>
@@ -82,7 +87,7 @@
                                         <!-- Location -->
                                         <td>
                                             <span class="badge bg-info text-dark">
-                                                 <%= log.location || "Unknown" %>
+                                                <%= log.location || "Unknown" %>
                                             </span>
                                         </td>
 

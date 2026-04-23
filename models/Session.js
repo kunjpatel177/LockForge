@@ -12,7 +12,8 @@ const sessionSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    location: String
+    location: String,
+    expiresAt: Date
 });
 
 module.exports = mongoose.model("Session", sessionSchema);
