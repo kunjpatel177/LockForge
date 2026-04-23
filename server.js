@@ -45,16 +45,20 @@ app.use(
 // ================= RATE LIMIT =================
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 1000,
+    max: 100,
+    standardHeaders: true,
+    legacyHeaders: false,
 });
 app.use(limiter);
 
-const loginLimiter = rateLimit({
+const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 1000,
-    message: "Too many login attempts. Try later."
+    max: 20,
+    message: "Too many attempts. Try later."
 });
-app.use("/login", loginLimiter);
+app.use("/login", authLimiter);
+app.use("/register", authLimiter);
+app.use("/export", authLimiter);
 
 // ================= SESSION =================
 const store = MongoStore.create({

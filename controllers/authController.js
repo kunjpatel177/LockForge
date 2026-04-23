@@ -214,6 +214,44 @@ module.exports.verifyOTP = async (req, res) => {
 };
 
 
+module.exports.resendOTP = async (req, res) => {
+    try {
+        if (!req.session.tempUserId) {
+            return res.json({
+                success: false,
+                message: "Session expired. Login again."
+            });
+        }
+
+        const User = require("../models/User");
+        const { generateOTP } = require("../utils/otp");
+        const { sendAlert } = require("../utils/mailer");
+
+        const user = await User.findById(req.session.tempUserId);
+
+        const otp = generateOTP();
+
+        req.session.otp = otp;
+        req.session.otpExpiry = Date.now() + 5 * 60 * 1000;
+
+        const html = `
+            <h2>🔐 OTP Resent</h2>
+            <p>Your new OTP is:</p>
+            <h1>${otp}</h1>
+            <p>Expires in 5 minutes.</p>
+        `;
+
+        await sendAlert(user.email, "Resend OTP", html);
+
+        res.json({ success: true });
+
+    } catch (err) {
+        console.error(err);
+        res.json({ success: false, message: "Failed to resend OTP" });
+    }
+};
+
+
 module.exports.deleteAccount = async (req, res) => {
     try {
         const { password } = req.body;

@@ -4,6 +4,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const csrfToken = document.getElementById("csrfToken")?.value;
 
+    const otpInput = document.querySelector(".otp-input");
+
+    if (otpInput) {
+
+        otpInput.focus();
+
+        otpInput.addEventListener("input", () => {
+
+            // 🔢 Allow only digits
+            otpInput.value = otpInput.value.replace(/[^0-9]/g, "");
+
+            // ⚡ Auto submit when 6 digits entered
+            if (otpInput.value.length === 6) {
+
+                // Trigger form submit
+                document.getElementById("otpForm").dispatchEvent(
+                    new Event("submit", { cancelable: true })
+                );
+            }
+        });
+    }
+
     // ================= LOGIN =================
     const loginForm = document.getElementById("loginForm");
 
@@ -64,6 +86,8 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("OTP FORM FOUND");
 
         otpForm.addEventListener("submit", async (e) => {
+            if (otpForm.dataset.submitting === "true") return;
+            otpForm.dataset.submitting = "true";
             e.preventDefault();
 
             console.log("OTP SUBMIT TRIGGERED");
@@ -80,6 +104,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify(dataObj),
                 credentials: "same-origin"
             });
+
+            otpForm.dataset.submitting = "false";
 
             const data = await res.json();
 
@@ -175,17 +201,17 @@ function showErrors(errors) {
 
 // ================= TOGGLE PASSWORD =================
 document.addEventListener("click", function (e) {
-    
+
     if (e.target.closest(".toggle-password")) {
-        
+
         const btn = e.target.closest(".toggle-password");
         const inputId = btn.dataset.target;
-        
+
         const input = document.getElementById(inputId);
         const icon = btn.querySelector("i");
-        
+
         if (!input) return;
-        
+
         if (input.type === "password") {
             input.type = "text";
             icon.classList.remove("fa-eye");
@@ -197,6 +223,113 @@ document.addEventListener("click", function (e) {
         }
     }
 });
+
+
+// ================= OTP COUNTDOWN =================
+let timer = 60;
+let interval;
+
+function startCountdown() {
+
+    const countdownEl = document.getElementById("countdown");
+    const resendLink = document.getElementById("resendLink");
+
+    if (!countdownEl || !resendLink) return;
+
+    resendLink.classList.add("disabled-link");
+
+    interval = setInterval(() => {
+
+        countdownEl.innerText = `Resend available in ${timer}s`;
+
+        timer--;
+
+        if (timer < 0) {
+            clearInterval(interval);
+            countdownEl.innerText = "";
+
+            resendLink.classList.remove("disabled-link");
+        }
+
+    }, 1000);
+}
+
+// START TIMER ON LOAD
+document.addEventListener("DOMContentLoaded", () => {
+    if (document.getElementById("resendLink")) {
+        startCountdown();
+    }
+});
+
+
+// ================= RESEND OTP =================
+document.addEventListener("click", async (e) => {
+
+    if (e.target.id === "resendLink" && !e.target.classList.contains("disabled-link")) {
+
+        e.preventDefault();
+
+        const csrfToken = document.getElementById("csrfToken")?.value;
+
+        const res = await fetch("/resend-otp", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "CSRF-Token": csrfToken
+            }
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+
+            // restart timer
+            timer = 60;
+            startCountdown();
+
+            document.getElementById("error").innerText = "OTP resent successfully";
+        } else {
+            document.getElementById("error").innerText = data.message;
+        }
+    }
+
+});
+
+
+// ================= OTP BOX LOGIC =================
+const otpBoxes = document.querySelectorAll(".otp-box");
+
+if (otpBoxes.length > 0) {
+
+    otpBoxes[0].focus();
+
+    otpBoxes.forEach((box, index) => {
+
+        box.addEventListener("input", (e) => {
+
+            box.value = box.value.replace(/[^0-9]/g, "");
+
+            if (box.value && index < otpBoxes.length - 1) {
+                otpBoxes[index + 1].focus();
+            }
+
+            // 🔥 AUTO SUBMIT
+            const otp = Array.from(otpBoxes).map(b => b.value).join("");
+
+            if (otp.length === 6) {
+                submitOTP(otp);
+            }
+        });
+
+        // BACKSPACE MOVE
+        box.addEventListener("keydown", (e) => {
+            if (e.key === "Backspace" && !box.value && index > 0) {
+                otpBoxes[index - 1].focus();
+            }
+        });
+
+    });
+}
 
 
 window.showErrors = showErrors;

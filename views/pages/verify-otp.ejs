@@ -1,11 +1,11 @@
-<div class="container mt-5">
+<!-- <div class="container mt-5">
     <div class="card p-4 shadow">
 
         <h3 class="mb-3">Verify OTP</h3>
 
         
         <form id="otpForm" onsubmit="return false;">
-            <input type="hidden" id="csrfToken" value="<%= csrfToken %>">
+            <input type="hidden" id="csrfToken" value="<%#= csrfToken %>">
 
             <input type="text" name="otp" class="form-control mb-3" placeholder="Enter OTP" required>
 
@@ -18,4 +18,55 @@
         <div id="error" class="text-danger mt-2"></div>
 
     </div>
+</div> -->
+
+<div class="otp-wrapper d-flex align-items-center justify-content-center">
+
+    <div class="otp-card shadow-lg">
+
+        <!-- LOGO / TITLE -->
+        <div class="text-center mb-4">
+            <h4 class="fw-bold">🔐 Verify Your Identity</h4>
+            <p class="text-muted small">
+                Enter the 6-digit code sent to<br>
+                <strong>
+                    <%= maskedEmail || "your email" %>
+                </strong>
+            </p>
+        </div>
+
+        <!-- FORM -->
+        <form id="otpForm" onsubmit="return false;">
+
+            <input type="hidden" id="csrfToken" value="<%= csrfToken %>">
+
+            <!-- OTP INPUT -->
+            <input type="text" name="otp" maxlength="6" class="form-control otp-input text-center mb-3"
+                placeholder="••••••" required>
+
+            <!-- BUTTON -->
+            <button type="submit" class="btn btn-primary w-100 otp-btn">
+                Verify & Continue
+            </button>
+
+        </form>
+
+        <!-- ERROR -->
+        <div id="error" class="text-danger text-center mt-3 small"></div>
+
+        <!-- FOOTER -->
+        <div class="text-center mt-4 small text-muted">
+            Didn’t receive code?
+            <a href="#" id="resendLink" class="fw-semibold text-decoration-none disabled-link">
+                Resend
+            </a>
+            <div id="countdown" class="mt-2"></div>
+        </div>
+
+        <div class="text-center">
+            <a href="/" class="btn btn-outline-dark w-100 mt-2">Go back to Home</a>
+        </div>
+
+    </div>
+
 </div>

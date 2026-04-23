@@ -103,3 +103,46 @@ html, body {
         font-size: 14px;
     }
 }
+
+
+
+/* OTP PAGE */
+.otp-wrapper {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #111827, #1f2937);
+}
+
+.otp-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 35px;
+    width: 100%;
+    max-width: 380px;
+}
+
+/* OTP INPUT */
+.otp-input {
+    font-size: 1.8rem;
+    letter-spacing: 10px;
+    border-radius: 10px;
+    height: 55px;
+    font-weight: 600;
+}
+
+/* BUTTON */
+.otp-btn {
+    border-radius: 10px;
+    padding: 10px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.otp-btn:hover {
+    transform: translateY(-1px);
+}
+
+.disabled-link {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
