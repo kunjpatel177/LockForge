@@ -47,7 +47,7 @@ router.get("/logout", async (req, res) => {
             ip: req.ip,
             userAgent: req.headers["user-agent"],
             device: getDevice(req),
-            location: getLocation(req.ip)
+            location: await getLocation(req)
         });
     }
 
