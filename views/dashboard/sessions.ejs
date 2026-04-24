@@ -8,22 +8,23 @@
         </div>
         <div class="d-flex">
             <% if ( sessions.length> 1) { %>
-            <span>
-                <form method="POST" action="/sessions/logout-all" class="mb-3">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <span>
+                    <form method="POST" action="/sessions/logout-all" class="mb-3">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-                    <button class="btn btn-danger py-2 me-3" onclick="return confirm('Logout from all other devices?')">
-                        <i class="fa-solid fa-power-off"></i> Logout All Other Devices
-                    </button>
-                </form>
-            </span>
-            <% } %>
-            <span>
-                <a href="/dashboard" class="btn btn-dark px-3 py-2 ">
-                    <span> <i class="fa-solid fa-arrow-left-long"></i> Back to Dashboard</span>
-                </a>
-            </span>
-            
+                        <button class="btn btn-danger py-2 me-3"
+                            onclick="return confirm('Logout from all other devices?')">
+                            <i class="fa-solid fa-power-off"></i> Logout All Other Devices
+                        </button>
+                    </form>
+                </span>
+                <% } %>
+                    <span>
+                        <a href="/dashboard" class="btn btn-dark px-3 py-2 ">
+                            <span> <i class="fa-solid fa-arrow-left-long"></i> Back to Dashboard</span>
+                        </a>
+                    </span>
+
         </div>
     </div>
 
@@ -60,7 +61,9 @@
                         </div>
 
                         <div class="text-muted small">
-                            Last active: <%= session.lastActive.toLocaleString() %>
+                            Last active: <%= session.lastActive.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" ,
+                                day: "2-digit" , month: "short" , year: "numeric" , hour: "2-digit" , minute: "2-digit"
+                                , second: "2-digit" , hour12: true }) .replace("am", "AM" ) .replace("pm", "PM" ) %>
                         </div>
 
                     </div>
