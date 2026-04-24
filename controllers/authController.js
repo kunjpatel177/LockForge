@@ -49,7 +49,7 @@ module.exports.login = async (req, res) => {
 
         const currentDevice = getDevice(req);
         const currentIP = req.ip;
-        const currentLocation = getLocation(currentIP);
+        const currentLocation = await getLocation(req);
 
         const lastLogin = await AuditLog.findOne({
             userId: user._id,
@@ -73,7 +73,7 @@ module.exports.login = async (req, res) => {
 
         if (suspicious) {
 
-            const location = getLocation(req.ip);
+            const location = getLocation(req);
             const device = getDevice(req);
 
             const html = securityAlertTemplate({
@@ -109,7 +109,7 @@ module.exports.login = async (req, res) => {
                 ip: req.ip,
                 userAgent: req.headers["user-agent"],
                 device: getDevice(req),
-                location: getLocation(req.ip)
+                location: await getLocation(req)
             });
 
             return res.json({
@@ -126,7 +126,7 @@ module.exports.login = async (req, res) => {
             ip: req.ip,
             userAgent: req.headers["user-agent"],
             device: getDevice(req),
-            location: getLocation(req.ip)
+            location: await getLocation(req)
         });
 
         await Session.create({
@@ -134,7 +134,7 @@ module.exports.login = async (req, res) => {
             sessionId: req.sessionID,
             ip: req.ip,
             device: getDevice(req),
-            location: getLocation(req.ip),
+            location: await getLocation(req),
             expiresAt: new Date(Date.now() + 30 * 60 * 1000) // 30 min
             // expiresAt: new Date(Date.now() + 30 * 1000) // 30 min
         });
@@ -249,7 +249,7 @@ module.exports.verifyOTP = async (req, res) => {
             ip: req.ip,
             userAgent: req.headers["user-agent"],
             device: getDevice(req),
-            location: getLocation(req.ip)
+            location: await getLocation(req)
         });
 
         // 🔥 CREATE SESSION ENTRY (MAIN FIX)
@@ -258,7 +258,7 @@ module.exports.verifyOTP = async (req, res) => {
             sessionId: req.sessionID,
             ip: req.ip,
             device: getDevice(req),
-            location: getLocation(req.ip),
+            location: await getLocation(req),
             expiresAt: new Date(Date.now() + 30 * 60 * 1000) // 30 min
             // expiresAt: new Date(Date.now() + 30 * 1000) // 30 min
         });

@@ -43,7 +43,7 @@ module.exports.addCredential = async (req, res) => {
             action: "add_credential",
             ip: req.ip,
             device: getDevice(req),
-            location: getLocation(req.ip)
+            location: await getLocation(req.ip)
         });
 
         await newCredential.save();
@@ -141,7 +141,7 @@ module.exports.updateCredential = async (req, res) => {
             action: "update_credential",
             ip: req.ip,
             device: getDevice(req),
-            location: getLocation(req.ip)
+            location: await getLocation(req.ip)
         });
 
         res.redirect("/dashboard");
@@ -162,7 +162,7 @@ module.exports.deleteCredential = async (req, res) => {
             action: "delete_credential",
             ip: req.ip,
             device: getDevice(req),
-            location: getLocation(req.ip)
+            location: await getLocation(req.ip)
         });
         res.redirect("/dashboard");
 
@@ -331,7 +331,7 @@ module.exports.exportPDF = async (req, res) => {
             action: "export_pdf",
             ip: req.ip,
             device: getDevice(req),
-            location: getLocation(req.ip)
+            location: await getLocation(req.ip)
         });
 
     } catch (err) {
