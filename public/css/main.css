@@ -256,6 +256,16 @@ body {
     box-shadow: none !important;
 }
 
+/* Smooth transition */
+.dropdown-toggle::after {
+    transition: transform 0.3s ease;
+}
+
+/* Rotate when dropdown is open */
+.dropdown-toggle.show::after {
+    transform: rotate(180deg);
+}
+
 /* ===== DROPDOWN CONTAINER ===== */
 .user-dropdown {
     min-width: 260px;

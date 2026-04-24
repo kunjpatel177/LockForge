@@ -256,34 +256,11 @@ app.get("/sessions", isAuth, async (req, res) => {
 
     res.render("layouts/app", {
         title: "Active Sessions",
-        body
+        body,
+        csrfToken: req.csrfToken()
     });
 });
 
-// app.post("/sessions/logout", isAuth, async (req, res) => {
-
-//     const { sessionId } = req.body;
-
-//     // 🔥 1. Destroy actual session
-//     store.destroy(sessionId, async (err) => {
-
-//         if (err) {
-//             console.error("Session destroy error:", err);
-//             return res.redirect("/sessions");
-//         }
-
-//         // 🔥 2. Remove from your tracking collection
-//         await Session.deleteOne({
-//             sessionId,
-//             userId: req.session.userId
-//         });
-
-//         // res.redirect("/sessions");
-//         if (sessionId === req.sessionID) {
-//             return res.redirect("/sessions");
-//         }
-//     });
-// });
 
 app.post("/sessions/logout", isAuth, async (req, res) => {
 
@@ -304,6 +281,38 @@ app.post("/sessions/logout", isAuth, async (req, res) => {
 
         res.redirect("/sessions");
     });
+});
+
+app.post("/sessions/logout-all", isAuth, async (req, res) => {
+
+    try {
+        const currentSessionId = req.sessionID;
+
+        // 🔥 get all sessions except current
+        const sessions = await Session.find({
+            userId: req.session.userId,
+            sessionId: { $ne: currentSessionId }
+        });
+
+        // 🔥 destroy each session from store
+        for (let s of sessions) {
+            await new Promise((resolve) => {
+                store.destroy(s.sessionId, () => resolve());
+            });
+        }
+
+        // 🔥 remove from DB
+        await Session.deleteMany({
+            userId: req.session.userId,
+            sessionId: { $ne: currentSessionId }
+        });
+
+        res.redirect("/sessions");
+
+    } catch (err) {
+        console.error("Logout all devices error:", err);
+        res.redirect("/sessions");
+    }
 });
 
 app.get("/about", (req, res) => {

@@ -30,11 +30,6 @@ module.exports.login = async (req, res) => {
         return res.json({ success: false, errors });
     }
 
-    // if (Object.keys(errors).length > 0) {
-    //     console.log("Hello:   ",Object.keys(errors))
-    //     return res.json({ success: false, errors });
-    // }
-
     const key = deriveKey(password, user.salt);
 
     req.session.regenerate(async (err) => {
@@ -83,7 +78,7 @@ module.exports.login = async (req, res) => {
                 time: new Date().toLocaleString()
             });
 
-            await sendAlert(user.email, "⚠️ New Login Alert", html);
+            await sendAlert(user.email, "New Login Alert", html);
         }
 
         if (suspicious) {
@@ -96,7 +91,7 @@ module.exports.login = async (req, res) => {
             req.session.otpExpiry = Date.now() + 5 * 60 * 1000; // 5 min
 
             const html = `
-                            <h2>🔐 Verify Login</h2>
+                            <h2>Verify Login</h2>
                             <p>Your OTP is:</p>
                             <h1>${otp}</h1>
                             <p>This OTP expires in 5 minutes.</p>
@@ -119,7 +114,7 @@ module.exports.login = async (req, res) => {
         }
 
 
-        // 🔥 AUDIT LOG
+        // AUDIT LOG
         await AuditLog.create({
             userId: user._id,
             action: "login",
@@ -183,38 +178,6 @@ module.exports.register = async (req, res) => {
 };
 
 
-// module.exports.verifyOTP = async (req, res) => {
-//     console.log("BODY:", req.body);   // 🔥 ADD THIS
-//     const { otp } = req.body;
-
-//     console.log("SERVER OTP:", req.session.otp);
-//     console.log("USER OTP:", otp);
-
-//     if (!req.session.otp) {
-//         return res.json({ success: false, message: "No OTP found" });
-//     }
-
-//     if (Date.now() > req.session.otpExpiry) {
-//         return res.json({ success: false, message: "OTP expired" });
-//     }
-
-//     if (otp !== req.session.otp) {
-//         return res.json({ success: false, message: "Invalid OTP" });
-//     }
-
-//     req.session.userId = req.session.tempUserId;
-
-//     delete req.session.otp;
-//     delete req.session.tempUserId;
-//     delete req.session.otpExpiry;
-
-//     res.json({
-//         success: true,
-//         requireOTP: true,
-//         csrfToken: req.csrfToken()   // 🔥 NEW TOKEN
-//     });
-// };
-
 module.exports.verifyOTP = async (req, res) => {
 
     const { otp } = req.body;
@@ -234,15 +197,15 @@ module.exports.verifyOTP = async (req, res) => {
     try {
         const userId = req.session.tempUserId;
 
-        // 🔥 SET USER SESSION
+        // SET USER SESSION
         req.session.userId = userId;
 
-        // 🔥 CLEAN TEMP DATA
+        // CLEAN TEMP DATA
         delete req.session.otp;
         delete req.session.tempUserId;
         delete req.session.otpExpiry;
 
-        // 🔥 CREATE AUDIT LOG (MISSING BEFORE)
+        // CREATE AUDIT LOG (MISSING BEFORE)
         await AuditLog.create({
             userId,
             action: "otp_verification",
@@ -252,7 +215,7 @@ module.exports.verifyOTP = async (req, res) => {
             location: await getLocation(req)
         });
 
-        // 🔥 CREATE SESSION ENTRY (MAIN FIX)
+        // CREATE SESSION ENTRY (MAIN FIX)
         await Session.create({
             userId,
             sessionId: req.sessionID,
@@ -260,7 +223,6 @@ module.exports.verifyOTP = async (req, res) => {
             device: getDevice(req),
             location: await getLocation(req),
             expiresAt: new Date(Date.now() + 30 * 60 * 1000) // 30 min
-            // expiresAt: new Date(Date.now() + 30 * 1000) // 30 min
         });
 
         res.json({ success: true });
@@ -293,7 +255,7 @@ module.exports.resendOTP = async (req, res) => {
         req.session.otpExpiry = Date.now() + 5 * 60 * 1000;
 
         const html = `
-            <h2>🔐 OTP Resent</h2>
+            <h2>OTP Resent</h2>
             <p>Your new OTP is:</p>
             <h1>${otp}</h1>
             <p>Expires in 5 minutes.</p>
@@ -339,7 +301,7 @@ module.exports.deleteAccount = async (req, res) => {
             });
         }
 
-        // 🔥 DELETE EVERYTHING RELATED
+        // DELETE EVERYTHING RELATED
         const Credential = require("../models/Credential");
         const Session = require("../models/Session");
         const AuditLog = require("../models/AuditLog");

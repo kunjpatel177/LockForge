@@ -20,23 +20,6 @@ router.post("/register", validate(registerSchema), register);
 // LOGIN
 router.post("/login", validate(loginSchema), login);
 
-// router.get("/logout", async (req, res) => {
-
-//     if (req.session.userId) {
-//         await AuditLog.create({
-//             userId: req.session.userId,
-//             action: "logout",
-//             ip: req.ip,
-//             userAgent: req.headers["user-agent"],
-//             device: getDevice(req),
-//             location: getLocation(req.ip)
-//         });
-//     }
-
-//     req.session.destroy(() => {
-//         res.redirect("/login");
-//     });
-// });
 
 router.get("/logout", async (req, res) => {
 
@@ -62,7 +45,8 @@ router.get("/logout", async (req, res) => {
             });
         }
 
-        res.redirect("/login");
+        // res.redirect("/login");
+        res.redirect("/");
     });
 });
 
