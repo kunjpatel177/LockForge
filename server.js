@@ -320,6 +320,20 @@ app.get("/about", (req, res) => {
     });
 });
 
+
+app.get("/security", (req, res) => {
+
+    const body = renderView("pages/security.ejs",{
+        isLoggedIn: res.locals.isLoggedIn,
+    });
+
+    res.render("layouts/clean", {
+        title: "Security",
+        body
+    });
+});
+
+
 // ================= ROUTES FILES =================
 app.use("/", authRoutes);
 app.use("/", credentialRoutes);

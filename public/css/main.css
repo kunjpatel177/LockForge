@@ -391,6 +391,63 @@ body {
     border-top: 1px solid #eee;
 }
 
+
+/* FLOW DIAGRAM */
+/* FLOW DIAGRAM */
+.flow-box {
+    display: flex;
+    align-items: stretch;   /* 🔥 ensures equal height */
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.flow-step {
+    background: #f3f4f6;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+
+    width: 150px;
+    min-height: 120px;      /* 🔥 equal height */
+
+    display: flex;          /* 🔥 center content */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.flow-step i {
+    font-size: 22px;
+    margin-bottom: 6px;
+    color: #4f46e5;
+}
+
+.flow-arrow {
+    font-size: 20px;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+}
+
+/* THREAT CARDS */
+.threat-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    padding: 12px;
+    border-radius: 10px;
+    height: 100%;
+}
+
+.threat-card h6 {
+    font-weight: 600;
+}
+
+.threat-card p {
+    font-size: 13px;
+    color: #6b7280;
+}
+
 /* ----------------------------------------------- */
 
 /* ===== GLOBAL MOBILE FIX ===== */
