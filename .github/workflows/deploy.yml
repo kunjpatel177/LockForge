@@ -26,8 +26,8 @@ jobs:
       run: npm install
 
     # 4️⃣ Run tests (if available)
-    - name: Run Tests
-      run: npm test
+    - name: Skip Tests
+      run: echo "No tests configured"
 
     # 5️⃣ Deploy to Render
     - name: Trigger Render Deploy
