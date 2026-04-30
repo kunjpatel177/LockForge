@@ -2,367 +2,71 @@ require("dotenv").config();
 
 const express = require("express");
 const path = require("path");
-const mongoose = require("mongoose");
-const session = require("express-session");
-const MongoStore = require("connect-mongo").default;
-const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
-const flash = require("connect-flash");
-const csrf = require("csurf");
-const ejs = require("ejs");
-const fs = require("fs");
+
+const connectDB = require("./config/db");
+const setupSession = require("./config/session");
+
+const security = require("./middleware/security");
+const globals = require("./middleware/globals");
+const csrfSetup = require("./middleware/csrf");
 
 const authRoutes = require("./routes/auth");
 const credentialRoutes = require("./routes/credential");
-const isAuth = require("./middleware/auth");
-const AuditLog = require("./models/AuditLog");
-const { getDevice } = require("./utils/device");
-const Credential = require("./models/Credential");
-const { decrypt } = require("./utils/crypto");
-const Session = require("./models/Session")
+const pageRoutes = require("./routes/pages");
+
 const updateSession = require("./middleware/updateSession");
 const inactivity = require("./middleware/inactivity");
 const sessionCleanup = require("./middleware/sessionCleanup");
-const startSessionCleaner = require("./utils/sessionCleaner");
 
 const app = express();
 app.set("trust proxy", 1);
 
-// ================= DATABASE =================
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => {
-        console.log("DB connected");
+// DB
+connectDB();
 
-        startSessionCleaner();   // ✅ ADD THIS
-    })
-    .catch(err => console.log(err));
-
-// ================= MIDDLEWARE =================
+// BASIC
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-// ================= SECURITY =================
-app.use(
-    helmet({
-        contentSecurityPolicy: false
-    })
-);
+// SECURITY
+security(app);
 
-// ================= RATE LIMIT =================
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100,
-    standardHeaders: true,
-    legacyHeaders: false,
-});
-app.use(limiter);
+// SESSION
+const store = setupSession(app);
 
-const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 20,
-    message: "Too many attempts. Try later."
-});
-app.use("/login", authLimiter);
-app.use("/register", authLimiter);
-app.use("/export", authLimiter);
+// GLOBALS
+globals(app);
 
-// ================= SESSION =================
-const store = MongoStore.create({
-    mongoUrl: process.env.MONGO_URI
-});
-
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    rolling: true,
-
-    store: store,
-    // store: MongoStore.create({
-    //     mongoUrl: process.env.MONGO_URI
-    // }),
-
-    cookie: {
-        httpOnly: true,
-        // secure: false,        // true in production (HTTPS)
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",      // ✅ IMPORTANT FIX
-        maxAge: 1000 * 60 * 30
-    }
-}));
-
+// CUSTOM MIDDLEWARE
 app.use(sessionCleanup);
-
 app.use(inactivity);
+app.use(updateSession);
 
-app.use((req, res, next) => {
-    res.locals.isLoggedIn = !!req.session.userId;
-    res.locals.user = req.session.user || null;  // 🔥 ADD THIS
-    next();
-});
+// CSRF
+csrfSetup(app);
 
-// ================= FLASH =================
-app.use(flash());
-
-app.use((req, res, next) => {
-    res.locals.success = req.flash("success");
-    res.locals.error = req.flash("error");
-    next();
-});
-
-// ================= NO CACHE =================
-app.use((req, res, next) => {
-    res.set("Cache-Control", "no-store");
-    next();
-});
-
-// ================= CSRF (GLOBAL - FINAL FIX) =================
-const csrfProtection = csrf();
-
-app.use(csrfProtection);
-
-app.use((req, res, next) => {
-    res.locals.csrfToken = req.csrfToken();
-    next();
-});
-
-// ================= VIEW ENGINE =================
+// VIEW
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-
-// ================= HELPER =================
-function renderView(viewPath, data = {}) {
-    const content = fs.readFileSync(path.join(__dirname, "views", viewPath), "utf-8");
-    return ejs.render(content, data);
-}
-
-// ================= ROUTES =================
-// ---------- HOME ----------
-app.get("/", (req, res) => {
-
-    const body = renderView("pages/home.ejs", {
-        csrfToken: res.locals.csrfToken,
-        isLoggedIn: res.locals.isLoggedIn,   // ✅ ADD THIS
-        user: res.locals.user
-    });
-
-    res.render("layouts/public", {
-        title: "Home",
-        body,
-        csrfToken: res.locals.csrfToken
-    });
-});
-
-app.use(updateSession);
-// ---------- LOGIN ----------
-app.get("/login", (req, res) => {
-
-    const body = renderView("pages/login.ejs", {
-        csrfToken: res.locals.csrfToken
-    });
-
-    res.render("layouts/auth", {
-        title: "Login",
-        body,
-        csrfToken: res.locals.csrfToken
-    });
-});
-
-// ---------- REGISTER ----------
-app.get("/register", (req, res) => {
-
-    const body = renderView("pages/register.ejs", {
-        csrfToken: res.locals.csrfToken
-    });
-
-    res.render("layouts/auth", {
-        title: "Register",
-        body,
-        csrfToken: res.locals.csrfToken
-    });
-});
-
-// ---------- DASHBOARD ----------
-app.get("/dashboard", isAuth, async (req, res) => {
-
-    const credentialsRaw = await Credential.find({
-        userId: req.session.userId
-    });
-
-    const key = Buffer.from(req.session.encryptionKey, "hex");
-
-    const credentials = credentialsRaw.map(cred => {
-
-        const decryptedFields = cred.fields.map(field => {
-
-            if (["password", "otp", "code"].includes(field.type)) {
-                return {
-                    ...field._doc,
-                    value: decrypt(field.value, key)
-                };
-            }
-
-            return field;
-        });
-
-        return {
-            ...cred._doc,
-            fields: decryptedFields
-        };
-    });
-
-    const body = renderView("dashboard/index.ejs", {
-        credentials,
-        csrfToken: res.locals.csrfToken,
-        suspiciousLogin: req.session.suspiciousLogin || false
-    });
-
-    // reset after showing once
-    req.session.suspiciousLogin = false;
-
-    res.render("layouts/app", {
-        title: "Dashboard",
-        body,
-        csrfToken: res.locals.csrfToken
-    });
-});
-
-app.get("/history", isAuth, async (req, res) => {
-    const logs = await AuditLog.find({
-        userId: req.session.userId
-    }).sort({ time: -1 });
-
-    const body = renderView("dashboard/history.ejs", { logs });
-
-    res.render("layouts/app", {
-        title: "History",
-        body
-    });
-});
-
-app.get("/sessions", isAuth, async (req, res) => {
-
-    const sessions = await Session.find({
-        userId: req.session.userId
-    });
-
-    const body = renderView("dashboard/sessions.ejs", {
-        sessions,
-        currentSessionId: req.sessionID,
-        csrfToken: res.locals.csrfToken   // ✅ ADD THIS
-    });
-
-    res.render("layouts/app", {
-        title: "Active Sessions",
-        body,
-        csrfToken: req.csrfToken()
-    });
-});
-
-
-app.post("/sessions/logout", isAuth, async (req, res) => {
-
-    const { sessionId } = req.body;
-
-    if (sessionId === req.sessionID) {
-        return res.redirect("/sessions");
-    }
-
-    store.destroy(sessionId, async (err) => {
-
-        if (!err) {
-            await Session.deleteOne({
-                sessionId,
-                userId: req.session.userId
-            });
-        }
-
-        res.redirect("/sessions");
-    });
-});
-
-app.post("/sessions/logout-all", isAuth, async (req, res) => {
-
-    try {
-        const currentSessionId = req.sessionID;
-
-        // 🔥 get all sessions except current
-        const sessions = await Session.find({
-            userId: req.session.userId,
-            sessionId: { $ne: currentSessionId }
-        });
-
-        // 🔥 destroy each session from store
-        for (let s of sessions) {
-            await new Promise((resolve) => {
-                store.destroy(s.sessionId, () => resolve());
-            });
-        }
-
-        // 🔥 remove from DB
-        await Session.deleteMany({
-            userId: req.session.userId,
-            sessionId: { $ne: currentSessionId }
-        });
-
-        res.redirect("/sessions");
-
-    } catch (err) {
-        console.error("Logout all devices error:", err);
-        res.redirect("/sessions");
-    }
-});
-
-app.get("/about", (req, res) => {
-
-    const body = renderView("pages/about.ejs",{
-        // csrfToken: res.locals.csrfToken,
-        isLoggedIn: res.locals.isLoggedIn,   // ✅ ADD THIS
-        // user: res.locals.user
-    });
-
-    res.render("layouts/clean", {
-        title: "About",
-        body
-    });
-});
-
-
-app.get("/security", (req, res) => {
-
-    const body = renderView("pages/security.ejs",{
-        isLoggedIn: res.locals.isLoggedIn,
-    });
-
-    res.render("layouts/clean", {
-        title: "Security",
-        body
-    });
-});
-
-
-// ================= ROUTES FILES =================
+// ROUTES
+app.use("/", pageRoutes);
 app.use("/", authRoutes);
 app.use("/", credentialRoutes);
 
-// ================= ERROR HANDLER =================
+// ERROR HANDLER
 app.use((err, req, res, next) => {
 
     console.error("❌ ERROR:", err.message);
 
     if (err.code === "EBADCSRFTOKEN") {
-
-        // 🔥 If request is AJAX → send JSON
         if (req.headers["content-type"] === "application/json") {
             return res.status(403).json({
                 success: false,
                 message: "Invalid CSRF token"
             });
         }
-
-        // normal form
         return res.status(403).send("Invalid CSRF token");
     }
 
@@ -372,9 +76,5 @@ app.use((err, req, res, next) => {
     });
 });
 
-// ================= SERVER =================
 const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
