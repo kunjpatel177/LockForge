@@ -1,5 +1,6 @@
 <nav id="navbar" class="navbar navbar-expand-lg fixed-top px-4">
-    <a class="navbar-brand fw-bold text-white" href="/"><img src="/Images/android-chrome-512x512.png" height="29" alt="LockForge Logo"> LockForge</a>
+    <a class="navbar-brand fw-bold text-white" href="/"><img src="/Images/android-chrome-512x512.png" height="29"
+            alt="LockForge Logo"> LockForge</a>
 
     <button class="navbar-toggler text-white" data-bs-toggle="collapse" data-bs-target="#nav">
         ☰
@@ -15,15 +16,15 @@
 
                     <button class="btn dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
 
-                        <!-- Avatar (First Letter) -->
-                        <div class="avatar-circle me-2">
-                            <%= user.name.charAt(0).toUpperCase() %>
-                        </div>
+                    <div class="avatar-circle me-2">
+                        <%= user.name.charAt(0).toUpperCase() %>
+                    </div>
 
-                        <span>
-                            <%= user.name %>
-                        </span>
+                    <span>
+                        <%= user.name %>
+                    </span>
                     </button>
+                    
 
                     <ul class="dropdown-menu dropdown-menu-end user-dropdown shadow glass-dropdown">
 
@@ -59,16 +60,16 @@
                                 <span class="me-2"><i class="fa-solid fa-clock-rotate-left"></i></span> Activity History
                             </a>
                         </li>
-                        
+
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="/security">
-                            <span class="me-2"><i class="fa-solid fa-user-shield"></i></span> Security
+                                <span class="me-2"><i class="fa-solid fa-user-shield"></i></span> Security
                             </a>
                         </li>
 
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="/about">
-                            <span class="me-2"><i class="fa-solid fa-circle-info"></i></span> About
+                                <span class="me-2"><i class="fa-solid fa-circle-info"></i></span> About
                             </a>
                         </li>
 
@@ -80,7 +81,7 @@
 
                     </ul>
                 </div>
-                
+
 
                 <% } else { %>
 
@@ -92,7 +93,7 @@
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/about">About</a>
                     </li>
-                    
+
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/security">Security</a>
                     </li>

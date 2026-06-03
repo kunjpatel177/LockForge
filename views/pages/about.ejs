@@ -1,188 +1,311 @@
 <section class="about-hero d-flex align-items-center">
-    <div class="container text-center">
 
-        <h1 class="fw-bold display-5 mb-3">
-            Secure Password Management for Modern Users
-        </h1>
 
-        <p class="mb-4">
-            LockForge helps you store, manage, and protect your credentials with strong encryption and advanced security features.
-        </p>
+<div class="container text-center">
+
+    <span class="about-badge">
+        <i class="fa-solid fa-shield-halved"></i>
+        Secure Password Management Platform
+    </span>
+
+    <h1 class="display-4 fw-bold mt-4 mb-3">
+        Protect Your Digital Identity with LockForge
+    </h1>
+
+    <p class="about-subtitle mx-auto">
+        LockForge is a modern password management solution designed to securely
+        store credentials using strong encryption, adaptive authentication,
+        session monitoring, and security-focused architecture.
+    </p>
+
+    <div class="mt-4">
 
         <% if (isLoggedIn) { %>
-            <a href="/dashboard" class="btn btn-danger btn-lg px-4">
+            <a href="/dashboard" class="btn btn-primary btn-lg px-4">
+                <i class="fa-solid fa-chart-line me-2"></i>
                 Dashboard
             </a>
         <% } else { %>
             <a href="/register" class="btn btn-primary btn-lg px-4">
+                <i class="fa-solid fa-user-plus"></i>
                 Get Started
             </a>
         <% } %>
-        <a href="/" class="btn btn-outline-light btn-lg px-4 mx-3">
-            Home Page
+
+        <a href="/" class="btn btn-outline-light btn-lg px-4 ms-2">
+            <i class="fa-solid fa-house me-2"></i>
+            Home
         </a>
 
     </div>
+
+</div>
+
+
 </section>
 
+<!-- STATS -->
 
-<!-- ================= FEATURES ================= -->
 <section class="container py-5">
 
-    <div class="row g-4">
 
-        <div class="col-12 col-md-4">
-            <div class="about-card text-center p-4">
-                <i class="fa-solid fa-lock fa-2x mb-3"></i>
-                <h5>End-to-End Encryption</h5>
-                <p class="text-muted">
-                    Your data is encrypted using AES-256 and can only be accessed using your master password.
-                </p>
-            </div>
+<div class="row g-4 text-center">
+
+    <div class="col-md-3">
+        <div class="stats-card">
+            <h2>256-bit</h2>
+            <p>AES Encryption</p>
         </div>
-
-        <div class="col-12 col-md-4">
-            <div class="about-card text-center p-4">
-                <i class="fa-solid fa-shield-halved fa-2x mb-3"></i>
-                <h5>Secure Authentication</h5>
-                <p class="text-muted">
-                    Password hashing with bcrypt and secure session management ensure strong protection.
-                </p>
-            </div>
-        </div>
-
-        <div class="col-12 col-md-4">
-            <div class="about-card text-center p-4">
-                <i class="fa-solid fa-mobile-screen-button fa-2x mb-3"></i>
-                <h5>Device Tracking</h5>
-                <p class="text-muted">
-                    Monitor active sessions and detect suspicious logins across devices.
-                </p>
-            </div>
-        </div>
-
     </div>
+
+    <div class="col-md-3">
+        <div class="stats-card">
+            <h2>PBKDF2</h2>
+            <p>Key Derivation</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stats-card">
+            <h2>OTP</h2>
+            <p>Adaptive Authentication</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stats-card">
+            <h2>24/7</h2>
+            <p>Credential Access</p>
+        </div>
+    </div>
+
+</div>
+
 
 </section>
 
+<!-- MISSION -->
 
-<!-- ================= SECURITY ================= -->
-<section class="about-section bg-light py-5">
-
-    <div class="container">
-
-        <div class="row align-items-center">
-
-            <div class="col-md-6">
-                <h3 class="fw-semibold mb-3">Security Architecture</h3>
-
-                <ul class="list-unstyled">
-
-                    <li class="mb-2">
-                        <i class="fa-solid fa-check me-2 text-primary"></i>
-                        AES-256 Encryption for sensitive fields
-                    </li>
-
-                    <li class="mb-2">
-                        <i class="fa-solid fa-check me-2 text-primary"></i>
-                        PBKDF2-based key derivation
-                    </li>
-
-                    <li class="mb-2">
-                        <i class="fa-solid fa-check me-2 text-primary"></i>
-                        Password hashing using bcrypt
-                    </li>
-
-                    <li class="mb-2">
-                        <i class="fa-solid fa-check me-2 text-primary"></i>
-                        CSRF protection & rate limiting
-                    </li>
-
-                    <li class="mb-2">
-                        <i class="fa-solid fa-check me-2 text-primary"></i>
-                        OTP verification for new devices
-                    </li>
-
-                </ul>
-            </div>
-
-            <div class="col-md-6 text-center">
-                <i class="fa-solid fa-user-shield fa-6x text-primary opacity-75"></i>
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ================= HOW IT WORKS ================= -->
 <section class="container py-5">
 
-    <h3 class="text-center mb-5 fw-semibold">How It Works</h3>
 
-    <div class="row text-center g-4">
+<div class="row align-items-center">
 
-        <div class="col-12 col-md-4">
-            <i class="fa-solid fa-key fa-2x mb-3"></i>
-            <h6>Create Master Password</h6>
-            <p class="text-muted small">
-                Your master password generates a secure encryption key.
-            </p>
-        </div>
+    <div class="col-lg-6">
 
-        <div class="col-12 col-md-4">
-            <i class="fa-solid fa-database fa-2x mb-3"></i>
-            <h6>Store Encrypted Data</h6>
-            <p class="text-muted small">
-                All credentials are encrypted before being saved.
-            </p>
-        </div>
+        <h2 class="fw-bold mb-4">
+            Why LockForge?
+        </h2>
 
-        <div class="col-12 col-md-4">
-            <i class="fa-solid fa-unlock-keyhole fa-2x mb-3"></i>
-            <h6>Access Securely</h6>
-            <p class="text-muted small">
-                Only you can decrypt your data using your password.
-            </p>
-        </div>
+        <p class="text-muted">
+            Password reuse, weak passwords, and credential theft remain among
+            the most common security risks. LockForge was created to help users
+            securely manage sensitive credentials while maintaining a simple
+            and intuitive experience.
+        </p>
 
-    </div>
-
-</section>
-
-
-<!-- ================= DEVELOPER ================= -->
-<section class="about-developer-section bg-light py-5">
-
-    <div class="container text-center">
-
-        <h3 class="mb-3 fw-semibold text-light">Developer</h3>
-
-        <p class="text-light">
-            Built by <strong>Kunj Patel</strong> as a secure password manager project
-            demonstrating modern security practices and scalable backend architecture.
+        <p class="text-muted">
+            The platform combines encryption, authentication, device tracking,
+            audit logging, and session management into a single security-focused
+            application.
         </p>
 
     </div>
 
+    <div class="col-lg-6 text-center">
+
+        <div class="mission-icon">
+            <i class="fa-solid fa-user-shield"></i>
+        </div>
+
+    </div>
+
+</div>
+
+
 </section>
 
+<!-- FEATURES -->
 
-<!-- ================= CTA ================= -->
-<section class="text-center py-5">
-    
+<section class="bg-light py-5">
+
+
+<div class="container">
+
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Core Security Features</h2>
+        <p class="text-muted">
+            Designed with multiple layers of protection.
+        </p>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="about-card">
+                <i class="fa-solid fa-lock"></i>
+                <h5>Encrypted Storage</h5>
+                <p>
+                    Sensitive fields are encrypted using AES-256 before
+                    being stored in the database.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="about-card">
+                <i class="fa-solid fa-key"></i>
+                <h5>Secure Key Generation</h5>
+                <p>
+                    PBKDF2 derives strong encryption keys from the
+                    master password.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="about-card">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+                <h5>Session Monitoring</h5>
+                <p>
+                    View active sessions and remotely logout
+                    suspicious devices.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="about-card">
+                <i class="fa-solid fa-envelope-circle-check"></i>
+                <h5>OTP Verification</h5>
+                <p>
+                    New devices and unusual logins trigger
+                    additional authentication.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="about-card">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <h5>Audit History</h5>
+                <p>
+                    Every important account activity is logged
+                    for transparency and monitoring.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="about-card">
+                <i class="fa-solid fa-file-pdf"></i>
+                <h5>Secure Export</h5>
+                <p>
+                    Export credentials securely after password
+                    verification.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- TECH STACK -->
+
+<section class="container py-5">
+
+
+<div class="text-center mb-5">
+    <h2 class="fw-bold">Technology Stack</h2>
+</div>
+
+<div class="row g-4 text-center">
+
+    <div class="col-md-2 col-6">
+        <div class="tech-card">Node.js</div>
+    </div>
+
+    <div class="col-md-2 col-6">
+        <div class="tech-card">Express</div>
+    </div>
+
+    <div class="col-md-2 col-6">
+        <div class="tech-card">MongoDB</div>
+    </div>
+
+    <div class="col-md-2 col-6">
+        <div class="tech-card">EJS</div>
+    </div>
+
+    <div class="col-md-2 col-6">
+        <div class="tech-card">Bootstrap</div>
+    </div>
+
+    <div class="col-md-2 col-6">
+        <div class="tech-card">AES + PBKDF2</div>
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- DEVELOPER -->
+
+<section class="developer-section py-5">
+
+
+<div class="container text-center">
+
+    <h2 class="fw-bold mb-3">
+        Built by Kunj Patel
+    </h2>
+
+    <p class="developer-text">
+        LockForge was developed as a security-focused full-stack application
+        to demonstrate practical implementation of authentication,
+        encryption, secure session management, and modern web security concepts.
+    </p>
+
+</div>
+
+
+</section>
+
+<!-- CTA -->
+
+<section class="py-5 text-center">
+
+
+<div class="container">
+
+    <h2 class="fw-bold mb-3">
+        Secure Your Credentials Today
+    </h2>
+
+    <p class="text-muted mb-4">
+        Take control of your passwords with a platform designed around security.
+    </p>
+
     <% if (isLoggedIn) { %>
-        <h3 class="mb-3 fw-semibold">Continue Securing Your Credentials Today</h3>
-        <a href="/dashboard" class="btn btn-dark btn-lg px-4">
-            Dashboard
+
+        <a href="/dashboard" class="btn btn-dark btn-lg">
+            Go To Dashboard
         </a>
-        <% } else { %>
-            <h3 class="mb-3 fw-semibold">Start Securing Your Credentials Today</h3>
-            <a href="/register" class="btn btn-dark btn-lg px-4">
-        Create Account
-    </a>
-        <% } %>
+
+    <% } else { %>
+
+        <a href="/register" class="btn btn-dark btn-lg">
+            <i class="fa-solid fa-user-plus me-2"></i>Create Account
+        </a>
+
+    <% } %>
+
+</div>
+
 
 </section>

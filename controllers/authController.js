@@ -326,4 +326,3 @@ module.exports.deleteAccount = async (req, res) => {
         });
     }
 };
-

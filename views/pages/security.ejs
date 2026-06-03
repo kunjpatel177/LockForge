@@ -1,142 +1,249 @@
+<section class="security-hero">
+
+    <div class="container">
+
+        <div class="d-flex justify-content-end mb-4">
+            <% if (isLoggedIn) { %>
+                <a href="/" class="btn btn-outline-light me-3">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+
+                <a href="/dashboard" class="btn btn-light">
+                    <i class="fa-solid fa-chart-line"></i> Dashboard
+                </a>
+                <% } else { %>
+                    <a href="/" class="btn btn-light btn-lg">
+                        <i class="fa-solid fa-house"></i> Home
+                    </a>
+                    <% } %>
+        </div>
+
+        <div class="text-center">
+
+            <div class="security-badge">
+                <i class="fa-solid fa-shield-halved"></i>
+                Enterprise-Inspired Security
+            </div>
+
+            <h1 class="display-5 fw-bold mt-4">
+                Security Architecture
+            </h1>
+
+            <p class="lead mt-3">
+                LockForge is designed around modern security principles including
+                encryption, session monitoring, adaptive authentication and secure credential storage.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
 <section class="container py-5">
 
-    <!-- TOP NAV ACTIONS -->
-    <div class="d-flex justify-content-end mb-3">
-        <% if (isLoggedIn) { %>
-            <a href="/" class="btn btn-dark me-3">
-                <i class="fa-solid fa-house"></i> Home
-            </a>
-            <a href="/dashboard" class="btn btn-primary ">
-                <i class="fa-solid fa-chart-line"></i> Dashboard
-            </a>
-        <% } else { %>
-            <a href="/" class="btn btn-dark ">
-                <i class="fa-solid fa-house"></i> Home
-            </a>
-        <% } %>
+    <!-- SECURITY OVERVIEW -->
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-3">
+            <div class="security-stat-card">
+                <i class="fa-solid fa-lock"></i>
+                <h3>AES-256</h3>
+                <p>Credential Encryption</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="security-stat-card">
+                <i class="fa-solid fa-key"></i>
+                <h3>PBKDF2</h3>
+                <p>Key Derivation</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="security-stat-card">
+                <i class="fa-solid fa-mobile-screen"></i>
+                <h3>OTP</h3>
+                <p>Adaptive Authentication</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="security-stat-card">
+                <i class="fa-solid fa-desktop"></i>
+                <h3>Sessions</h3>
+                <p>Device Tracking</p>
+            </div>
+        </div>
+
     </div>
 
-    <!-- HEADER -->
-    <div class="text-center mb-5">
-        <h1 class="fw-bold">
-            <i class="fa-solid fa-shield-halved me-2"></i> Security Architecture
-        </h1>
-        <p class="text-muted">
-            A detailed overview of how PassVault ensures confidentiality, integrity, and security of user data.
-        </p>
-    </div>
+    <!-- FLOW -->
 
-    <!-- ================= FLOW DIAGRAM ================= -->
-    <div class="mb-5">
-        <h3>
-            <i class="fa-solid fa-diagram-project me-2 text-primary"></i> System Flow
+    <div class="section-card mb-5">
+
+        <h3 class="section-title">
+            <i class="fa-solid fa-diagram-project"></i>
+            Credential Protection Flow
         </h3>
 
-        <div class="flow-box mt-4">
+        <div class="flow-box">
 
             <div class="flow-step">
                 <i class="fa-solid fa-user-lock"></i>
-                <p>User Login</p>
+                <span>User Authentication</span>
             </div>
 
-            <i class="fa-solid fa-arrow-right flow-arrow"></i>
+            <div class="flow-arrow">
+                <i class="fa-solid fa-arrow-right"></i>
+            </div>
 
             <div class="flow-step">
                 <i class="fa-solid fa-key"></i>
-                <p>Key Derivation<br>(PBKDF2)</p>
+                <span>PBKDF2 Key Derivation</span>
             </div>
 
-            <i class="fa-solid fa-arrow-right flow-arrow"></i>
+            <div class="flow-arrow">
+                <i class="fa-solid fa-arrow-right"></i>
+            </div>
 
             <div class="flow-step">
                 <i class="fa-solid fa-lock"></i>
-                <p>AES Encryption</p>
+                <span>AES Encryption</span>
             </div>
 
-            <i class="fa-solid fa-arrow-right flow-arrow"></i>
+            <div class="flow-arrow">
+                <i class="fa-solid fa-arrow-right"></i>
+            </div>
 
             <div class="flow-step">
                 <i class="fa-solid fa-database"></i>
-                <p>Secure Storage</p>
+                <span>Encrypted Storage</span>
             </div>
 
         </div>
+
     </div>
 
-    <!-- ================= ENCRYPTION ================= -->
-    <div class="mb-5">
-        <h3>
-            <i class="fa-solid fa-lock me-2 text-success"></i> Encryption Strategy
-        </h3>
-        <p>
-            Sensitive user credentials are encrypted using AES-256 encryption before being stored.
-            The encryption key is derived dynamically using PBKDF2 from the user's master password.
-            This ensures that even the server cannot decrypt stored data without user input.
-        </p>
-    </div>
+    <!-- SECURITY LAYERS -->
 
-    <!-- ================= WHY AES + PBKDF2 ================= -->
-    <div class="mb-5">
-        <h3>
-            <i class="fa-solid fa-circle-info me-2 text-warning"></i> Why AES + PBKDF2?
+    <div class="section-card mb-5">
+
+        <h3 class="section-title">
+            <i class="fa-solid fa-layer-group"></i>
+            Security Layers
         </h3>
 
-        <ul>
-            <li><strong>AES-256:</strong> Industry-standard symmetric encryption, fast and secure.</li>
-            <li><strong>PBKDF2:</strong> Protects against brute-force attacks using key stretching.</li>
-            <li><strong>No Key Storage:</strong> Encryption key is never stored in database.</li>
-            <li><strong>Defense in Depth:</strong> Combines hashing + encryption for maximum security.</li>
-        </ul>
-    </div>
+        <div class="row g-4">
 
-    <!-- ================= THREAT MODEL ================= -->
-    <div class="mb-5">
-        <h3>
-            <i class="fa-solid fa-triangle-exclamation me-2 text-danger"></i> Threat Model
-        </h3>
-
-        <div class="row">
-
-            <div class="col-md-6 mb-3">
-                <div class="threat-card">
-                    <h6><i class="fa-solid fa-user-secret me-2"></i> Data Breach</h6>
-                    <p>Encrypted data ensures attackers cannot read credentials.</p>
+            <div class="col-md-6">
+                <div class="security-layer">
+                    <h5>Authentication Layer</h5>
+                    <p>
+                        Secure login with bcrypt password verification and OTP-based adaptive authentication.
+                    </p>
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
-                <div class="threat-card">
-                    <h6><i class="fa-solid fa-bug me-2"></i> Brute Force</h6>
-                    <p>Rate limiting and PBKDF2 reduce attack feasibility.</p>
+            <div class="col-md-6">
+                <div class="security-layer">
+                    <h5>Encryption Layer</h5>
+                    <p>
+                        Sensitive credentials are encrypted using AES before database storage.
+                    </p>
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
-                <div class="threat-card">
-                    <h6><i class="fa-solid fa-network-wired me-2"></i> Session Hijacking</h6>
-                    <p>Secure cookies and session tracking mitigate risks.</p>
+            <div class="col-md-6">
+                <div class="security-layer">
+                    <h5>Session Security</h5>
+                    <p>
+                        Device-aware sessions with activity tracking and remote session revocation.
+                    </p>
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
-                <div class="threat-card">
-                    <h6><i class="fa-solid fa-location-dot me-2"></i> Suspicious Login</h6>
-                    <p>OTP verification triggers on device/location changes.</p>
+            <div class="col-md-6">
+                <div class="security-layer">
+                    <h5>Application Security</h5>
+                    <p>
+                        CSRF protection, rate limiting, secure cookies and input validation.
+                    </p>
                 </div>
             </div>
 
         </div>
+
     </div>
 
-    <!-- ================= SESSION ================= -->
-    <div class="mb-5">
-        <h3>
-            <i class="fa-solid fa-laptop me-2 text-info"></i> Session Security
+    <!-- THREAT MODEL -->
+
+    <div class="section-card mb-5">
+
+        <h3 class="section-title">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            Threat Mitigation
         </h3>
-        <p>
-            Sessions are securely stored using MongoDB. Users can monitor and revoke sessions across devices.
-            Sessions expire automatically and inactive sessions are cleaned periodically.
-        </p>
+
+        <div class="row g-4">
+
+            <div class="col-md-6">
+                <div class="threat-card">
+                    <h5>Database Breach</h5>
+                    <p>Stored credentials remain unreadable because they are encrypted before storage.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="threat-card">
+                    <h5>Brute Force Attack</h5>
+                    <p>Rate limiting and PBKDF2 key stretching significantly increase attack cost.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="threat-card">
+                    <h5>Session Hijacking</h5>
+                    <p>Secure cookies, session monitoring and remote logout reduce exposure.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="threat-card">
+                    <h5>Suspicious Login</h5>
+                    <p>OTP verification activates when login patterns differ from historical activity.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TECHNOLOGIES -->
+
+    <div class="section-card">
+
+        <h3 class="section-title">
+            <i class="fa-solid fa-microchip"></i>
+            Technologies Used
+        </h3>
+
+        <div class="tech-grid">
+
+            <span class="tech-pill">Node.js</span>
+            <span class="tech-pill">Express.js</span>
+            <span class="tech-pill">MongoDB</span>
+            <span class="tech-pill">AES-256-CBC</span>
+            <span class="tech-pill">PBKDF2</span>
+            <span class="tech-pill">bcrypt</span>
+            <span class="tech-pill">CSRF</span>
+            <span class="tech-pill">Rate Limiting</span>
+            <span class="tech-pill">Session Tracking</span>
+
+        </div>
+
     </div>
 
 </section>

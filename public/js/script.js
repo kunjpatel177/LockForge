@@ -1,7 +1,4 @@
-//script.js file
-
-
-// ================= GLOBAL =================
+// GLOBAL
 let fieldCount = 0;
 const csrfToken = document.getElementById("csrfToken")?.value;
 
@@ -25,7 +22,7 @@ function showToast(message, type = "info") {
     }, 3000);
 }
 
-// ================= ADD FIELD =================
+// ADD FIELD
 function addField(label = "", value = "", type = "text") {
 
     const container = document.getElementById("fieldsContainer");
@@ -105,7 +102,7 @@ function addField(label = "", value = "", type = "text") {
         const allFields = document.querySelectorAll(".field-group");
 
         if (allFields.length <= 1) {
-            showToast("⚠️ At least one field required", "error");
+            showToast("At least one field required", "error");
             return;
         }
         div.remove();
@@ -138,13 +135,13 @@ function addField(label = "", value = "", type = "text") {
 }
 
 
-// ================= ADD FIELD WITH DATA (EDIT PAGE) =================
+// ADD FIELD WITH DATA (EDIT PAGE)
 function addFieldWithData(label = "", value = "", type = "text") {
     addField(label, value, type);
 }
 
 
-// ================= ADD FIELD BUTTON =================
+// ADD FIELD BUTTON
 document.addEventListener("DOMContentLoaded", () => {
 
     const addBtn = document.getElementById("addFieldBtn");
@@ -156,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// ================= TOGGLE PASSWORD =================
+// TOGGLE PASSWORD
 document.addEventListener("click", function (e) {
 
     if (e.target.closest(".toggle-btn")) {
@@ -182,7 +179,7 @@ document.addEventListener("click", function (e) {
 });
 
 
-// ================= COPY =================
+// COPY
 document.addEventListener("click", function (e) {
 
     if (e.target.closest(".copy-btn")) {
@@ -202,7 +199,7 @@ document.addEventListener("click", function (e) {
     }
 });
 
-// ===== SEARCH FUNCTIONALITY =====
+// SEARCH FUNCTIONALITY
 const input = document.getElementById("searchInput");
 
 if (input) {
@@ -253,7 +250,7 @@ if (addForm) {
 
             let valid = true;
 
-            // 🔥 manually include fields (important)
+            // manually include fields
             const fields = [];
 
             document.querySelectorAll(".field-group").forEach((group) => {
@@ -268,14 +265,14 @@ if (addForm) {
                 }
             });
 
-            // 🔥 VALIDATION
+            // VALIDATION
             if (fields.length === 0) {
-                showToast("⚠️ At least one field required", "error");
+                showToast("At least one field required", "error");
                 return;
             }
 
             if (!valid) {
-                showToast("⚠️ Fields cannot be empty", "error");
+                showToast("Fields cannot be empty", "error");
                 return;
             }
 
@@ -287,7 +284,7 @@ if (addForm) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "CSRF-Token": csrfToken   // 🔥 REQUIRED
+                    "CSRF-Token": csrfToken  
                 },
                 body: JSON.stringify(dataObj),
                 credentials: "same-origin"
@@ -310,7 +307,7 @@ if (addForm) {
     });
 }
 
-// ================= EDIT FORM VALIDATION =================
+// EDIT FORM VALIDATION
 const editForm = document.getElementById("editForm");
 
 if (editForm) {
@@ -320,14 +317,14 @@ if (editForm) {
 
         const fields = document.querySelectorAll(".field-group");
 
-        // 🔥 Check if at least 1 field exists
+        // Check if at least 1 field exists
         if (fields.length === 0) {
             e.preventDefault();
-            showToast("⚠️ At least one field required", "error");
+            showToast("At least one field required", "error");
             return;
         }
 
-        // 🔥 Validate each field
+        // Validate each field
         fields.forEach(group => {
             const label = group.querySelector(".field-label")?.value.trim();
             const value = group.querySelector(".field-value")?.value.trim();
@@ -339,14 +336,14 @@ if (editForm) {
 
         if (!valid) {
             e.preventDefault();
-            showToast("⚠️ Fields cannot be empty", "error");
+            showToast("Fields cannot be empty", "error");
         }
 
     });
 }
 
 
-// ===== SEARCH FUNCTIONALITY =====
+// SEARCH FUNCTIONALITY
 document.addEventListener("DOMContentLoaded", () => {
 
     const input = document.getElementById("searchInput");
@@ -395,7 +392,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// ================= DELETE ACCOUNT (FIXED) =================
+// DELETE ACCOUNT
 document.addEventListener("click", async (e) => {
 
     const btn = e.target.closest("#confirmDelete");

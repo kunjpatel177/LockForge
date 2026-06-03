@@ -34,7 +34,8 @@ body {
 /* ===== SIDEBAR ===== */
 .sidebar {
     width: 240px;
-    background: #111827;
+    /* background: #111827; */
+    background: linear-gradient(135deg, #050816, #111827);
     color: white;
     padding: 20px;
 }
@@ -69,13 +70,18 @@ body {
 }
 
 .sidebar > h3 > a {
-    color: #fef08a;
+    
+    color: #fcfcfc;
+    /* letter-spacing: 1px; */
+    font-weight: 600;
     margin: auto;
 }
 
 .sidebar > h3 > a:hover {
+    color: #fbc4a4;
     background: none;
     transform:none;
+    font-size: 27px;
 
 }
 

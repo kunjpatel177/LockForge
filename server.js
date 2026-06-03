@@ -13,10 +13,12 @@ const csrfSetup = require("./middleware/csrf");
 const authRoutes = require("./routes/auth");
 const credentialRoutes = require("./routes/credential");
 const pageRoutes = require("./routes/pages");
+const sessionRoutes = require("./routes/session");
 
 const updateSession = require("./middleware/updateSession");
 const inactivity = require("./middleware/inactivity");
 const sessionCleanup = require("./middleware/sessionCleanup");
+
 
 const app = express();
 app.set("trust proxy", 1);
@@ -54,6 +56,8 @@ app.set("views", path.join(__dirname, "views"));
 app.use("/", pageRoutes);
 app.use("/", authRoutes);
 app.use("/", credentialRoutes);
+app.use("/", sessionRoutes);
+
 
 // ERROR HANDLER
 app.use((err, req, res, next) => {

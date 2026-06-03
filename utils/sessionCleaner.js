@@ -6,13 +6,13 @@ function startSessionCleaner() {
 
     /*
 * * * * * *
-│ │ │ │ │ │
-│ │ │ │ │ └── Seconds
-│ │ │ │ └──── Minutes
-│ │ │ └────── Hours
-│ │ └──────── Day of month
-│ └────────── Month
-└──────────── Day of week
+| | | | | |
+| | | | | └── Day of week (0-7)
+| | | | └──── Month
+| | | └────── Day of month
+| | └──────── Hour
+| └────────── Minute
+└──────────── Second
     */
 
     cron.schedule("*/10 * * * * *", async () => {
@@ -45,7 +45,7 @@ function startSessionCleaner() {
             });
 
             if (result.deletedCount > 0) {
-                console.log(`🧹 Removed ${result.deletedCount} expired sessions`);
+                console.log(`Removed ${result.deletedCount} expired sessions`);
             }
 
         } catch (err) {

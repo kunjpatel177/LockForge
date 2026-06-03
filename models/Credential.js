@@ -12,14 +12,16 @@ const fieldSchema = new Schema({
     },
     type: {
         type: String,
-        enum: ["text", "password", "otp", "code"],
-        default: "text"
+        enum: ["text", "password", "otp"],
+        // default: "text"
+        default: "password"
     }
 });
 
 const credentialSchema = new Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
         required: true
     },
     service: {

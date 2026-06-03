@@ -24,4 +24,5 @@ module.exports = (app) => {
     app.use("/login", authLimiter);
     app.use("/register", authLimiter);
     app.use("/export", authLimiter);
+    app.use("/delete-account", authLimiter);
 };

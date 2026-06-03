@@ -1,77 +1,99 @@
-<footer class="footer bg-dark text-light pt-5 pb-3 ">
+<footer class="footer pt-5 pb-3">
     <div class="container">
+        <div class="row gy-4">
 
-        <div class="row text-start">
-
-            <!-- BRAND -->
-            <div class="col-12 col-md-4 mb-4">
-                <h5 class="fw-bold">LockForge</h5>
-                <p class="text-muted small">
-                    A secure password manager designed to protect your digital identity
-                    with modern encryption and reliable performance.
+            <div class="col-lg-4 col-md-6">
+                <div class="d-flex align-items-center mb-3">
+                    <img src="/Images/android-chrome-512x512.png" height="29" alt="LockForge Logo">
+                    <h4 class="mb-0 fw-bold ms-2">LockForge</h4>
+                </div>
+                <p class="footer-desc">
+                    Secure password management platform built with strong encryption, adaptive authentication, session monitoring and modern security practices.
                 </p>
+                <div class="footer-badges mt-3">
+                    <span class="badge footer-badge">
+                        <i class="fa-solid fa-lock"></i> AES-256
+                    </span>
+                    <span class="badge footer-badge">
+                        <i class="fa-solid fa-key"></i> PBKDF2
+                    </span>
+                    <span class="badge footer-badge">
+                        <i class="fa-solid fa-shield"></i> OTP
+                    </span>
+                </div>
             </div>
 
-            <!-- QUICK LINKS -->
-            <div class="col-md-2 mb-4">
-                <h6 class="fw-semibold">Links</h6>
-                <ul class="list-unstyled">
+            <div class="col-lg-2 col-md-6">
+                <h6 class="footer-heading">Quick Links</h6>
+                <ul class="list-unstyled mt-3">
                     <% if (isLoggedIn) { %>
                         <li><a href="/" class="footer-link">Home</a></li>
                         <li><a href="/about" class="footer-link">About</a></li>
                         <li><a href="/security" class="footer-link">Security</a></li>
-                        <% } else { %>
-                            <li><a href="/" class="footer-link">Home</a></li>
-                            <li><a href="/about" class="footer-link">About</a></li>
-                            <li><a href="/security" class="footer-link">Security</a></li>
-
-                            <li><a href="/login" class="footer-link">Login</a></li>
-                            <li><a href="/register" class="footer-link">Register</a></li>
-                            <% } %>
+                    <% } else { %>
+                        <li><a href="/" class="footer-link">Home</a></li>
+                        <li><a href="/about" class="footer-link">About</a></li>
+                        <li><a href="/security" class="footer-link">Security</a></li>
+                        <li><a href="/login" class="footer-link">Login</a></li>
+                        <li><a href="/register" class="footer-link">Register</a></li>
+                    <% } %>
                 </ul>
             </div>
 
-            <!-- FEATURES -->
-            <div class="col-md-3 mb-4">
-                <h6 class="fw-semibold">Features</h6>
-                <ul class="list-unstyled">
-                    <li class="footer-text">Encryption</li>
-                    <li class="footer-text">OTP Security</li>
-                    <li class="footer-text">Session Tracking</li>
-                    <li class="footer-text">PDF Export</li>
+            <div class="col-lg-3 col-md-6">
+                <h6 class="footer-heading">Security Features</h6>
+                <ul class="list-unstyled mt-3">
+                    <li class="footer-feature">
+                        <i class="fa-solid fa-check"></i> End-to-End Encryption
+                    </li>
+                    <li class="footer-feature">
+                        <i class="fa-solid fa-check"></i> OTP Verification
+                    </li>
+                    <li class="footer-feature">
+                        <i class="fa-solid fa-check"></i> Session Tracking
+                    </li>
+                    <li class="footer-feature">
+                        <i class="fa-solid fa-check"></i> Activity Monitoring
+                    </li>
+                    <li class="footer-feature">
+                        <i class="fa-solid fa-check"></i> Secure PDF Export
+                    </li>
                 </ul>
             </div>
 
-            <!-- SOCIAL -->
-            <div class="col-md-3 mb-4">
-                <h6 class="fw-semibold">Connect</h6>
-
-                <div class="d-flex gap-3 mt-2">
-
-                    <a href="#" class="social-icon">
-                        <i class="fa-brands fa-linkedin-in"></i>
-                    </a>
-
+            <div class="col-lg-3 col-md-6">
+                <h6 class="footer-heading">Connect</h6>
+                <p class="footer-text mt-3">
+                    Explore the project and connect with the developer.
+                </p>
+                <div class="d-flex gap-3 mt-3">
                     <a href="#" class="social-icon">
                         <i class="fa-brands fa-github"></i>
                     </a>
-
                     <a href="#" class="social-icon">
-                        <i class="fa-brands fa-twitter"></i>
+                        <i class="fa-brands fa-linkedin-in"></i>
                     </a>
-
+                    <a href="#" class="social-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                    </a>
                 </div>
-
             </div>
 
         </div>
 
-        <!-- DIVIDER -->
-        <hr class="border-secondary">
+        <hr class="footer-divider my-4">
 
-        <!-- BOTTOM -->
-        <div class="text-center small">
-            © 2026 LockForge. All rights reserved.
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <small class="footer-copy">
+                    © 2026 LockForge. All rights reserved.
+                </small>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <small class="footer-copy">
+                    Built with <i class="fa-solid fa-heart text-danger"></i> using Node.js, Express.js, MongoDB & EJS
+                </small>
+            </div>
         </div>
 
     </div>

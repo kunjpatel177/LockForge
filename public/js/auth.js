@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    console.log("AUTH JS LOADED");
-
     const csrfToken = document.getElementById("csrfToken")?.value;
 
     const otpInput = document.querySelector(".otp-input");
@@ -12,10 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         otpInput.addEventListener("input", () => {
 
-            // 🔢 Allow only digits
+            // Allow only digits
             otpInput.value = otpInput.value.replace(/[^0-9]/g, "");
 
-            // ⚡ Auto submit when 6 digits entered
+            // Auto submit when 6 digits entered
             if (otpInput.value.length === 6) {
 
                 // Trigger form submit
@@ -26,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ================= LOGIN =================
+    // LOGIN
     const loginForm = document.getElementById("loginForm");
 
     if (loginForm) {
@@ -36,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
 
             const formData = new FormData(loginForm);
-            console.log("--------", formData)
 
             const dataObj = Object.fromEntries(formData.entries());
 
@@ -79,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ================= OTP =================
+    // OTP
     const otpForm = document.getElementById("otpForm");
 
     if (otpForm) {
@@ -126,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// ================= REGISTER =================
+// REGISTER
 const registerForm = document.getElementById("registerForm");
 
 if (registerForm) {
@@ -166,7 +163,7 @@ if (registerForm) {
 }
 
 
-// ================= CLEAR ERRORS =================
+// CLEAR ERRORS
 function clearErrors() {
 
     document.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
@@ -176,7 +173,7 @@ function clearErrors() {
     });
 }
 
-// ================= SHOW ERRORS =================
+// SHOW ERRORS
 function showErrors(errors) {
 
     for (let key in errors) {
@@ -192,14 +189,14 @@ function showErrors(errors) {
         div.innerText = errors[key];
 
         // input.parentNode.appendChild(div);
-        // 🔥 FIX: append AFTER parent container (not inside)
+
         const parent = input.closest(".mb-3") || input.parentNode;
         parent.appendChild(div);
     }
 }
 
 
-// ================= TOGGLE PASSWORD =================
+// TOGGLE PASSWORD
 document.addEventListener("click", function (e) {
 
     if (e.target.closest(".toggle-password")) {
@@ -225,7 +222,7 @@ document.addEventListener("click", function (e) {
 });
 
 
-// ================= OTP COUNTDOWN =================
+// OTP COUNTDOWN
 let timer = 60;
 let interval;
 
@@ -262,7 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// ================= RESEND OTP =================
+// RESEND OTP
 document.addEventListener("click", async (e) => {
 
     if (e.target.id === "resendLink" && !e.target.classList.contains("disabled-link")) {
@@ -296,7 +293,7 @@ document.addEventListener("click", async (e) => {
 });
 
 
-// ================= OTP BOX LOGIC =================
+// OTP BOX LOGIC
 const otpBoxes = document.querySelectorAll(".otp-box");
 
 if (otpBoxes.length > 0) {
@@ -332,7 +329,7 @@ if (otpBoxes.length > 0) {
 }
 
 
-// ================= PASSWORD LIVE VALIDATION =================
+// PASSWORD LIVE VALIDATION
 const passwordInput = document.getElementById("password");
 
 if (passwordInput) {
@@ -364,13 +361,13 @@ if (passwordInput) {
         toggleRule("rule-special", hasSpecial);
         toggleRule("rule-length", hasLength);
 
-        // ================= PASSWORD STRENGTH =================
+        // PASSWORD STRENGTH
         const strengthBar = document.getElementById("strengthBar");
         const strengthText = document.getElementById("strengthText");
 
         if (strengthBar && strengthText) {
 
-            // 🔥 EMPTY INPUT FIX
+            // EMPTY INPUT FIX
             if (val.length === 0) {
                 strengthBar.className = "progress-bar";
                 strengthBar.style.width = "0%";
@@ -436,7 +433,6 @@ function toggleRule(id, isValid) {
         }
     }
 }
-
 
 window.showErrors = showErrors;
 window.clearErrors = clearErrors;
