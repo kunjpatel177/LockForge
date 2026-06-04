@@ -39,31 +39,6 @@ async function getLocation(req) {
         return "Local Network";
     }
 
-    // try {
-    //     const res = await axios.get(`http://ip-api.com/json/${ip}`);
-
-    //     if (res.data.status === "success") {
-
-    //         const location = `${res.data.country}, ${res.data.city}`;
-
-    //         // ✅ 2. SAVE IN SESSION (ADD THIS)
-    //         if (req.session) {
-    //             req.session.location = {
-    //                 ip,
-    //                 value: location
-    //             };
-    //         }
-
-    //         return location;
-    //     }
-
-    //     return "Unknown";
-
-    // } catch (err) {
-    //     console.error("IP API error:", err.message);
-    //     return "Unknown";
-    // }
-
     try {
 
         const res = await axios.get(

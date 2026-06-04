@@ -35,6 +35,7 @@ router.get("/logout", async (req, res) => {
     }
 
     const currentSessionId = req.sessionID;
+    console.log("Session ID: ",currentSessionId)
 
     req.session.destroy(async (err) => {
 
@@ -44,6 +45,11 @@ router.get("/logout", async (req, res) => {
                 sessionId: currentSessionId
             });
         }
+        else{
+            console.log("Some error")
+        }
+
+        
 
         // res.redirect("/login");
         res.redirect("/");

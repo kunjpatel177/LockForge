@@ -232,7 +232,10 @@ module.exports.verifyOTP = async (req, res) => {
             expiresAt: new Date(Date.now() + 30 * 60 * 1000) // 30 min
         });
 
-        res.json({ success: true });
+        res.json({
+            success: true,
+            csrfToken: req.csrfToken()
+        });
 
     } catch (err) {
         console.error("OTP verify error:", err);
