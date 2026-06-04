@@ -74,7 +74,7 @@ module.exports.login = async (req, res) => {
             const location = getLocation(req);
             const device = getDevice(req);
 
-            const html = securityAlertTemplate({
+            const alertMail = securityAlertTemplate({
                 device,
                 location,
                 ip: req.ip,
@@ -82,7 +82,7 @@ module.exports.login = async (req, res) => {
             });
 
             console.log("LOGIN STEP 3");
-            await sendAlert(user.email, "New Login Alert", html).catch(err => console.error("Alert Email Failed:", err.message));
+            await sendAlert(user.email, "New Login Alert", alertMail).catch(err => console.error("Alert Email Failed:", err.message));
             console.log("LOGIN STEP 4");
         }
 
@@ -95,7 +95,7 @@ module.exports.login = async (req, res) => {
             req.session.tempUserId = user._id;
             req.session.otpExpiry = Date.now() + 5 * 60 * 1000; // 5 min
 
-            const html = `
+            const otpMail = `
                             <h2>Verify Login</h2>
                             <p>Your OTP is:</p>
                             <h1>${otp}</h1>
@@ -103,7 +103,7 @@ module.exports.login = async (req, res) => {
                                                                     `;
 
             console.log("LOGIN STEP 5");
-            await sendAlert(user.email, "OTP Verification", html).catch(err => console.error("Alert Email Failed:", err.message));
+            await sendAlert(user.email, "OTP Verification", otpMail).catch(err => console.error("Alert Email Failed:", err.message));
             console.log("LOGIN STEP 6");
             await AuditLog.create({
                 userId: user._id,
