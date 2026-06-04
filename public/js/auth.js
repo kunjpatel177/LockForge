@@ -147,12 +147,15 @@ if (registerForm) {
             });
 
             const data = await res.json();
+            if (data.csrfToken) {
+                document.getElementById("csrfToken").value = data.csrfToken;
+            }
 
             if (!data.success) {
                 // console.log("Errors --> ",data.errors)
                 showErrors(data.errors);
             } else {
-                window.location.href = "/login";
+                window.location.href = "/dashboard";
             }
 
         } catch (err) {
@@ -291,42 +294,6 @@ document.addEventListener("click", async (e) => {
     }
 
 });
-
-
-// OTP BOX LOGIC
-const otpBoxes = document.querySelectorAll(".otp-box");
-
-if (otpBoxes.length > 0) {
-
-    otpBoxes[0].focus();
-
-    otpBoxes.forEach((box, index) => {
-
-        box.addEventListener("input", (e) => {
-
-            box.value = box.value.replace(/[^0-9]/g, "");
-
-            if (box.value && index < otpBoxes.length - 1) {
-                otpBoxes[index + 1].focus();
-            }
-
-            // 🔥 AUTO SUBMIT
-            const otp = Array.from(otpBoxes).map(b => b.value).join("");
-
-            if (otp.length === 6) {
-                submitOTP(otp);
-            }
-        });
-
-        // BACKSPACE MOVE
-        box.addEventListener("keydown", (e) => {
-            if (e.key === "Backspace" && !box.value && index > 0) {
-                otpBoxes[index - 1].focus();
-            }
-        });
-
-    });
-}
 
 
 // PASSWORD LIVE VALIDATION

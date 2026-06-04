@@ -595,8 +595,8 @@ body {
     height: 450px;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(59, 130, 246, .18), transparent 70%);
-    bottom: -150px;
-    right: -120px;
+    bottom: 150px;
+    right: -100px;
     animation: floatGlow2 12s infinite alternate;
 }
 

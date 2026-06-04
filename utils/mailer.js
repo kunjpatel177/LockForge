@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
 
 module.exports.sendAlert = async (to, subject, html) => {
     await transporter.sendMail({
-        from: `"Password Manager" <${process.env.EMAIL_USER}>`,
+        from: `"LockForge" <${process.env.EMAIL_USER}>`,
         to,
         subject,
         html
