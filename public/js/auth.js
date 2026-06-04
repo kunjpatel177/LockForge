@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const csrfToken = document.getElementById("csrfToken")?.value;
+    // const csrfToken = document.getElementById("csrfToken")?.value;
 
     const otpInput = document.querySelector(".otp-input");
 
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "CSRF-Token": csrfToken
+                    "CSRF-Token": document.getElementById("csrfToken")?.value
                 },
                 body: JSON.stringify(dataObj),
                 credentials: "same-origin"
@@ -60,10 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (res.status === 403) {
                 alert("Session expired. Please refresh page.");
                 return;
-            }
-            // console.log(res)
-            if (data.csrfToken) {
-                document.getElementById("csrfToken").value = data.csrfToken;
             }
 
             if (data.requireOTP) {
@@ -96,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "CSRF-Token": csrfToken
+                    "CSRF-Token": document.getElementById("csrfToken")?.value
                 },
                 body: JSON.stringify(dataObj),
                 credentials: "same-origin"
@@ -141,9 +137,10 @@ if (registerForm) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "CSRF-Token": csrfToken
+                    "CSRF-Token": document.getElementById("csrfToken")?.value
                 },
-                body: JSON.stringify(dataObj)
+                body: JSON.stringify(dataObj),
+                credentials: "same-origin"
             });
 
             const data = await res.json();
@@ -269,13 +266,13 @@ document.addEventListener("click", async (e) => {
 
         e.preventDefault();
 
-        const csrfToken = document.getElementById("csrfToken")?.value;
+        // const csrfToken = document.getElementById("csrfToken")?.value;
 
         const res = await fetch("/resend-otp", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "CSRF-Token": csrfToken
+                "CSRF-Token": document.getElementById("csrfToken")?.value
             }
         });
 
