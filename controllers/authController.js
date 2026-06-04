@@ -44,7 +44,10 @@ module.exports.login = async (req, res) => {
 
         const currentDevice = getDevice(req);
         const currentIP = req.ip;
+
+        console.log("LOGIN STEP 1");
         const currentLocation = await getLocation(req);
+        console.log("LOGIN STEP 2");
 
         const lastLogin = await AuditLog.findOne({
             userId: user._id,
@@ -78,7 +81,9 @@ module.exports.login = async (req, res) => {
                 time: new Date().toLocaleString()
             });
 
-            await sendAlert(user.email, "New Login Alert", html);
+            console.log("LOGIN STEP 3");
+            await sendAlert(user.email, "New Login Alert", html).catch(err => console.error("Alert Email Failed:", err.message));
+            console.log("LOGIN STEP 4");
         }
 
         if (suspicious) {
@@ -97,7 +102,9 @@ module.exports.login = async (req, res) => {
                             <p>This OTP expires in 5 minutes.</p>
                                                                     `;
 
-            await sendAlert(user.email, "OTP Verification", html);
+            console.log("LOGIN STEP 5");
+            await sendAlert(user.email, "OTP Verification", html).catch(err => console.error("Alert Email Failed:", err.message));
+            console.log("LOGIN STEP 6");
             await AuditLog.create({
                 userId: user._id,
                 action: "login",

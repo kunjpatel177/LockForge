@@ -39,14 +39,45 @@ async function getLocation(req) {
         return "Local Network";
     }
 
+    // try {
+    //     const res = await axios.get(`http://ip-api.com/json/${ip}`);
+
+    //     if (res.data.status === "success") {
+
+    //         const location = `${res.data.country}, ${res.data.city}`;
+
+    //         // ✅ 2. SAVE IN SESSION (ADD THIS)
+    //         if (req.session) {
+    //             req.session.location = {
+    //                 ip,
+    //                 value: location
+    //             };
+    //         }
+
+    //         return location;
+    //     }
+
+    //     return "Unknown";
+
+    // } catch (err) {
+    //     console.error("IP API error:", err.message);
+    //     return "Unknown";
+    // }
+
     try {
-        const res = await axios.get(`http://ip-api.com/json/${ip}`);
+
+        const res = await axios.get(
+            `http://ip-api.com/json/${ip}`,
+            {
+                timeout: 3000
+            }
+        );
 
         if (res.data.status === "success") {
 
-            const location = `${res.data.country}, ${res.data.city}`;
+            const location =
+                `${res.data.country}, ${res.data.city}`;
 
-            // ✅ 2. SAVE IN SESSION (ADD THIS)
             if (req.session) {
                 req.session.location = {
                     ip,
@@ -60,7 +91,12 @@ async function getLocation(req) {
         return "Unknown";
 
     } catch (err) {
-        console.error("IP API error:", err.message);
+
+        console.error(
+            "IP API error:",
+            err.message
+        );
+
         return "Unknown";
     }
 }
