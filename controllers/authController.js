@@ -42,9 +42,6 @@ module.exports.login = async (req, res) => {
         // };
         // req.session.encryptionKey = key.toString("hex");
 
-        const some_ip = getRealIP(req)
-        console.log(some_ip)
-
         const currentDevice = getDevice(req);
         const currentIP = req.ip;
 
