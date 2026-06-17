@@ -6,7 +6,7 @@ const crypto = require("crypto");
 const AuditLog = require("../models/AuditLog");
 const { getDevice } = require("../utils/device");
 const Session = require("../models/Session");
-const { getLocation } = require("../utils/location");
+const { getLocation, getRealIP } = require("../utils/location");
 const { sendAlert } = require("../utils/mailer");
 const { generateOTP } = require("../utils/otp");
 const { securityAlertTemplate } = require("../utils/emailTemplates");
@@ -35,19 +35,20 @@ module.exports.login = async (req, res) => {
     req.session.regenerate(async (err) => {
         if (err) return res.json({ success: false });
 
-        req.session.userId = user._id;
-        req.session.user = {
-            name: user.fullName,
-            email: user.email
-        };
-        req.session.encryptionKey = key.toString("hex");
+        // req.session.userId = user._id;
+        // req.session.user = {
+        //     name: user.fullName,
+        //     email: user.email
+        // };
+        // req.session.encryptionKey = key.toString("hex");
+
+        const some_ip = getRealIP(req)
+        console.log(some_ip)
 
         const currentDevice = getDevice(req);
         const currentIP = req.ip;
 
-        console.log("LOGIN STEP 1");
         const currentLocation = await getLocation(req);
-        console.log("LOGIN STEP 2");
 
         const lastLogin = await AuditLog.findOne({
             userId: user._id,
@@ -58,9 +59,7 @@ module.exports.login = async (req, res) => {
 
         if (lastLogin) {
             if (
-                lastLogin.device !== currentDevice ||
-                lastLogin.location !== currentLocation
-                //|| lastLogin.ip !== currentIP
+                lastLogin.device !== currentDevice || lastLogin.ip !== currentIP || lastLogin.location !== currentLocation
             ) {
                 suspicious = true;
             }
@@ -81,18 +80,23 @@ module.exports.login = async (req, res) => {
                 time: new Date().toLocaleString()
             });
 
-            console.log("LOGIN STEP 3");
             await sendAlert(user.email, "New Login Alert", alertMail).catch(err => console.error("Alert Email Failed:", err.message));
-            console.log("LOGIN STEP 4");
-        }
+            // }
 
-        if (suspicious) {
+            // if (suspicious) {
+
+            req.session.tempUserId = user._id;
+            req.session.tempUser = {
+                name: user.fullName,
+                email: user.email
+            };
+            req.session.tempEncryptionKey = key.toString("hex");
 
             const otp = generateOTP();
 
             // store OTP in session
             req.session.otp = otp;
-            req.session.tempUserId = user._id;
+            // req.session.tempUserId = user._id;
             req.session.otpExpiry = Date.now() + 5 * 60 * 1000; // 5 min
 
             const otpMail = `
@@ -102,17 +106,7 @@ module.exports.login = async (req, res) => {
                             <p>This OTP expires in 5 minutes.</p>
                                                                     `;
 
-            console.log("LOGIN STEP 5");
             await sendAlert(user.email, "OTP Verification", otpMail).catch(err => console.error("Alert Email Failed:", err.message));
-            console.log("LOGIN STEP 6");
-            await AuditLog.create({
-                userId: user._id,
-                action: "login",
-                ip: req.ip,
-                userAgent: req.headers["user-agent"],
-                device: getDevice(req),
-                location: await getLocation(req)
-            });
 
             return res.json({
                 success: true,
@@ -120,12 +114,19 @@ module.exports.login = async (req, res) => {
             });
         }
 
+        req.session.userId = user._id;
+        req.session.user = {
+            name: user.fullName,
+            email: user.email
+        };
+        req.session.encryptionKey = key.toString("hex");
+
 
         // AUDIT LOG
         await AuditLog.create({
             userId: user._id,
             action: "login",
-            ip: req.ip,
+            ip: getRealIP(req),
             userAgent: req.headers["user-agent"],
             device: getDevice(req),
             location: await getLocation(req)
@@ -134,17 +135,16 @@ module.exports.login = async (req, res) => {
         await Session.create({
             userId: user._id,
             sessionId: req.sessionID,
-            ip: req.ip,
+            ip: getRealIP(req),
             device: getDevice(req),
             location: await getLocation(req),
             expiresAt: new Date(Date.now() + 30 * 60 * 1000) // 30 min
-            // expiresAt: new Date(Date.now() + 30 * 1000) // 30 min
         });
 
         // res.json({ success: true });
 
         return res.json({
-            success: true, csrfToken: req.csrfToken()   /* 🔥 NEW TOKEN */
+            success: true, csrfToken: req.csrfToken()
         });
     });
 };
@@ -154,7 +154,7 @@ module.exports.register = async (req, res) => {
 
     let { fullName, email, username, password } = req.body;
     // console.log("BODY:", req.body);
-    console.log("Email:", email);
+    // console.log("Email:", email);
 
     const errors = {};
 
@@ -166,7 +166,7 @@ module.exports.register = async (req, res) => {
     if (existingUsername) errors.username = "Username taken";
 
     if (Object.keys(errors).length > 0) {
-        console.log("Hello:   ", errors)
+        // console.log("Hello:   ", errors)
         return res.json({ success: false, errors });
     }
 
@@ -181,7 +181,7 @@ module.exports.register = async (req, res) => {
         salt
     });
 
-    return res.json({ success: true });
+    return res.json({ success: true, csrfToken: req.csrfToken() });
 };
 
 
@@ -205,18 +205,32 @@ module.exports.verifyOTP = async (req, res) => {
         const userId = req.session.tempUserId;
 
         // SET USER SESSION
-        req.session.userId = userId;
+        // req.session.userId = userId;
+        req.session.userId = req.session.tempUserId;
+        req.session.user = req.session.tempUser;
+        req.session.encryptionKey = req.session.tempEncryptionKey;
 
         // CLEAN TEMP DATA
         delete req.session.otp;
         delete req.session.tempUserId;
+        delete req.session.tempUser;
+        delete req.session.tempEncryptionKey;
         delete req.session.otpExpiry;
+
+        await AuditLog.create({
+            userId: req.session.userId,
+            action: "login",
+            ip: getRealIP(req),
+            userAgent: req.headers["user-agent"],
+            device: getDevice(req),
+            location: await getLocation(req)
+        });
 
         // CREATE AUDIT LOG (MISSING BEFORE)
         await AuditLog.create({
             userId,
             action: "otp_verification",
-            ip: req.ip,
+            ip: getRealIP(req),
             userAgent: req.headers["user-agent"],
             device: getDevice(req),
             location: await getLocation(req)
@@ -226,7 +240,7 @@ module.exports.verifyOTP = async (req, res) => {
         await Session.create({
             userId,
             sessionId: req.sessionID,
-            ip: req.ip,
+            ip: getRealIP(req),
             device: getDevice(req),
             location: await getLocation(req),
             expiresAt: new Date(Date.now() + 30 * 60 * 1000) // 30 min
@@ -268,7 +282,7 @@ module.exports.resendOTP = async (req, res) => {
             <h2>OTP Resent</h2>
             <p>Your new OTP is:</p>
             <h1>${otp}</h1>
-            <p>Expires in 5 minutes.</p>
+            <p>This otp xpires in 5 minutes.</p>
         `;
 
         await sendAlert(user.email, "Resend OTP", html);

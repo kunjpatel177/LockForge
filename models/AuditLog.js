@@ -5,7 +5,7 @@ const auditSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
-    action: String, // login, logout, add, delete, edit, session expire
+    action: String, // login, logout, add, delete, edit, session expire, export pdf, logout all
     ip: String,
     userAgent: String,
     device: String,

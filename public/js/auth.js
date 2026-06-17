@@ -144,15 +144,15 @@ if (registerForm) {
             });
 
             const data = await res.json();
+            
             if (data.csrfToken) {
                 document.getElementById("csrfToken").value = data.csrfToken;
             }
 
-            if (!data.success) {
-                // console.log("Errors --> ",data.errors)
-                showErrors(data.errors);
-            } else {
+            if (data.success) {
                 window.location.href = "/dashboard";
+            } else {
+                showErrors(data.errors);
             }
 
         } catch (err) {

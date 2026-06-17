@@ -1,4 +1,4 @@
-<div class="container-fluid py-4">
+<div class="container-fluid py-4 history-page">
 
     <!-- HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -13,7 +13,7 @@
     </div>
 
     <!-- CARD -->
-    <div class="card shadow border-0 rounded-4">
+    <div class="card shadow border-0 rounded-4 history-card">
 
         <div class="card-body p-4">
 
@@ -27,7 +27,7 @@
 
                 <% } else { %>
 
-                    <div class="table-responsive">
+                    <div class="table-responsive history-table-wrapper">
                         <table class="table align-middle table-hover">
 
                             <thead class="table-light">
@@ -47,16 +47,16 @@
                                         <!-- ACTION -->
                                         <td>
                                             <% if (log.action==="login" ) { %>
-                                                <span class="badge bg-success">Login</span>
+                                                <span class="badge bg-success history-badge">Login</span>
 
                                                 <% } else if (log.action==="logout" ) { %>
-                                                    <span class="badge bg-secondary">Logout</span>
+                                                    <span class="badge bg-secondary history-badge">Logout</span>
 
                                                     <% } else if (log.action==="logout_expired" ) { %>
-                                                        <span class="badge bg-warning text-dark">Session Expired</span>
+                                                        <span class="badge bg-warning history-badge text-dark">Session Expired</span>
 
                                                         <% } else { %>
-                                                            <span class="badge bg-primary">
+                                                            <span class="badge bg-primary history-badge">
                                                                 <%= log.action %>
                                                             </span>
                                                             <% } %>
@@ -89,7 +89,7 @@
 
                                         <!-- Location -->
                                         <td>
-                                            <span class="badge bg-info text-dark">
+                                            <span class="badge bg-info history-badge text-dark">
                                                 <%= log.location || "Unknown" %>
                                             </span>
                                         </td>
@@ -107,7 +107,7 @@
     </div>
 
 </div>
-
+<!-- 
 <style>
     body {
         background: #f6f8fb;
@@ -136,4 +136,4 @@
         padding: 4px 8px;
         border-radius: 6px;
     }
-</style>
+</style> -->

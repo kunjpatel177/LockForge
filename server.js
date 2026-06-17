@@ -62,7 +62,7 @@ app.use("/", sessionRoutes);
 // ERROR HANDLER
 app.use((err, req, res, next) => {
 
-    console.error("❌ ERROR:", err.message);
+    console.error("ERROR:", err.message);
 
     if (err.code === "EBADCSRFTOKEN") {
         if (req.headers["content-type"] === "application/json") {

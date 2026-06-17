@@ -6,7 +6,7 @@ const {addCredential, getEditPage, updateCredential, deleteCredential, exportPDF
 const validate = require("../middleware/validate");
 const { credentialSchema } = require("../utils/joiSchemas");
 
-// ADD (AJAX)
+// ADD 
 router.post("/add", isAuth, validate(credentialSchema), addCredential);
 
 // EDIT PAGE

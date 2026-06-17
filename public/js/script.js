@@ -234,15 +234,11 @@ if (input) {
 }
 
 
-console.log("SCRIPT LOADED");
-
 const addForm = document.getElementById("addForm");
 
 if (addForm) {
     addForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-
-        console.log("SUBMIT TRIGGERED");
 
         try {
             const formData = new FormData(addForm);

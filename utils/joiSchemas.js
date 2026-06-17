@@ -1,8 +1,5 @@
 const Joi = require("joi");
 
-// ================= REGISTER =================
-
-
 const registerSchema = Joi.object({
     fullName: Joi.string()
         .min(3)
@@ -53,7 +50,6 @@ const registerSchema = Joi.object({
         })
 });
 
-// ================= LOGIN =================
 const loginSchema = Joi.object({
     email: Joi.string().email().required().messages({
         "string.empty": "Email is required",
@@ -63,7 +59,6 @@ const loginSchema = Joi.object({
     }),
 });
 
-// ================= ADD CREDENTIAL =================
 const credentialSchema = Joi.object({
     service: Joi.string().required(),
 
@@ -72,7 +67,7 @@ const credentialSchema = Joi.object({
             label: Joi.string().required(),
             value: Joi.string().required(),
             type: Joi.string()
-                .valid("text", "password", "otp", "code")
+                .valid("text", "password", "otp")
                 .default("text")
         })
     ).min(1).required()

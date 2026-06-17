@@ -10,7 +10,8 @@ body {
 
 /* GLOW TITLE */
 .glow-text {
-    font-size: 3rem;
+    padding-bottom: 10px;
+    font-size: 3.5rem;
     font-weight: 700;
     background: linear-gradient(90deg,
             #fef3c7,
@@ -26,8 +27,8 @@ body {
     -webkit-text-fill-color: transparent;
     animation: shimmer 6s linear infinite;
     text-shadow:
-        0 0 10px rgba(255, 255, 255, 0.3),
-        0 0 20px rgba(99, 102, 241, 0.3);
+        0 0 2px rgba(255, 255, 255, 0.3),
+        0 0 2px rgba(99, 102, 241, 0.3);
 }
 
 @keyframes shimmer {
@@ -94,7 +95,8 @@ body {
 }
 
 .hero-title {
-    font-size: 3rem;
+    margin-top: 20px;
+    font-size: 2.7rem;
     line-height: 1.2;
     animation: fadeUp 1s ease;
 }

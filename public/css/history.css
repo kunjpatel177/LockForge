@@ -1,0 +1,93 @@
+body {
+    background: #f6f8fb;
+}
+
+.card {
+    transition: 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.history-row:hover {
+    background: #f1f5ff;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    border-radius: 12px;
+}
+
+code {
+    background: #eef1f7;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+
+
+/* Page background */
+.history-page {
+    background: #f6f8fb;
+    min-height: 100vh;
+}
+
+/* Card hover */
+.history-card {
+    transition: 0.3s ease;
+}
+
+.history-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Scrollable table wrapper */
+.history-table-wrapper {
+    max-height: 700px;      /* change height if needed */
+    overflow-y: auto;
+    overflow-x: auto;
+    border-radius: 12px;
+}
+
+/* Sticky table header */
+.history-table-wrapper thead {
+    position: sticky;
+    margin-top: 0;
+    top: 0;
+    z-index: 10;
+}
+
+/* Row hover */
+.history-row:hover {
+    background: #f1f5ff;
+}
+
+/* Badge style */
+.history-badge {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    border-radius: 12px;
+}
+
+/* IP code style */
+.history-ip {
+    background: #eef1f7;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+/* Scrollbar styling */
+.history-table-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.history-table-wrapper::-webkit-scrollbar-thumb {
+    background: #c7cbd1;
+    border-radius: 10px;
+}
+
+.history-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}

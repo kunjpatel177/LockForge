@@ -7,7 +7,7 @@ const { register, login, verifyOTP, resendOTP, deleteAccount } = require("../con
 const AuditLog = require("../models/AuditLog");
 const Session = require("../models/Session");
 const { getDevice } = require("../utils/device");
-const { getLocation } = require("../utils/location");
+const { getLocation, getRealIP } = require("../utils/location");
 const validate = require("../middleware/validate");
 const isAuth = require("../middleware/auth")
 const { registerSchema, loginSchema } = require("../utils/joiSchemas");
@@ -27,7 +27,7 @@ router.get("/logout", async (req, res) => {
         await AuditLog.create({
             userId: req.session.userId,
             action: "logout",
-            ip: req.ip,
+            ip: getRealIP(req),
             userAgent: req.headers["user-agent"],
             device: getDevice(req),
             location: await getLocation(req)
@@ -35,7 +35,7 @@ router.get("/logout", async (req, res) => {
     }
 
     const currentSessionId = req.sessionID;
-    console.log("Session ID: ",currentSessionId)
+    // console.log("Session ID: ", currentSessionId)
 
     req.session.destroy(async (err) => {
 
@@ -45,11 +45,11 @@ router.get("/logout", async (req, res) => {
                 sessionId: currentSessionId
             });
         }
-        else{
+        else {
             console.log("Some error")
         }
 
-        
+
 
         // res.redirect("/login");
         res.redirect("/");
@@ -58,7 +58,7 @@ router.get("/logout", async (req, res) => {
 
 router.get("/verify-otp", (req, res) => {
 
-    const maskedEmail = maskEmail(req.session.user?.email);
+    const maskedEmail = maskEmail(req.session.tempUser?.email);
 
     const body = fs.readFileSync("views/pages/verify-otp.ejs", "utf-8");
 
@@ -66,7 +66,7 @@ router.get("/verify-otp", (req, res) => {
         title: "Verify OTP",
         body: ejs.render(body, {
             csrfToken: req.csrfToken(),
-            maskedEmail   
+            maskedEmail
         }),
         csrfToken: req.csrfToken()
     });
@@ -74,6 +74,17 @@ router.get("/verify-otp", (req, res) => {
 
 router.post("/verify-otp", verifyOTP);
 router.post("/resend-otp", resendOTP);
+
+router.get("/cancel-otp", (req, res) => {
+
+    delete req.session.otp;
+    delete req.session.tempUserId;
+    delete req.session.tempUser;
+    delete req.session.tempEncryptionKey;
+    delete req.session.otpExpiry;
+
+    res.redirect("/");
+});
 
 router.post("/delete-account", isAuth, deleteAccount);
 

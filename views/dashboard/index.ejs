@@ -37,7 +37,7 @@
             No matching services found.
         </p>
 
-        <!-- ================= ADD CREDENTIAL ================= -->
+        <!-- ADD CREDENTIAL -->
 
         <div class="credential-card add-card">
             <h4 class="mb-3 text-center ">Add Your Service Here</h4>
@@ -68,7 +68,7 @@
 
         </div>
 
-        <!-- ================= DISPLAY ================= -->
+        <!-- DISPLAY -->
 
         <% if (!credentials || credentials.length===0) { %>
             <p class="text-muted mt-3">No credentials found.</p>
@@ -159,9 +159,6 @@
 
                 </div>
 
-                <!-- <script src="/js/script.js"></script> -->
-
-                <!-- ================= DELETE ACCOUNT MODAL ================= -->
 
                 <!-- DELETE ACCOUNT MODAL -->
                 <div class="modal fade" id="deleteModal" tabindex="-1">
@@ -180,7 +177,7 @@
                                     <input type="password" id="deletePassword" class="form-control"
                                         placeholder="Enter your password">
 
-                                    <!-- 👁️ TOGGLE BUTTON -->
+                                    <!-- TOGGLE BUTTON -->
                                     <button type="button" class="btn btn-outline-secondary ms-2 toggle-password"
                                         data-target="deletePassword">
                                         <i class="fa fa-eye"></i>
@@ -208,7 +205,8 @@
 
                             <!-- HEADER -->
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="fw-semibold m-0 text-center"><i class="fa-solid fa-file-shield me-1"></i>Export Credentials</h5>
+                                <h5 class="fw-semibold m-0 text-center"><i
+                                        class="fa-solid fa-file-shield me-1"></i>Export Credentials</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
 
@@ -239,7 +237,7 @@
 
                             <!-- ACTION BUTTON -->
                             <button class="btn btn-primary w-100 fw-medium" onclick="exportPDF()">
-                                📄 Export PDF
+                                <i class="fa-solid fa-file"></i> Export PDF
                             </button>
 
                         </div>

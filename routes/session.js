@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const isAuth = require("../middleware/auth")
 const Session = require("../models/Session")
+const AuditLog = require("../models/AuditLog");
+const { getDevice } = require("../utils/device");
+const { getLocation, getRealIP } = require("../utils/location");
 const MongoStore = require("connect-mongo").default;
 
 const store = MongoStore.create({
@@ -35,6 +38,15 @@ router.post("/sessions/logout", isAuth, async (req, res) => {
             await Session.deleteOne({
                 sessionId,
                 userId: req.session.userId
+            });
+
+            await AuditLog.create({
+                userId: req.session.userId,
+                action: "logout",
+                ip: getRealIP(req),
+                userAgent: req.headers["user-agent"],
+                device: getDevice(req),
+                location: await getLocation(req)
             });
 
             req.flash("success", "Device logged out successfully");
@@ -85,6 +97,15 @@ router.post("/sessions/logout-all", isAuth, async (req, res) => {
         await Session.deleteMany({
             userId: req.session.userId,
             sessionId: { $ne: currentSessionId }
+        });
+
+        await AuditLog.create({
+            userId: req.session.userId,
+            action: "logout all",
+            ip: getRealIP(req),
+            userAgent: req.headers["user-agent"],
+            device: getDevice(req),
+            location: await getLocation(req)
         });
 
         req.flash(

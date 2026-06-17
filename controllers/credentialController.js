@@ -2,7 +2,7 @@ const Credential = require("../models/Credential");
 const { encrypt, decrypt } = require("../utils/crypto");
 const AuditLog = require("../models/AuditLog");
 const { getDevice } = require("../utils/device");
-const { getLocation } = require("../utils/location");
+const { getLocation, getRealIP } = require("../utils/location");
 const PDFDocument = require("pdfkit");
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
@@ -41,7 +41,7 @@ module.exports.addCredential = async (req, res) => {
         await AuditLog.create({
             userId: req.session.userId,
             action: "add_credential",
-            ip: req.ip,
+            ip: getRealIP(req),
             device: getDevice(req),
             location: await getLocation(req)
         });
@@ -139,7 +139,7 @@ module.exports.updateCredential = async (req, res) => {
         await AuditLog.create({
             userId: req.session.userId,
             action: "update_credential",
-            ip: req.ip,
+            ip: getRealIP(req),
             device: getDevice(req),
             location: await getLocation(req)
         });
@@ -160,7 +160,7 @@ module.exports.deleteCredential = async (req, res) => {
         await AuditLog.create({
             userId: req.session.userId,
             action: "delete_credential",
-            ip: req.ip,
+            ip: getRealIP(req),
             device: getDevice(req),
             location: await getLocation(req)
         });
@@ -179,7 +179,7 @@ module.exports.exportPDF = async (req, res) => {
 
         const user = await User.findById(req.session.userId);
 
-        // 🔐 VERIFY PASSWORD
+        // VERIFY PASSWORD
         const isMatch = await bcrypt.compare(password, user.masterPassword);
 
         if (!isMatch) {
@@ -189,11 +189,11 @@ module.exports.exportPDF = async (req, res) => {
             });
         }
 
-        // 🔑 DERIVE KEY AGAIN
+        // DERIVE KEY AGAIN
         const { deriveKey, decrypt } = require("../utils/crypto");
         const key = deriveKey(password, user.salt);
 
-        // 📦 GET CREDS
+        // GET CREDS
         const credentials = await Credential.find({
             userId: req.session.userId
         });
@@ -208,7 +208,7 @@ module.exports.exportPDF = async (req, res) => {
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader(
             "Content-Disposition",
-            "attachment; filename=credentials.pdf"
+            `attachment; filename=credentials.pdf`
         );
 
         doc.pipe(res);
@@ -329,7 +329,7 @@ module.exports.exportPDF = async (req, res) => {
         await AuditLog.create({
             userId: req.session.userId,
             action: "export_pdf",
-            ip: req.ip,
+            ip: getRealIP(req),
             device: getDevice(req),
             location: await getLocation(req)
         });

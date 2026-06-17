@@ -3,14 +3,10 @@ function maskEmail(email) {
 
     const [name, domain] = email.split("@");
 
-    // const maskedName =
-    //     name.length <= 2
-    //         ? name[0] + "*"
-    //         : name.slice(0, 2) + "***";
     const maskedName =
-    name.length <= 3
+    name.length <= 5
         ? name[0] + "***"
-        : name.slice(0, 3) + "***";
+        : name.slice(0, 5) + "***";
 
     return `${maskedName}@${domain}`;
 }
