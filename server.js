@@ -1,3 +1,8 @@
+const dns = require("dns");
+
+// Force IPv4 before any DNS resolution
+dns.setDefaultResultOrder("ipv4first");
+
 require("dotenv").config();
 
 const express = require("express");
