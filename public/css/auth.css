@@ -428,7 +428,7 @@ body {
 
 /* BACK BUTTON */
 
-.back-btn {
+/* .back-btn {
     margin-top: 20px;
     width: 100%;
     height: 40px;
@@ -443,4 +443,47 @@ body {
 
 .back-btn:hover {
     color: rgb(255, 255, 255);
+} */
+
+
+.back-btn {
+    margin-top: 20px;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 14px;
+    z-index: 1;
+    background: linear-gradient(135deg, #013332, #003408, #360101);
+    transition:
+        color 0.4s ease,
+        transform 0.3s ease;
+}
+
+/* SECOND GRADIENT LAYER */
+.back-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #3b0001, #003a09, #003b3a);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+}
+
+/* HOVER */
+.back-btn:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.back-btn:hover::before {
+    opacity: 1;
 }
