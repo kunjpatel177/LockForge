@@ -299,7 +299,7 @@ module.exports.exportPDF = async (req, res) => {
         // ================= RENDER =================
         credentials.forEach(drawCard);
 
-        // ================= ADD LAST PAGE FOOTER (ONLY ONCE) =================
+        // ================= ADD LAST PAGE FOOTER =================
 
         // DO NOT addPage blindly
         if (doc.y > doc.page.height - 120) {

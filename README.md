@@ -292,4 +292,4 @@ node server.js
 
 GitHub: https://github.com/kunjpatel177/
 
-Live website: https://lockforge.onrender.com/    or    https://lockforge-navy.vercel.app/
+Live website: https://lockforge-navy.vercel.app/

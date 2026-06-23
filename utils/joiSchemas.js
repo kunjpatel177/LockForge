@@ -5,7 +5,7 @@ const registerSchema = Joi.object({
         .min(3)
         .max(50)
         .trim()
-        .pattern(/^[A-Za-z]+(?:\s[A-Za-z]+)*$/)   // ✅ only letters + spaces
+        .pattern(/^[A-Za-z]+(?:\s[A-Za-z]+)*$/) 
         .required()
         .messages({
             "string.pattern.base": "Full name must contain only letters",

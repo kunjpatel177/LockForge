@@ -45,7 +45,7 @@ code {
 
 /* Scrollable table wrapper */
 .history-table-wrapper {
-    max-height: 700px;      /* change height if needed */
+    max-height: 700px;
     overflow-y: auto;
     overflow-x: auto;
     border-radius: 12px;

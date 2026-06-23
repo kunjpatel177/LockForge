@@ -40,7 +40,7 @@ day of week    0-7 (0 or 7 is Sunday, or use names)
                 // CREATE LOG
                 await AuditLog.create({
                     userId: session.userId,
-                    action: "logout_expired",   // NEW TYPE
+                    action: "logout_expired",
                     ip: session.ip,
                     device: session.device,
                     location: session.location,

@@ -40,7 +40,7 @@ router.get("/logout", async (req, res) => {
     req.session.destroy(async (err) => {
 
         if (!err) {
-            // 🔥 REMOVE from active sessions
+            // REMOVE from active sessions
             await Session.deleteOne({
                 sessionId: currentSessionId
             });

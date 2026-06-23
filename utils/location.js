@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 function getRealIP(req) {
-    if (!req || !req.headers) return "127.0.0.1"; // 🔥 safety fallback
+    if (!req || !req.headers) return "127.0.0.1"; // safety fallback
 
     let ip = req.headers["x-forwarded-for"]?.split(",")[0] || req.headers["x-real-ip"] || req.ip;
 

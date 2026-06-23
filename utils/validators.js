@@ -11,16 +11,6 @@ function isValidEmail(email) {
 
 // Strong password validation
 function isStrongPassword(password) {
-    /*
-        Conditions:
-        - Min 8 chars
-        - At least 1 uppercase
-        - At least 1 lowercase
-        - At least 1 number
-        - At least 1 special character
-    */
-    // const passwordRegex =
-    //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
     // return passwordRegex.test(password);
     return typeof password === "string" &&

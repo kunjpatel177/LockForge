@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main   # change if your branch is different
+      - main 
 
 jobs:
   build-and-deploy:
@@ -11,25 +11,30 @@ jobs:
 
     steps:
 
-    # 1️⃣ Checkout code
+    # Checkout code
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    # 2️⃣ Setup Node
+    # Setup Node
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: 18
 
-    # 3️⃣ Install dependencies
+    # Install dependencies
     - name: Install Dependencies
       run: npm install
 
-    # 4️⃣ Run tests (if available)
+    # Run tests
     - name: Skip Tests
       run: echo "No tests configured"
 
-    # 5️⃣ Deploy to Render
-    - name: Trigger Render Deploy
+    # Deploy to Vercel
+    - name: Trigger Vercel Deploy
       run: |
-        curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+        curl -X POST ${{ secrets.VERCEL_LOCKFORGE_HOOK }}
+
+    # Deploy to Render
+    # - name: Trigger Render Deploy
+    #   run: |
+    #     curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}

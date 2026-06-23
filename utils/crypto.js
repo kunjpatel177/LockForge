@@ -2,12 +2,12 @@ const crypto = require("crypto");
 
 const algorithm = "aes-256-cbc";
 
-// 🔑 Derive key
+// Derive key
 function deriveKey(password, salt) {
     return crypto.pbkdf2Sync(password, salt, 100000, 32, "sha256");
 }
 
-// 🔐 Encrypt
+// Encrypt
 function encrypt(text, key) {
     const iv = crypto.randomBytes(16);
 
@@ -22,7 +22,7 @@ function encrypt(text, key) {
     };
 }
 
-// 🔓 Decrypt
+// Decrypt
 function decrypt(encryptedData, key) {
     const iv = Buffer.from(encryptedData.iv, "hex");
 

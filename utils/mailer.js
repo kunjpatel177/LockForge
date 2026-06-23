@@ -21,34 +21,3 @@ module.exports.sendAlert = async (to, subject, html) => {
         throw err;
     }
 };
-
-// const nodemailer = require("nodemailer");
-
-// const transporter = nodemailer.createTransport({
-//     host: "smtp-relay.brevo.com",
-//     // host: "smtp.gmail.com",
-//     // port: 465,
-//     secure: true,
-//     port: 587,
-//     // secure: false,
-//     family: 4, // Force IPv4
-//     auth: {
-//         user: process.env.EMAIL_USER,
-//         pass: process.env.EMAIL_PASS
-//     }
-// });
-
-// module.exports.sendAlert = async (to, subject, html) => {
-
-//     try {
-//         const info = await transporter.sendMail({
-//             from: `"LockForge" <${process.env.EMAIL_USER}>`,
-//             to,
-//             subject,
-//             html
-//         });
-//     } catch (err) {
-//         console.error("EMAIL ERROR:", err);
-//         throw err;
-//     }
-// };
