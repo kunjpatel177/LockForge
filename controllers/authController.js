@@ -332,7 +332,7 @@ module.exports.deleteAccount = async (req, res) => {
         await AuditLog.deleteMany({ userId: user._id });
         await User.findByIdAndDelete(user._id);
 
-        // 🔐 Destroy session
+        // Destroy session
         req.session.destroy(() => {
             res.json({
                 success: true

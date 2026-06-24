@@ -8,7 +8,7 @@
 </div>
 
 
-<!-- ================= EDIT FORM ================= -->
+<!-- EDIT FORM -->
 
 <div class="credential-card edit-card">
 
@@ -49,7 +49,7 @@
 </div>
 
 
-<!-- ================= PASS DATA ================= -->
+<!-- PASS DATA -->
 
 <script id="edit-data" type="application/json">
     <%- JSON.stringify(cred.fields || []) %>
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (fields.length === 0) {
             e.preventDefault();
 
-            // 🔥 Use existing toast function
+            // Use existing toast function
             if (typeof showToast === "function") {
                 showToast("⚠️ At least one field required", "error");
             } else {

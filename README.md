@@ -147,7 +147,7 @@ Used for:
 
 ### 10. CI/CD Pipeline (GitHub Actions)
 
-Implemented automated deployment pipeline using **GitHub Actions** and **Render**.
+Implemented automated deployment pipeline using **GitHub Actions** and **Vercel**.
 
 Workflow:
 
@@ -160,7 +160,7 @@ Install Dependencies
         ↓
 Run Tests
         ↓
-Trigger Render Deployment
+Trigger Vercel Deployment
         ↓
 Website Auto Updates
 ```
@@ -227,7 +227,7 @@ Architecture pattern:
 
 ### DevOps
 - GitHub Actions
-- Render Deployment
+- Vercel Deployment
 
 ---
 

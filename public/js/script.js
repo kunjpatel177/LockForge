@@ -1,4 +1,3 @@
-// GLOBAL
 let fieldCount = 0;
 const csrfToken = document.getElementById("csrfToken")?.value;
 
@@ -9,14 +8,14 @@ function showToast(message, type = "info") {
 
     toast.innerText = message;
 
-    // reset classes
+    // RESET CLASSES
     toast.className = "toast-box show";
 
     if (type === "success") toast.classList.add("toast-success");
     if (type === "error") toast.classList.add("toast-error");
     if (type === "info") toast.classList.add("toast-info");
 
-    // auto hide
+    // AUTO HIDE
     setTimeout(() => {
         toast.classList.remove("show");
     }, 3000);
@@ -135,7 +134,7 @@ function addField(label = "", value = "", type = "text") {
 }
 
 
-// ADD FIELD WITH DATA (EDIT PAGE)
+// ADD FIELD WITH DATA --> EDIT PAGE
 function addFieldWithData(label = "", value = "", type = "text") {
     addField(label, value, type);
 }

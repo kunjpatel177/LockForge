@@ -13,8 +13,8 @@ const fieldSchema = new Schema({
     type: {
         type: String,
         enum: ["text", "password", "otp"],
-        // default: "text"
-        default: "password"
+        default: "text"
+        // default: "password"
     }
 });
 

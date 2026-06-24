@@ -341,7 +341,7 @@ body {
     }
 }
 
-/* NAVBAR DEFAULT (transparent) */
+/* NAVBAR DEFAULT */
 #navbar {
     transition: all 0.3s ease;
     background: transparent;
@@ -429,7 +429,7 @@ body {
     transform: rotate(180deg);
 }
 
-/* ===== DROPDOWN CONTAINER ===== */
+/* DROPDOWN CONTAINER */
 .user-dropdown {
     min-width: 260px;
     border-radius: 12px;
@@ -437,12 +437,12 @@ body {
     border: none;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 .user-header {
     padding: 10px 15px;
 }
 
-/* ===== AVATAR ===== */
+/* AVATAR */
 .avatar-lg {
     width: 50px;
     height: 50px;
@@ -459,7 +459,7 @@ body {
     margin: auto;
 }
 
-/* ===== ITEMS ===== */
+/* ITEMS */
 .user-dropdown .dropdown-item {
     margin-left: 3px;
     padding: 8px 15px;
@@ -479,7 +479,7 @@ body {
 }
 
 
-/* ================= FOOTER ================= */
+/* FOOTER */
 
 .footer {
     background: #0f172a;
@@ -570,7 +570,7 @@ body {
 }
 
 
-/* ================= ABOUT PAGE ================= */
+/* ABOUT PAGE */
 
 .about-hero {
     min-height: 75vh;
@@ -968,7 +968,6 @@ body {
     }
 }
 
-/* ===== GLOBAL MOBILE FIXES ===== */
 @media (max-width: 768px) {
     body {
         font-size: 14px;

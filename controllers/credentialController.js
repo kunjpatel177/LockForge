@@ -7,7 +7,7 @@ const PDFDocument = require("pdfkit");
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 
-// ================= ADD CREDENTIAL (AJAX) =================
+// ADD CREDENTIAL (AJAX)
 
 module.exports.addCredential = async (req, res) => {
     try {
@@ -59,7 +59,7 @@ module.exports.addCredential = async (req, res) => {
     }
 };
 
-// ================= GET EDIT PAGE =================
+// GET EDIT PAGE
 module.exports.getEditPage = async (req, res) => {
 
     try {
@@ -108,7 +108,7 @@ module.exports.getEditPage = async (req, res) => {
     }
 };
 
-// ================= UPDATE CREDENTIAL =================
+// UPDATE CREDENTIAL
 module.exports.updateCredential = async (req, res) => {
 
     try {
@@ -152,7 +152,7 @@ module.exports.updateCredential = async (req, res) => {
     }
 };
 
-// ================= DELETE =================
+// DELETE
 module.exports.deleteCredential = async (req, res) => {
 
     try {
@@ -214,7 +214,7 @@ module.exports.exportPDF = async (req, res) => {
         doc.pipe(res);
 
 
-        // ================= FIRST PAGE HEADER =================
+        // FIRST PAGE HEADER
         doc
             .font("Helvetica-Bold")
             .fontSize(20)
@@ -236,7 +236,7 @@ module.exports.exportPDF = async (req, res) => {
 
         doc.moveDown(1.5);
 
-        // ================= CARD FUNCTION =================
+        // CARD FUNCTION
         function drawCard(cred) {
 
             const cardWidth = doc.page.width - 100;
@@ -296,12 +296,10 @@ module.exports.exportPDF = async (req, res) => {
             doc.y = y + cardHeight + 15;
         }
 
-        // ================= RENDER =================
+        // RENDER
         credentials.forEach(drawCard);
 
-        // ================= ADD LAST PAGE FOOTER =================
-
-        // DO NOT addPage blindly
+        // ADD LAST PAGE FOOTER
         if (doc.y > doc.page.height - 120) {
             doc.addPage();
         }

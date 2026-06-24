@@ -71,7 +71,7 @@
                     <!-- RIGHT ACTION -->
                     <div>
 
-                        <% if (session.sessionId !== currentSessionId) { %>
+                        <% if (session.sessionId !==currentSessionId) { %>
                             <form method="POST" action="/sessions/logout">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>"> <!-- ADD THIS -->
                                 <input type="hidden" name="sessionId" value="<%= session.sessionId %>">

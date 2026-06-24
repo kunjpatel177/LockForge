@@ -1,5 +1,3 @@
-/* auth.css file */
-/* RESET */
 * {
     margin: 0;
     padding: 0;
@@ -242,7 +240,7 @@ body {
     background: #16a34a;
 }
 
-/* RESPONSIVE (MOBILE) */
+/* RESPONSIVE */
 @media (max-width: 768px) {
 
     .auth-card {
@@ -257,7 +255,7 @@ body {
 
 
 
-/* ================= OTP PAGE ================= */
+/* OTP PAGE */
 
 .otp-page {
     min-height: 100vh;
@@ -427,25 +425,6 @@ body {
 }
 
 /* BACK BUTTON */
-
-/* .back-btn {
-    margin-top: 20px;
-    width: 100%;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    color: #ffffff;
-    background: linear-gradient(135deg, #574801, #550103);
-    font-size: 14px;
-}
-
-.back-btn:hover {
-    color: rgb(255, 255, 255);
-} */
-
-
 .back-btn {
     margin-top: 20px;
     width: 100%;

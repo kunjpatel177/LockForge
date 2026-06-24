@@ -1,319 +1,156 @@
-<!-- HERO -->
-
 <section class="hero d-flex align-items-center text-white">
-
-
     <div class="container text-center">
-
-        <h1 class="hero-main-title glow-text">
-            Welcome to LockForge
-        </h1>
-
+        <h1 class="hero-main-title glow-text">Welcome to LockForge</h1>
         <h2 class="hero-title fw-bold">
-            The Secure Password Manager Built
-            <br>
-            For Modern Digital Security
+            The Secure Password Manager Built<br>For Modern Digital Security
         </h2>
-
         <p class="hero-subtitle mt-3">
             Protect your credentials with AES-256 encryption, PBKDF2 key derivation,
             OTP verification, activity monitoring and multi-device session security.
         </p>
 
         <div class="mt-4">
-
             <% if (!isLoggedIn) { %>
-
                 <a href="/register" class="btn btn-primary btn-lg me-3">
                     <i class="fa-solid fa-user-plus me-2"></i>Get Started
                 </a>
-
                 <% } else { %>
-
                     <a href="/dashboard" class="btn btn-primary btn-lg me-3">
                         Go to Dashboard
                     </a>
-
                     <% } %>
-
-                        <a href="#features" class="btn btn-outline-light btn-lg">
-                            Learn More
-                        </a>
-
+                        <a href="#features" class="btn btn-outline-light btn-lg">Learn More</a>
         </div>
-
     </div>
-
-
 </section>
-
-<!-- TRUST BADGES -->
 
 <section class="trust-section py-4">
-
-
     <div class="container">
-
         <div class="trust-badges">
-
             <div class="trust-badge">
-                <i class="fa-solid fa-lock"></i>
-                AES-256 Encryption
+                <i class="fa-solid fa-lock"></i> AES-256 Encryption
             </div>
-
             <div class="trust-badge">
-                <i class="fa-solid fa-key"></i>
-                PBKDF2
+                <i class="fa-solid fa-key"></i> PBKDF2
             </div>
-
             <div class="trust-badge">
-                <i class="fa-solid fa-mobile-screen"></i>
-                OTP Security
+                <i class="fa-solid fa-mobile-screen"></i> OTP Security
             </div>
-
             <div class="trust-badge">
-                <i class="fa-solid fa-shield-halved"></i>
-                Session Monitoring
+                <i class="fa-solid fa-shield-halved"></i> Session Monitoring
             </div>
-
         </div>
-
     </div>
-
-
 </section>
-
-<!-- FEATURES -->
 
 <section id="features" class="container py-5">
-
-
-    <h2 class="text-center mb-5 fw-semibold">
-        Why Choose LockForge?
-    </h2>
-
+    <h2 class="text-center mb-5 fw-semibold">Why Choose LockForge?</h2>
     <div class="row g-4">
-
         <div class="col-md-4">
-
             <div class="feature-card reveal p-4 text-center h-100">
-
                 <i class="fa-solid fa-lock fa-2x mb-3"></i>
-
                 <h5>Advanced Encryption</h5>
-
-                <p>
-                    Credentials are encrypted using AES-256 before storage.
-                </p>
-
+                <p>Credentials are encrypted using AES-256 before storage.</p>
             </div>
-
         </div>
-
         <div class="col-md-4">
-
             <div class="feature-card reveal p-4 text-center h-100">
-
                 <i class="fa-solid fa-user-shield fa-2x mb-3"></i>
-
                 <h5>Adaptive Authentication</h5>
-
-                <p>
-                    OTP verification protects against suspicious login attempts.
-                </p>
-
+                <p>OTP verification protects against suspicious login attempts.</p>
             </div>
-
         </div>
-
         <div class="col-md-4">
-
             <div class="feature-card reveal p-4 text-center h-100">
-
                 <i class="fa-solid fa-desktop fa-2x mb-3"></i>
-
                 <h5>Session Tracking</h5>
-
-                <p>
-                    Monitor devices and remotely revoke active sessions.
-                </p>
-
+                <p>Monitor devices and remotely revoke active sessions.</p>
             </div>
-
         </div>
-
     </div>
-
-
 </section>
-
-<!-- HOW IT WORKS -->
 
 <section class="container py-5">
-
-
-    <h2 class="text-center mb-5 fw-semibold">
-        How It Works
-    </h2>
-
+    <h2 class="text-center mb-5 fw-semibold">How It Works</h2>
     <div class="row g-4 text-center">
-
         <div class="col-md-4">
-
             <div class="step-card reveal p-4">
-
                 <i class="fa-solid fa-user-plus fa-2x mb-3"></i>
-
                 <h5>Create Account</h5>
-
-                <p>
-                    Register with a secure master password.
-                </p>
-
+                <p>Register with a secure master password.</p>
             </div>
-
         </div>
-
         <div class="col-md-4">
-
             <div class="step-card reveal p-4">
-
                 <i class="fa-solid fa-key fa-2x mb-3"></i>
-
                 <h5>Encrypt Credentials</h5>
-
-                <p>
-                    Credentials are encrypted before being stored.
-                </p>
-
+                <p>Credentials are encrypted before being stored.</p>
             </div>
-
         </div>
-
         <div class="col-md-4">
-
             <div class="step-card reveal p-4">
-
                 <i class="fa-solid fa-unlock-keyhole fa-2x mb-3"></i>
-
                 <h5>Access Securely</h5>
-
-                <p>
-                    Retrieve data only after successful authentication.
-                </p>
-
+                <p>Retrieve data only after successful authentication.</p>
             </div>
-
         </div>
-
     </div>
-
-
 </section>
-
-<!-- ARCHITECTURE -->
 
 <section class="architecture-section py-5">
-
-
     <div class="container">
-
-        <h2 class="text-center mb-5 fw-semibold">
-            How LockForge Protects Your Data
-        </h2>
-
+        <h2 class="text-center mb-5 fw-semibold">How LockForge Protects Your Data</h2>
         <div class="architecture-flow">
-
-            <div class="arch-box">
-                User Login
-            </div>
-
+            <div class="arch-box">User Login</div>
             <div class="arch-arrow">
                 <i class="fa-solid fa-arrow-right"></i>
             </div>
-
-            <div class="arch-box">
-                PBKDF2
-            </div>
-
+            <div class="arch-box">PBKDF2</div>
             <div class="arch-arrow">
                 <i class="fa-solid fa-arrow-right"></i>
             </div>
-
-            <div class="arch-box">
-                AES-256
-            </div>
-
+            <div class="arch-box">AES-256</div>
             <div class="arch-arrow">
                 <i class="fa-solid fa-arrow-right"></i>
             </div>
-
-            <div class="arch-box">
-                MongoDB
-            </div>
-
+            <div class="arch-box">MongoDB</div>
         </div>
-
     </div>
-
-
 </section>
 
-<!-- SECURITY METRICS -->
-
 <section class="container py-5">
-
-
-    <h2 class="text-center mb-5 fw-semibold">
-        Security Metrics
-    </h2>
-
+    <h2 class="text-center mb-5 fw-semibold">Security Metrics</h2>
     <div class="row g-4">
-
         <div class="col-md-3">
             <div class="metric-card p-4 text-center">
                 <h3>AES-256</h3>
                 <p>Encryption</p>
             </div>
         </div>
-
         <div class="col-md-3">
             <div class="metric-card p-4 text-center">
                 <h3>PBKDF2</h3>
                 <p>Key Derivation</p>
             </div>
         </div>
-
         <div class="col-md-3">
             <div class="metric-card p-4 text-center">
                 <h3>OTP</h3>
                 <p>Authentication</p>
             </div>
         </div>
-
         <div class="col-md-3">
             <div class="metric-card p-4 text-center">
                 <h3>Sessions</h3>
                 <p>Monitoring</p>
             </div>
         </div>
-
     </div>
-
-
 </section>
 
-<!-- TECH STACK -->
-
 <section class="container py-5">
-
-
-    <h2 class="text-center mb-5 fw-semibold">
-        Built With
-    </h2>
-
+    <h2 class="text-center mb-5 fw-semibold">Built With</h2>
     <div class="tech-grid">
-
         <span class="tech-pill">Node.js</span>
         <span class="tech-pill">Express.js</span>
         <span class="tech-pill">MongoDB</span>
@@ -323,68 +160,30 @@
         <span class="tech-pill">PBKDF2</span>
         <span class="tech-pill">bcrypt</span>
         <span class="tech-pill">Nodemailer</span>
-
     </div>
-
-
 </section>
 
-<!-- SECURITY HIGHLIGHT -->
-
 <section class="security-highlight">
-
-
     <div class="container text-center">
-
-        <h2 class="fw-bold mb-4">
-            Security-First Design
-        </h2>
-
+        <h2 class="fw-bold mb-4">Security-First Design</h2>
         <p>
             LockForge follows a defense-in-depth architecture using encryption,
             hashing, key derivation, CSRF protection, session management,
             OTP authentication and activity monitoring.
         </p>
-
     </div>
-
-
 </section>
 
-<!-- CTA -->
-
 <section class="cta text-center text-white py-5">
-
-
     <% if (!isLoggedIn) { %>
-
-        <h2>
-            Start Securing Your Credentials Today
-        </h2>
-
-        <p class="mt-3">
-            Join LockForge and protect your digital identity.
-        </p>
-
+        <h2>Start Securing Your Credentials Today</h2>
+        <p class="mt-3">Join LockForge and protect your digital identity.</p>
         <a href="/register" class="btn btn-dark btn-lg mt-3">
             <i class="fa-solid fa-user-plus me-2"></i>Create Account
         </a>
-
         <% } else { %>
-
-            <h2>
-                Continue Managing Your Credentials Securely
-            </h2>
-
-            <p class="mt-3">
-                Access your dashboard and stay protected.
-            </p>
-
-            <a href="/dashboard" class="btn btn-dark btn-lg mt-3">
-                Go To Dashboard
-            </a>
-
+            <h2>Continue Managing Your Credentials Securely</h2>
+            <p class="mt-3">Access your dashboard and stay protected.</p>
+            <a href="/dashboard" class="btn btn-dark btn-lg mt-3">Go To Dashboard</a>
             <% } %>
-
-
 </section>

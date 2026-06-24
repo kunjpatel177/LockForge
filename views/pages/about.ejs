@@ -1,8 +1,5 @@
 <section class="about-hero d-flex align-items-center">
-
-
     <div class="container text-center">
-
         <span class="about-badge">
             <i class="fa-solid fa-shield-halved"></i>
             Secure Password Management Platform
@@ -19,7 +16,6 @@
         </p>
 
         <div class="mt-4">
-
             <% if (isLoggedIn) { %>
                 <a href="/dashboard" class="btn btn-primary btn-lg px-4">
                     <i class="fa-solid fa-chart-line me-2"></i>
@@ -36,21 +32,12 @@
                             <i class="fa-solid fa-house me-2"></i>
                             Home
                         </a>
-
         </div>
-
     </div>
-
-
 </section>
 
-<!-- STATS -->
-
 <section class="container py-5">
-
-
     <div class="row g-4 text-center">
-
         <div class="col-md-3">
             <div class="stats-card">
                 <h2>256-bit</h2>
@@ -78,24 +65,13 @@
                 <p>Credential Access</p>
             </div>
         </div>
-
     </div>
-
-
 </section>
 
-<!-- MISSION -->
-
 <section class="container py-5">
-
-
     <div class="row align-items-center">
-
         <div class="col-lg-6">
-
-            <h2 class="fw-bold mb-4">
-                Why LockForge?
-            </h2>
+            <h2 class="fw-bold mb-4">Why LockForge?</h2>
 
             <p class="text-muted">
                 Password reuse, weak passwords, and credential theft remain among
@@ -109,38 +85,24 @@
                 audit logging, and session management into a single security-focused
                 application.
             </p>
-
         </div>
 
         <div class="col-lg-6 text-center">
-
             <div class="mission-icon">
                 <i class="fa-solid fa-user-shield"></i>
             </div>
-
         </div>
-
     </div>
-
-
 </section>
 
-<!-- FEATURES -->
-
 <section class="bg-light py-5">
-
-
     <div class="container">
-
         <div class="text-center mb-5">
             <h2 class="fw-bold">Core Security Features</h2>
-            <p class="text-muted">
-                Designed with multiple layers of protection.
-            </p>
+            <p class="text-muted">Designed with multiple layers of protection.</p>
         </div>
 
         <div class="row g-4">
-
             <div class="col-md-4">
                 <div class="about-card">
                     <i class="fa-solid fa-lock"></i>
@@ -206,25 +168,16 @@
                     </p>
                 </div>
             </div>
-
         </div>
-
     </div>
-
-
 </section>
 
-<!-- TECH STACK -->
-
 <section class="container py-5">
-
-
     <div class="text-center mb-5">
         <h2 class="fw-bold">Technology Stack</h2>
     </div>
 
     <div class="row g-4 text-center">
-
         <div class="col-md-2 col-6">
             <div class="tech-card">Node.js</div>
         </div>
@@ -248,64 +201,34 @@
         <div class="col-md-2 col-6">
             <div class="tech-card">AES + PBKDF2</div>
         </div>
-
     </div>
-
-
 </section>
 
-<!-- DEVELOPER -->
-
 <section class="developer-section py-5">
-
-
     <div class="container text-center">
-
-        <h2 class="fw-bold mb-3">
-            Built by Kunj Patel
-        </h2>
+        <h2 class="fw-bold mb-3">Built by Kunj Patel</h2>
 
         <p class="developer-text">
             LockForge was developed as a security-focused full-stack application
             to demonstrate practical implementation of authentication,
             encryption, secure session management, and modern web security concepts.
         </p>
-
     </div>
-
-
 </section>
 
-<!-- CTA -->
-
 <section class="py-5 text-center">
-
-
     <div class="container">
-
-        <h2 class="fw-bold mb-3">
-            Secure Your Credentials Today
-        </h2>
-
+        <h2 class="fw-bold mb-3">Secure Your Credentials Today</h2>
         <p class="text-muted mb-4">
             Take control of your passwords with a platform designed around security.
         </p>
 
         <% if (isLoggedIn) { %>
-
-            <a href="/dashboard" class="btn btn-dark btn-lg">
-                Go To Dashboard
-            </a>
-
+            <a href="/dashboard" class="btn btn-dark btn-lg">Go To Dashboard</a>
             <% } else { %>
-
                 <a href="/register" class="btn btn-dark btn-lg">
                     <i class="fa-solid fa-user-plus me-2"></i>Create Account
                 </a>
-
                 <% } %>
-
     </div>
-
-
 </section>

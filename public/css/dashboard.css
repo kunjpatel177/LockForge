@@ -1,12 +1,10 @@
-/* dashboard.css */
-/* ===== GLOBAL ===== */
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
     background: #f9fafb;
 }
 
-/* ===== LAYOUT ===== */
+/* LAYOUT */
 .dashboard {
     display: flex;
     min-height: 100vh;
@@ -31,7 +29,7 @@ body {
     color: crimson !important;
 }
 
-/* ===== SIDEBAR ===== */
+/* SIDEBAR */
 .sidebar {
     width: 240px;
     /* background: #111827; */
@@ -85,13 +83,13 @@ body {
 
 }
 
-/* ===== MAIN ===== */
+/* MAIN */
 .main-content {
     flex: 1;
     padding: 30px;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 .dashboard-header {
     display: flex;
     justify-content: space-between;
@@ -104,7 +102,7 @@ body {
     gap: 10px;
 }
 
-/* ===== GRID FIX ===== */
+/* GRID FIX */
 .row {
     display: flex;
     flex-wrap: wrap;
@@ -118,7 +116,7 @@ body {
     transition: all 0.3s ease !important;
 }
 
-/* ===== CARD ===== */
+/* CARD */
 .credential-card {
     width: 100%;
     background: #ffffff;
@@ -145,7 +143,7 @@ body {
     border: 1px dashed #d1d5db;
 }
 
-/* ===== CARD HEADER ===== */
+/* CARD HEADER */
 .card-header {
     display: flex;
     justify-content: space-between;
@@ -167,7 +165,7 @@ body {
     margin: 0;
 }
 
-/* ===== BODY ===== */
+/* BODY */
 .card-body {
     margin-top: 10px;
 }
@@ -201,7 +199,7 @@ body {
     gap: 6px;
 }
 
-/* ===== ICON BUTTON ===== */
+/* ICON BUTTON */
 .icon-btn {
     border: none;
     background: transparent;
@@ -215,20 +213,20 @@ body {
     transform: scale(1.1);
 }
 
-/* ===== FORM ===== */
+/* FORM */
 .form-control {
     border-radius: 8px;
     /* width: 300px; */
 }
 
-/* ===== BUTTONS ===== */
+/* BUTTONS */
 .btn {
     border-radius: 8px;
     font-size: 13px;
     padding: 5px 10px;
 }
 
-/* ===== RESPONSIVE ===== */
+/* RESPONSIVE */
 @media (max-width: 768px) {
     .dashboard-header {
         flex-direction: column;
@@ -237,7 +235,7 @@ body {
     }
 }
 
-/* ===== EDIT PAGE ===== */
+/* EDIT PAGE */
 .edit-card {
     max-width: 1300px;
 }
@@ -278,7 +276,7 @@ body {
     }
 }
 
-/* ===== FIX FIELD LAYOUT (SAFE) ===== */
+/* FIX FIELD LAYOUT */
 .field-group {
     display: flex;
     flex-wrap: wrap;
@@ -310,7 +308,7 @@ body {
 }
 
 
-/* ===== TOAST ===== */
+/* TOAST */
 .toast-box {
     position: fixed;
     top: 20px;
@@ -352,14 +350,14 @@ body {
 }
 
 
-/* ===== SESSION CARD ===== */
+/* SESSION CARD */
 .session-card {
     background: #ffffff;
     border: 1px solid #e5e7eb;
     transition: 0.25s ease;
 }
 
-/* HOVER EFFECT (GitHub style) */
+/* HOVER EFFECT */
 .session-card:hover {
     box-shadow: 0 6px 18px rgba(0,0,0,0.08);
     transform: translateY(-2px);
@@ -381,11 +379,6 @@ body {
 .sessions-info h3{
     color: #dc2626;
 }
-
-
-
-
-
 
 
 /* -------------------------- */
